@@ -9,8 +9,8 @@ namespace Hedonist.Models {
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("comment")]
-        public string Comment { get; set; }
+        [Column("name")]
+        public string Name { get; set; }
 
         [Column("mac_address")]
         public string MacAddress { get; set; }
@@ -31,13 +31,6 @@ namespace Hedonist.Models {
 
         [Column("text")]
         public string Text { get; set; }
-
-        [Column("created_date")]
-        public DateTime CreatedDate { get; set; }
-
-        [Column("modified_date")]
-        public DateTime ModifiedDate { get; set; }
-
     }
 
     [Table("answer")]
@@ -57,13 +50,6 @@ namespace Hedonist.Models {
 
         [Column("text")]
         public string Text { get; set; }
-
-        [Column("created_date")]
-        public DateTime CreatedDate { get; set; }
-
-        [Column("modified_date")]
-        public DateTime ModifiedDate { get; set; }
-
     }
 
     [Table("gift")]
@@ -96,24 +82,19 @@ namespace Hedonist.Models {
         public DateTime CreatedDate { get; set; }
     }
 
-    [Table("password")]
-    public class Password {
+    [Table("password_info")]
+    public class PasswordInfo {
         [Key]
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("hash")]
-        public string Hash { get; set; }
+        [Column("password_hash")]
+        public string PasswordHash { get; set; }
         
-        //TODO: CREATE DB TRIGGERS!!!
-
-        [Column("created_date")]
-        public DateTime CreatedDate { get; set; }
-        
-        [Column("modified_date")]
-        public DateTime ModifiedDate { get; set; }
-
         [Column("is_used")]
         public bool IsUsed { get; set; }
+
+        [Column("ticket")]
+        public string? Ticket { get; set; }
     }
 }

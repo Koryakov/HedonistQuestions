@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedonist.WebApi", "Hedonist.WebApi\Hedonist.WebApi.csproj", "{6BE82FFF-4CD5-42E4-BEAD-830D7CF348B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hedonist.WebApi", "Hedonist.WebApi\Hedonist.WebApi.csproj", "{6BE82FFF-4CD5-42E4-BEAD-830D7CF348B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedonist.Repository", "Hedonist.Repository\Hedonist.Repository.csproj", "{0F2E46B4-1EF3-49E3-BACD-FBC02C15442B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hedonist.Repository", "Hedonist.Repository\Hedonist.Repository.csproj", "{0F2E46B4-1EF3-49E3-BACD-FBC02C15442B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedonist.Models", "Hedonist.Models\Hedonist.Models.csproj", "{DD3DA6C1-C594-4E2C-9D15-EDEC214B859C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hedonist.Models", "Hedonist.Models\Hedonist.Models.csproj", "{DD3DA6C1-C594-4E2C-9D15-EDEC214B859C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedonist.WinForm", "Hedonist.WinForm\Hedonist.WinForm.csproj", "{5403B928-892B-4879-A31D-703A845508B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Hedonist.WinForm", "Hedonist.WinForm\Hedonist.WinForm.csproj", "{5403B928-892B-4879-A31D-703A845508B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedonist.Business", "Hedonist.Business\Hedonist.Business.csproj", "{3B6E163A-976F-4916-9AC3-586FFD79766B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hedonist.Test", "Hedonist.Test\Hedonist.Test.csproj", "{266F9346-19E9-403D-9313-69F91C456556}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{5403B928-892B-4879-A31D-703A845508B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5403B928-892B-4879-A31D-703A845508B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5403B928-892B-4879-A31D-703A845508B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B6E163A-976F-4916-9AC3-586FFD79766B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B6E163A-976F-4916-9AC3-586FFD79766B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B6E163A-976F-4916-9AC3-586FFD79766B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B6E163A-976F-4916-9AC3-586FFD79766B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{266F9346-19E9-403D-9313-69F91C456556}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{266F9346-19E9-403D-9313-69F91C456556}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{266F9346-19E9-403D-9313-69F91C456556}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{266F9346-19E9-403D-9313-69F91C456556}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

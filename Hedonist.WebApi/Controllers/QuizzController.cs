@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Hedonist.Business;
+using Hedonist.Models;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,9 +17,25 @@ namespace Hedonist.WebApi.Controllers {
 
         // GET: api/<QuizzController>
         [HttpGet]
-        public IEnumerable<string> Get() {
-            logger.Info("Get");
-            return new string[] { "value1", "value2" };
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Question>))]
+        [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<QuestionsModel>> GetQuestionsAsync(string password) {
+            try {
+                logger.Info($"IN GetQuestions(password={password})");
+                var engine = new QuizEngine();
+                var questInfo = await engine.GetQuizAsync(password);
+                if (!questInfo.IsPasswordValid) {
+                    return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                }
+                else if (questInfo.Questions.Count == 0) {
+                    return new StatusCodeResult(StatusCodes.Status404NotFound);
+                }
+                return questInfo;
+            } catch (Exception ex) { 
+                logger.Error(ex);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // GET api/<QuizzController>/5

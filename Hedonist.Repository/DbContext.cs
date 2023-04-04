@@ -4,7 +4,8 @@ using Hedonist.Models;
 namespace Hedonist.Repositories {
     public class HedonistDbContext : DbContext {
         private readonly string connectionString;
-        //public DbSet<TgMessage> TgMessage { get; set; }
+        public DbSet<Question> Question { get; set; }
+        public DbSet<PasswordInfo> PasswordInfo { get; set; }
 
         public HedonistDbContext(DbContextOptions<HedonistDbContext> options) : base(options) {
         }
