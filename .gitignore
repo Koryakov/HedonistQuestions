@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Hedonist.WinForm/App.config
+/Hedonist.Test/appsettings.json
+/Hedonist.WebApi/appsettings.json
