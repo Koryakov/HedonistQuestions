@@ -364,3 +364,4 @@ FodyWeavers.xsd
 /Hedonist.WinForm/App.config
 /Hedonist.Test/appsettings.json
 /Hedonist.WebApi/appsettings.json
+/Hedonist.Wpf/appsettings.json
