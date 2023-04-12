@@ -1,3 +1,9 @@
+using Hedonist.WebApi;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using NLog;
+
+var logger = NLog.LogManager.GetCurrentClassLogger();
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,5 +26,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseExceptionHandler(exceptionHandlerApp => {
+    exceptionHandlerApp.Run(async context => {
+        var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+         var exception = exceptionHandlerFeature?.Error;
+        logger.Error(exception);
+    });
+});
 
 app.Run();

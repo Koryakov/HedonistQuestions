@@ -14,7 +14,7 @@ namespace Hedonist.Test {
         public void PasswordsCreatingTest() {
             StringBuilder sqlInstructions = new StringBuilder($"INSERT INTO public.\"password_info\"\r\n(password_hash, is_used)\r\nVALUES\r\n");
             for (int i = 0; i < 100; i++) {
-                string psw = $"Psw-{i}";
+                string psw = $"*{i:000}";
                 string hashPsw = PasswordHasher.Hash(psw);
                 Assert.True(PasswordHasher.Verify(psw, hashPsw));
 
@@ -24,10 +24,13 @@ namespace Hedonist.Test {
         }
 
         [Fact]
-        public async Task ValidatePasswordTest() {
+        public async Task GetQuizTest() {
             var engine = new QuizEngine();
-            var questionsModel = await engine.GetQuizAsync("Psw-1");
-            Assert.True(questionsModel.IsPasswordValid);
+            var result = await engine.UsePasswordAndReturnTicketAsync(new Password("Psw-6"));
+            Assert.True(result.IsAuthorized);
+            string ticket = result.Result;
+            
+            var questionsModel = await engine.GetQuizAsync(new Ticket(ticket));
         }
     }
 }

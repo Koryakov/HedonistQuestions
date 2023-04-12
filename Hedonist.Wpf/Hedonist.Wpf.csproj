@@ -1,0 +1,67 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\art.png" />
+    <None Remove="Images\Communication.png" />
+    <None Remove="Images\Food.png" />
+    <None Remove="Images\Mixology.png" />
+    <None Remove="Images\Movement.png" />
+    <None Remove="Images\Music.png" />
+    <None Remove="Images\relax_in_water.png" />
+    <None Remove="Images\start-test.gif" />
+    <None Remove="Images\Trends.png" />
+    <None Remove="NLog.config" />
+    <None Remove="start-test.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="7.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="NLog" Version="5.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hedonist.Models\Hedonist.Models.csproj" />
+  </ItemGroup>
+
+    <ItemGroup>
+	    <Content Include="appsettings.json">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	    </Content>
+	    <Content Include="NLog.config">
+	      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	    </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="WpfAnimatedGif">
+        <HintPath>Lib\WpfAnimatedGif.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Images\Art.png" />
+      <Resource Include="Images\Communication.png" />
+      <Resource Include="Images\Food.png" />
+      <Resource Include="Images\Mixology.png" />
+      <Resource Include="Images\Movement.png" />
+      <Resource Include="Images\Music.png" />
+      <Resource Include="Images\relax_in_water.png" />
+      <Content Include="Images\start-test.gif">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Resource Include="Images\Trends.png" />
+    </ItemGroup>
+
+</Project>

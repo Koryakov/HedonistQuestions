@@ -5,6 +5,7 @@ namespace Hedonist.Repositories {
     public class HedonistDbContext : DbContext {
         private readonly string connectionString;
         public DbSet<Question> Question { get; set; }
+        public DbSet<Answer> Answer { get; set; }
         public DbSet<PasswordInfo> PasswordInfo { get; set; }
 
         public HedonistDbContext(DbContextOptions<HedonistDbContext> options) : base(options) {

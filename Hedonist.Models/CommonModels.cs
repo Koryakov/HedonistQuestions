@@ -31,6 +31,9 @@ namespace Hedonist.Models {
 
         [Column("text")]
         public string Text { get; set; }
+
+        //[ForeignKey("QuestionId")]
+        public ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }
 
     [Table("answer")]
@@ -40,8 +43,8 @@ namespace Hedonist.Models {
         [Column("id")]
         public int Id { get; set; }
 
-        [Column("parent_id")]
-        public int ParentId { get; set; }
+        [Column("parent_answer_id")]
+        public int? ParentAnswerId { get; set; }
         [Column("group")]
         public int Group { get; set; }
 
@@ -50,6 +53,13 @@ namespace Hedonist.Models {
 
         [Column("text")]
         public string Text { get; set; }
+        
+        [Column("question_id")]
+        //[ForeignKey("question_id")]
+        public int QuestionId { get; set; }
+
+        //[NotMapped]        public List<Answer> ChildAnswers { get; set; } = new List<Answer>();
+
     }
 
     [Table("gift")]
@@ -96,5 +106,40 @@ namespace Hedonist.Models {
 
         [Column("ticket")]
         public string? Ticket { get; set; }
+
+        [Column("terminal_name")]
+        public string TerminalName { get; set; }
+        
+    }
+
+    public class AuthenticatedResult<T> {
+        public static AuthenticatedResult<T> NotAuthenticated() {
+            return new AuthenticatedResult<T>() {
+                IsAuthorized = false,
+                Result = default(T)
+            };
+        }
+        public AuthenticatedResult(T result) {
+            IsAuthorized = true;
+            Result = result;
+        }
+        public AuthenticatedResult() { }
+        public bool IsAuthorized { get; set; }
+        public T? Result { get; set; }
+    }    
+
+    public class Password {
+        public Password(string value) {
+            Value = value;
+        }
+
+        public string Value { get; set; }
+    }
+
+    public class Ticket {
+        public Ticket(string value) {
+            Value = value;
+        }
+        public string Value { get; set; }
     }
 }

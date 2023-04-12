@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Intrinsics.Arm;
 
 namespace Hedonist.Repository {
     public class HedonistRepository {
@@ -23,27 +24,61 @@ namespace Hedonist.Repository {
             return new HedonistDbContext(connectionString);
         }
         /// <returns>returns ticket for next requests</returns>
-        public async Task<(bool, string)> ValidatePasswordHashAsync(string passwordHash) {
+        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(string passwordHash) {
             using (var db = CreateContext()) {
                 var pswInfo = await db.PasswordInfo.FirstOrDefaultAsync(p => p.PasswordHash == passwordHash);
                 if (pswInfo != null) {
                     logger.Info($"passwordHash={passwordHash} found. IsUsed={pswInfo.IsUsed}. Ticket='{pswInfo.Ticket}'");
 
                     if (!pswInfo.IsUsed) {
-                        //TODO: generate ticket, return and store to db
-                        return (true, pswInfo.Ticket);
-                    }
-                }
+                        pswInfo.IsUsed = true;
+                        pswInfo.Ticket = Guid.NewGuid().ToString();
+                        await db.SaveChangesAsync();
 
+                        return new AuthenticatedResult<string>() {
+                            IsAuthorized = true,
+                            Result = pswInfo.Ticket
+                        };
+                    }                    
+                }
                 logger.Info($"passwordHash={passwordHash} not found.");
-                return (false, "");
+                return AuthenticatedResult<string>.NotAuthenticated();
             }
         }
 
-        public async Task<List<Question>> GetQuizByTicketAsync(string ticket) {
+        public async Task<AuthenticatedResult<(List<Question>?, List<Answer>?)>> GetQuizByTicketAsync(string ticket) {
+            const int group = 1;
             using (var db = CreateContext()) {
-                var questions = await db.Question.Where(q => q.Group == 1).ToListAsync();
-                return questions;
+                bool isTicketCorrect = await db.PasswordInfo.AnyAsync(p => p.Ticket == ticket);
+
+                if (isTicketCorrect) {
+                    var questions = await db.Question.Where(q => q.Group == group).Include(q => q.Answers).ToListAsync();
+                    var answers = await db.Answer.Where(a => a.Group == group).ToListAsync();
+
+                    return new AuthenticatedResult<(List<Question>?, List<Answer>?)>() {
+                        IsAuthorized = true,
+                        Result = (questions, answers)
+                    };
+                }
+                return AuthenticatedResult<(List<Question>?, List<Answer>?)>.NotAuthenticated();
+            }
+        }
+
+        public async Task<AuthenticatedResult<(List<Question>?, List<Answer>?)>> GetQuizByTicketAsyncOld(string ticket) {
+            const int group = 1;
+            using (var db = CreateContext()) {
+                bool isTicketCorrect = await db.PasswordInfo.AnyAsync(p => p.Ticket == ticket);
+
+                if (isTicketCorrect) {
+                    var questions = await db.Question.Where(q => q.Group == group).ToListAsync();
+                    var answers = await db.Answer.Where(a => a.Group == group).ToListAsync();
+
+                    return new AuthenticatedResult<(List<Question>?, List<Answer>?)>() {
+                        IsAuthorized = true,
+                        Result = (questions, answers)
+                    };
+                }
+                return AuthenticatedResult<(List<Question>?, List<Answer>?)>.NotAuthenticated();
             }
         }
     }

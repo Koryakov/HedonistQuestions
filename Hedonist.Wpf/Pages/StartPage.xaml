@@ -1,0 +1,20 @@
+﻿<Page x:Class="Hedonist.Wpf.Pages.StartPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
+      mc:Ignorable="d"
+      xmlns:gif="http://wpfanimatedgif.codeplex.com"
+      gif:ImageBehavior.AnimateInDesignMode="True"
+      Title="StartPage">
+    <StackPanel Orientation="Vertical" Background="Beige">
+
+        <Image Name="img"
+                    Stretch="Fill"
+                    gif:ImageBehavior.AnimatedSource="/Images/start-test.gif"
+                    gif:ImageBehavior.AutoStart="True"
+                    />
+
+    </StackPanel>
+</Page>
