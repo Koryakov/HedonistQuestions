@@ -24,7 +24,7 @@ namespace Hedonist.Repository {
             return new HedonistDbContext(connectionString);
         }
         /// <returns>returns ticket for next requests</returns>
-        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(string passwordHash) {
+        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(string passwordHash, string terminalName) {
             using (var db = CreateContext()) {
                 var pswInfo = await db.PasswordInfo.FirstOrDefaultAsync(p => p.PasswordHash == passwordHash);
                 if (pswInfo != null) {
@@ -33,6 +33,7 @@ namespace Hedonist.Repository {
                     if (!pswInfo.IsUsed) {
                         pswInfo.IsUsed = true;
                         pswInfo.Ticket = Guid.NewGuid().ToString();
+                        pswInfo.TerminalName = terminalName;
                         await db.SaveChangesAsync();
 
                         return new AuthenticatedResult<string>() {

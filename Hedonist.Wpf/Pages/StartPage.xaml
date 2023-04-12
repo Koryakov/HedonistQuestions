@@ -8,13 +8,16 @@
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
       gif:ImageBehavior.AnimateInDesignMode="True"
       Title="StartPage">
-    <StackPanel Orientation="Vertical" Background="Beige">
-
-        <Image Name="img"
+    <Grid>
+        <Grid PreviewMouseDown="Grid_PreviewMouseDown">
+            <Image Name="img"
                     Stretch="Fill"
-                    gif:ImageBehavior.AnimatedSource="/Images/start-test.gif"
+                    gif:ImageBehavior.AnimatedSource="/Images/Hypno.gif"
                     gif:ImageBehavior.AutoStart="True"
                     />
-
-    </StackPanel>
+            <TextBlock Style="{StaticResource textHypno}" Width="920"
+                    VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Text="В чем твой гедонизм?" />
+        </Grid>
+    </Grid>
 </Page>

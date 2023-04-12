@@ -12,13 +12,13 @@ namespace Hedonist.Test {
 
         [Fact]
         public void PasswordsCreatingTest() {
-            StringBuilder sqlInstructions = new StringBuilder($"INSERT INTO public.\"password_info\"\r\n(password_hash, is_used)\r\nVALUES\r\n");
+            StringBuilder sqlInstructions = new StringBuilder($"INSERT INTO public.\"password_info\"\r\n(password_hash, is_used, terminal_name)\r\nVALUES\r\n");
             for (int i = 0; i < 100; i++) {
                 string psw = $"*{i:000}";
                 string hashPsw = PasswordHasher.Hash(psw);
                 Assert.True(PasswordHasher.Verify(psw, hashPsw));
 
-                sqlInstructions.AppendLine($"('{hashPsw}', FALSE),");
+                sqlInstructions.AppendLine($"('{hashPsw}', FALSE, 'unittest_terminal'),");
             }
             var res = sqlInstructions.ToString();
         }
@@ -26,7 +26,7 @@ namespace Hedonist.Test {
         [Fact]
         public async Task GetQuizTest() {
             var engine = new QuizEngine();
-            var result = await engine.UsePasswordAndReturnTicketAsync(new Password("Psw-6"));
+            var result = await engine.UsePasswordAndReturnTicketAsync(new PasswordData("Psw-6", "unit test"));
             Assert.True(result.IsAuthorized);
             string ticket = result.Result;
             

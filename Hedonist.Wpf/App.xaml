@@ -129,7 +129,24 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
+        <Style x:Key="textHypno" TargetType="{x:Type TextBlock}">
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontSize" Value="141"/>
+            <Setter Property="FontWeight" Value="Heavy"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Foreground">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Offset="0" Color="#0BDAF2" />
+                        <GradientStop Offset="1" Color="#DD01E5" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="textLarge" TargetType="{x:Type TextBlock}">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="FontFamily" Value="Montserrat"/>

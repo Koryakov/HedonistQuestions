@@ -20,11 +20,10 @@ namespace Hedonist.Wpf.Pages {
     public partial class StartPage : Page {
         public StartPage() {
             InitializeComponent();
-            this.Loaded += StartPage_Loaded;
         }
-
-        private void StartPage_Loaded(object sender, RoutedEventArgs e) {
+        
+        private void Grid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
+            NavigationService.Navigate(new NumberPage());
         }
-
     }
 }

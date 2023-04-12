@@ -19,20 +19,19 @@ namespace Hedonist.WebApi.Controllers {
         [HttpGet]
         [Route("Authenticate")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-        [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<string>> Authenticate(string password) {
+        public async Task<ActionResult<string>> Authenticate(string password, string terminalName) {
             try {
                 logger.Info($"IN Authenticate(password={password})");
                 var engine = new QuizEngine();
-                var res = await engine.UsePasswordAndReturnTicketAsync(new Password(password));
+                var res = await engine.UsePasswordAndReturnTicketAsync(new PasswordData(password, terminalName));
                 if (res.IsAuthorized) {
                     return res.Result;
                 }
                 else {
                     return new StatusCodeResult(StatusCodes.Status401Unauthorized);
                 }
-                return new StatusCodeResult(StatusCodes.Status401Unauthorized);
             }
             catch (Exception ex) {
                 logger.Error(ex);

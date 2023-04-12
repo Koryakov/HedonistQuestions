@@ -21,10 +21,10 @@ namespace Hedonist.Business {
             repository = new HedonistRepository(connectionString);
         }
 
-        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(Password password) {
+        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(PasswordData passwordData) {
 
-            string hashPsw = PasswordHasher.Hash(password.Value);
-            return  await repository.UsePasswordAndReturnTicketAsync(hashPsw);
+            string hashPsw = PasswordHasher.Hash(passwordData.PasswordText);
+            return  await repository.UsePasswordAndReturnTicketAsync(hashPsw, passwordData.TerminalName);
         }
 
         public async Task<AuthenticatedResult<List<Question>?>> GetQuizAsync(Ticket ticket) {
@@ -34,9 +34,9 @@ namespace Hedonist.Business {
                 var answersGroups = quizResult.Result.Item2.GroupBy(a => a.ParentAnswerId).OrderBy(g => g.Key).ToList();
 
                 var answersParentGroup = answersGroups[0].ToList();
-                foreach (var answParent in answersParentGroup) {
-                    //answParent.ChildAnswers = answersGroups[1].Where(a => a.ParentId == answParent.Id).ToList();
-                }
+                //foreach (var answParent in answersParentGroup) {
+                //    //answParent.ChildAnswers = answersGroups[1].Where(a => a.ParentId == answParent.Id).ToList();
+                //}
                 questions[0].Answers = answersParentGroup;
 
                 return new AuthenticatedResult<List<Question>?>() {

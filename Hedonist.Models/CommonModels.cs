@@ -128,12 +128,14 @@ namespace Hedonist.Models {
         public T? Result { get; set; }
     }    
 
-    public class Password {
-        public Password(string value) {
-            Value = value;
+    public class PasswordData {
+        public PasswordData(string value, string terminalName) {
+            PasswordText = value;
+            TerminalName = terminalName;
         }
 
-        public string Value { get; set; }
+        public string PasswordText { get; set; }
+        public string TerminalName { get; set; }
     }
 
     public class Ticket {
