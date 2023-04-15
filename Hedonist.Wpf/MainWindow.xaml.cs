@@ -26,7 +26,7 @@ namespace Hedonist.Wpf {
         private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
             frame.NavigationService.Navigate(new StartPage());
             //frame.NavigationService.Navigate(new NumberPage());
-            //frame.NavigationService.Navigate(new TestPage());
+            //frame.NavigationService.Navigate(new TestPage("02bfaebf-61cc-42f6-ab38-fbb578809d5c"));
             //frame.NavigationService.Navigate(new Variants());
             //frame.NavigationService.Navigate(new InfoPage());
         }

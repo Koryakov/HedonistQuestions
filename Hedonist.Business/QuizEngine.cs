@@ -48,5 +48,19 @@ namespace Hedonist.Business {
                 return AuthenticatedResult<List<Question>?>.NotAuthenticated();
             }
         }
+
+        public async Task<AuthenticatedResult<QuizData>> GetQuizDataAsync(Ticket ticket) {
+            var quizResult = await repository.GetQuizByTicketAsync(ticket.Value);
+            if (quizResult.IsAuthorized) {
+                var quizData = new QuizData() {
+                    Questions = quizResult.Result.questions,
+                    Answers = quizResult.Result.answers
+                };
+                return new AuthenticatedResult<QuizData>(quizData);
+            }
+            else {
+                return AuthenticatedResult<QuizData>.NotAuthenticated();
+            }
+        }
     }
 }

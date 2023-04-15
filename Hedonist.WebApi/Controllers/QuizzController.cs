@@ -41,31 +41,65 @@ namespace Hedonist.WebApi.Controllers {
 
         // GET: api/<QuizzController>
         [HttpGet]
-        [Route("GetQuiz")]
+        [Route("GetQuizData")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Question>))]
-        [ProducesResponseType(StatusCodes.Status203NonAuthoritative)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<List<Question>>> GetQuiz(string ticket) {
+        public async Task<ActionResult<QuizData>> GetQuizData(string ticket) {
             try {
-                logger.Info($"IN GetQuestions(ticket={ticket})");
-                var engine = new QuizEngine();
-                var quizInfo = await engine.GetQuizAsync(new Ticket(ticket));
-                List<Question>? questions = quizInfo.Result;
+                logger.Debug($"IN GetQuizData(ticket={ticket})");
+                var quizInfo = await new QuizEngine().GetQuizDataAsync(new Ticket(ticket));
+                QuizData quizData = quizInfo.Result;
 
                 if (!quizInfo.IsAuthorized) {
+                    logger.Debug($"OUT GetQuizData(ticket={ticket}) return Status401Unauthorized");
                     return new StatusCodeResult(StatusCodes.Status401Unauthorized);
                 }
-                else if (questions.Count == 0 || questions[0].Answers.Count == 0) {
+                else if (quizData.Questions.Count == 0 || quizData.Answers.Count == 0) {
+                    logger.Debug($"OUT GetQuizData(ticket={ticket}) return Status404NotFound");
                     return new StatusCodeResult(StatusCodes.Status404NotFound);
                 }
-                return questions;
+                logger.Debug($"OUT GetQuizData(ticket={ticket}) return OK, questions count = {quizData.Questions.Count}, answers count = {quizData.Answers.Count}");
+                return quizData;
             }
             catch (Exception ex) {
-                logger.Error(ex);
+                logger.Debug($"GetQuizData(ticket={ticket}) EXCEPTION", ex);
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
+        /*
+        // GET: api/<QuizzController>
+        [HttpGet]
+        [Route("GetQuiz")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Question>))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<List<Question>>> GetQuiz(string ticket) {
+            try {
+                logger.Debug($"IN GetQuiz(ticket={ticket})");
+                var quizInfo = await new QuizEngine().GetQuizAsync(new Ticket(ticket));
+                List<Question>? questions = quizInfo.Result;
+
+                if (!quizInfo.IsAuthorized) {
+                    logger.Debug($"OUT GetQuiz(ticket={ticket}) return Status401Unauthorized");
+                    return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                }
+                else if (questions.Count == 0 || questions[0].Answers.Count == 0) {
+                    logger.Debug($"OUT GetQuiz(ticket={ticket}) return Status404NotFound");
+                    return new StatusCodeResult(StatusCodes.Status404NotFound);
+                }
+                logger.Debug($"OUT GetQuiz(ticket={ticket}) return OK, questions count = {questions.Count}");
+                return questions;
+            }
+            catch (Exception ex) {
+                logger.Debug($"GetQuiz(ticket={ticket}) EXCEPTION", ex);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+        */
         //// GET api/<QuizzController>/5
         //[HttpGet("{id}")]
         //public string Get(int id) {

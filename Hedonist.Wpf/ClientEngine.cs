@@ -1,5 +1,6 @@
 ﻿using Hedonist.Models;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -8,6 +9,7 @@ using System.Net;
 using System.Net.Http;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -59,7 +61,7 @@ namespace Hedonist.Wpf {
                         authResult.Result = AutorizeResultType.Authorized;
                         authResult.Ticket = await response.Content.ReadAsStringAsync();
                         break;
-                    case HttpStatusCode.NonAuthoritativeInformation:
+                    case HttpStatusCode.Unauthorized:
                         authResult.Result = AutorizeResultType.Unauthorized;
                         break;
                     case HttpStatusCode.InternalServerError:
@@ -80,8 +82,41 @@ namespace Hedonist.Wpf {
             }
         }
 
-        public static async Task<AuthenticatedResult<(List<Question>?, List<Answer>?)>> GetQuizByTicketAsync(string ticket) {
-            return null;
+        public static async Task<(AutorizeResultType resultType, QuizData quizData)> GetQuizByTicketAsync(string ticket) {
+            logger.Debug("IN GetQuizByTicketAsync();");
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            AutorizeResultType resultType = AutorizeResultType.Unknown;
+            try {
+                response = await httpClient.GetAsync(
+                    settings.QuizHost + $"/api/Quizz/GetQuizData?ticket={ticket}");
+                logger.Info($"GetQuizByTicketAsync request StatusCode = {response.StatusCode};");
+
+                var strQuiz = await response.Content.ReadAsStringAsync();
+                var quizData = JsonConvert.DeserializeObject<QuizData>(strQuiz);
+
+                switch (response.StatusCode) {
+                    case HttpStatusCode.OK:
+                        resultType = AutorizeResultType.Authorized;
+                        break;
+                    case HttpStatusCode.Unauthorized:
+                        resultType = AutorizeResultType.Unauthorized;
+                        break;
+                    case HttpStatusCode.InternalServerError:
+                        resultType = AutorizeResultType.Error;
+                        break;
+                    default:
+                        resultType = AutorizeResultType.Unknown;
+                        break;
+                }
+                logger.Debug("OUT GetQuizByTicketAsync();");
+                return (resultType, quizData);
+
+            }
+            catch (HttpRequestException) {
+                logger.Error("GetQuizByTicketAsync GetAsync TIMEOUT;");
+                return (AutorizeResultType.Timeout, null);
+            }
+
         }
     }
 }

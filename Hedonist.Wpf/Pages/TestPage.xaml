@@ -3,17 +3,75 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
+      xmlns:local="clr-namespace:Hedonist.Wpf"
+      xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
+      xmlns:spinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
       Background="#000000"
       Title="TestPage">
+    
+    <Page.Resources>
+        <local:StateViewModel x:Key="viewmodel"></local:StateViewModel>
+    </Page.Resources>
 
-    <Grid>
-        <StackPanel Orientation="Vertical">
-            <Image Width = "1080" Height="753" Source="..\\Images\relax_in_water.png"    
-            VerticalAlignment = "Top" Margin = "30"/>
+    <Grid Background="Wheat" Margin="0" Width="1080" Height="1920">
+        <custom:Modal x:Name="modal" Panel.ZIndex="10">
+            <Grid Width="300" Height="300">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock x:Name="modalMessage"/>
+                    <Button
+                        x:Name="btnCloseModal"
+                         Click="OnCloseModalClick"
+                        Margin="0 10 0 0"
+                        Padding="10 5"
+                        Content="Закрыть" />
+                </StackPanel>
+            </Grid>
+        </custom:Modal>
+
+        <StackPanel Orientation="Vertical" Margin="0">
+            <!--<Grid>
+                <Image Width="1080" Height="753" Source="..\\Images\relax_in_water.png"
+                    VerticalAlignment = "Top" Margin = "0"/>
+
+                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
+                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <TextBlock Style="{StaticResource textLarge}" Width="934"
+                    Margin="76 96 0 0"
+                    Text="Гедонизм: как быть профессионалом в удовольствии" />
+            </Grid>-->
+
+            <StackPanel Orientation="Vertical" Background="Black" Margin="0 48 0 0" Width="894">
+                <TextBlock Style="{StaticResource textMiddle}" Text="Давай разберемся, насколько ты любишь отдыхать и умеешь ли правильно это делать?"/>
+                <TextBlock Margin="0 20 0 0" Style="{StaticResource textMiddle}" Text="Ответь на несколько вопросов и узнай, гедонист ты или нет!"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Background="Black" Margin="0 48 0 0" Width="931">
+                <TextBlock Style="{StaticResource textMiddle}" x:Name="txtQuestion"/>
+
+                <ItemsControl ItemsSource="{Binding States}" x:Name="ctlAnswers">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <RadioButton GroupName="Same" Click="RadioButton_Click" IsChecked="{Binding IsSelected}" Content="{Binding StateName}" Foreground="White"></RadioButton>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="0 65 0 0">
+                <Button x:Name="btnNext" Content="Продолжить" Width="420" Style="{StaticResource commonDarkButton}" Click="btnNext_Click"></Button>
+            </StackPanel>
+
+            <spinner:LoadingSpinner  x:Name="spinner"
+            Grid.Row="1"
+            Margin="10"
+            Cap="Triangle"
+            Diameter="150"
+            Thickness="7"
+            Color="#DD01E5" />
         </StackPanel>
-
     </Grid>
 </Page>
+<!--https://stackoverflow.com/questions/18390528/wpf-radiobutton-togglebutton-styling-->

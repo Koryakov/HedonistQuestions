@@ -24,43 +24,38 @@ namespace Hedonist.Wpf.Pages {
     public partial class NumberPage : Page {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         readonly BackgroundWorker bgWorker = new BackgroundWorker();
-       //private readonly ManualResetEventSlim resetEvent = new();
         private AutorizeResult autorizeResult;
         private bool isErrorHappens = false;
 
         public NumberPage() {
             InitializeComponent();
 
-            bgWorker.DoWork += BgWorker_DoWork;
-            bgWorker.RunWorkerCompleted += BgWorker_RunWorkerCompleted;
+            bgWorker.DoWork += NumberPageBgWorker_DoWork;
+            bgWorker.RunWorkerCompleted += NumberPageBgWorker_RunWorkerCompleted;
         }
 
-        private void BgWorker_DoWork(object? sender, DoWorkEventArgs e) {
+        private void NumberPageBgWorker_DoWork(object? sender, DoWorkEventArgs e) {
             try {
-                logger.Debug("IN BgWorker_DoWork()");
+                logger.Debug("IN NumberPageBgWorker_DoWork()");
                 string password = pswBox.Password;
                 autorizeResult = new AutorizeResult();
                 
                 Task getAuthTask = Task.Run(async () => {
-                    logger.Debug("BgWorker_DoWork() Task Run()...");
+                    logger.Debug("NumberPageBgWorker_DoWork() Task Run()...");
                     autorizeResult = await ClientEngine.AuthorizeAndGetTicketAsync(password);
-                    //resetEvent.Set();
-                    logger.Debug("BgWorker_DoWork() Task Run() resetEvent was Set()");
 
                 });
                 Task.WaitAll(getAuthTask);
-                logger.Debug("BgWorker_DoWork; resetEvent.Wait() started...");
-                //resetEvent.Wait();
-                logger.Debug("OUT BgWorker_DoWork; resetEvent.Wait() ended");
+                logger.Debug("OUT NumberPageBgWorker_DoWork; resetEvent.Wait() ended");
 
             } catch (Exception ex) {
                 isErrorHappens = true;
-                logger.Error("OUT BgWorker_DoWork() with EXCEPTION", ex);
+                logger.Error("NumberPageBgWorker_DoWork() EXCEPTION", ex);
             }
         }
 
-        private void BgWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
-            logger.Debug("IN BgWorker_RunWorkerCompleted()");
+        private void NumberPageBgWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
+            logger.Debug("IN NumberPageBgWorker_RunWorkerCompleted()");
             spinner.IsLoading = false;
 
             if (isErrorHappens) {
@@ -73,7 +68,7 @@ namespace Hedonist.Wpf.Pages {
 
                 switch (autorizeResult.Result) {
                     case AutorizeResultType.Authorized:
-                        logger.Debug("IN BgWorker_RunWorkerCompleted() - Navigate to TestPage...");
+                        logger.Debug("NumberPageBgWorker_RunWorkerCompleted() - Navigate to TestPage...");
                         NavigationService.Navigate(new TestPage(autorizeResult.Ticket));
                         break;
                     case AutorizeResultType.Unauthorized:
@@ -86,7 +81,7 @@ namespace Hedonist.Wpf.Pages {
                         break;
                 }
             }
-            logger.Debug("OUT BgWorker_RunWorkerCompleted()");
+            logger.Debug("OUT NumberPageBgWorker_RunWorkerCompleted()");
         }
 
         private void btnNumber_Click(object sender, RoutedEventArgs e) {
