@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,8 +23,17 @@ namespace Hedonist.Wpf.Pages {
             InitializeComponent();
         }
         
-        private void Grid_PreviewMouseDown(object sender, MouseButtonEventArgs e) {
-            NavigationService.Navigate(new NumberPage());
+        private void GridClick(object sender, MouseButtonEventArgs e) {
+            var mouseWasDownOn = e.Source as FrameworkElement;
+            if (mouseWasDownOn.Tag.ToString() == "ScreenSaver") {
+                NavigationService.Navigate(new InfoPage());
+            }
+        }
+        private void LockButtonClick(object sender, MouseButtonEventArgs e) {
+            var mouseWasDownOn = e.Source as FrameworkElement;
+            if (mouseWasDownOn.Tag.ToString() == "LockButton") {
+                NavigationService.Navigate(new NumberPage());
+            }
         }
     }
 }

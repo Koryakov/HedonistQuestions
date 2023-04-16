@@ -24,7 +24,7 @@ namespace Hedonist.Business {
         public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(PasswordData passwordData) {
 
             string hashPsw = PasswordHasher.Hash(passwordData.PasswordText);
-            return  await repository.UsePasswordAndReturnTicketAsync(hashPsw, passwordData.TerminalName);
+            return  await repository.UsePasswordAndReturnTicketAsync(hashPsw, passwordData.PasswordText, passwordData.TerminalName);
         }
 
         public async Task<AuthenticatedResult<List<Question>?>> GetQuizAsync(Ticket ticket) {

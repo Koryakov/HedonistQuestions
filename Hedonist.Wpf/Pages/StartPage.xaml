@@ -7,16 +7,18 @@
       mc:Ignorable="d"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
       gif:ImageBehavior.AnimateInDesignMode="True"
+      Background="Black"
       Title="StartPage">
     <Grid>
-        <Grid PreviewMouseDown="Grid_PreviewMouseDown">
-            <Image Name="img"
+        <Grid PreviewMouseDown="GridClick">
+            <Image Name="img" Tag="ScreenSaver"
                     Stretch="Fill"
                     gif:ImageBehavior.AnimatedSource="/Images/Hypno.gif"
                     gif:ImageBehavior.AutoStart="True"
                     />
-            <Image Source="..\\Images\free-icon-lock.png"
-                    VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 50 63 0"/>
+            <Image Tag="LockButton" Source="..\\Images\free-icon-lock.png" PreviewMouseDown="LockButtonClick"
+                   Width="64" Height="64" Panel.ZIndex="50"
+                   VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 150 163 0"/>
             <TextBlock Style="{StaticResource textHypno}" Width="920"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Text="В чем твой гедонизм?" />

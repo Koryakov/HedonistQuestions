@@ -80,7 +80,7 @@ namespace Hedonist.Wpf.Pages {
             }
             catch (Exception ex) {
                 isErrorHappens = true;
-                logger.Error("TestPageBgWorker_DoWork() EXCEPTION", ex);
+                logger.Error(ex, "TestPageBgWorker_DoWork() EXCEPTION");
             }
         }
 
@@ -140,7 +140,7 @@ namespace Hedonist.Wpf.Pages {
                 logger.Debug("OUT BindQuiz()");
 
             } catch (Exception ex) {
-                logger.Error("BindQuiz() with EXCEPTION", ex);
+                logger.Error(ex, "BindQuiz() with EXCEPTION");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }

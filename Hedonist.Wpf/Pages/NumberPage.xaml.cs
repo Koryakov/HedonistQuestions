@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hedonist.Wpf.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -16,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Shell;
+using System.Windows.Threading;
 
 namespace Hedonist.Wpf.Pages {
     /// <summary>
@@ -26,9 +28,11 @@ namespace Hedonist.Wpf.Pages {
         readonly BackgroundWorker bgWorker = new BackgroundWorker();
         private AutorizeResult autorizeResult;
         private bool isErrorHappens = false;
+        private DispatcherTimer timer = new DispatcherTimer();
 
         public NumberPage() {
             InitializeComponent();
+            InitTimer();
 
             bgWorker.DoWork += NumberPageBgWorker_DoWork;
             bgWorker.RunWorkerCompleted += NumberPageBgWorker_RunWorkerCompleted;
@@ -37,6 +41,7 @@ namespace Hedonist.Wpf.Pages {
         private void NumberPageBgWorker_DoWork(object? sender, DoWorkEventArgs e) {
             try {
                 logger.Debug("IN NumberPageBgWorker_DoWork()");
+                timer.Stop();
                 string password = pswBox.Password;
                 autorizeResult = new AutorizeResult();
                 
@@ -50,7 +55,7 @@ namespace Hedonist.Wpf.Pages {
 
             } catch (Exception ex) {
                 isErrorHappens = true;
-                logger.Error("NumberPageBgWorker_DoWork() EXCEPTION", ex);
+                logger.Error(ex, "NumberPageBgWorker_DoWork() EXCEPTION");
             }
         }
 
@@ -69,18 +74,22 @@ namespace Hedonist.Wpf.Pages {
                 switch (autorizeResult.Result) {
                     case AutorizeResultType.Authorized:
                         logger.Debug("NumberPageBgWorker_RunWorkerCompleted() - Navigate to TestPage...");
+                        timer.Stop();
                         NavigationService.Navigate(new TestPage(autorizeResult.Ticket));
                         break;
                     case AutorizeResultType.Unauthorized:
                         modalMessage.Text = "Неверный пароль";
                         modal.IsOpen = true;
+                        ResetTimer();
                         break;
                     default:
                         modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                         modal.IsOpen = true;
+                        ResetTimer();
                         break;
                 }
             }
+
             logger.Debug("OUT NumberPageBgWorker_RunWorkerCompleted()");
         }
 
@@ -90,6 +99,7 @@ namespace Hedonist.Wpf.Pages {
             if (!bgWorker.IsBusy && pswBox.Password.Length < 10) {
                 pswBox.Password += buttonValue;
             }
+            ResetTimer();
         }
 
         private void btnApplyPassword_Click(object sender, RoutedEventArgs e) {
@@ -99,11 +109,30 @@ namespace Hedonist.Wpf.Pages {
                 logger.Debug("starting bgWorker.RunWorkerAsync()...");
                 bgWorker.RunWorkerAsync();
             }
+            ResetTimer();
+
             logger.Debug("OUT btnApplyPassword_Click()");
         }
 
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
             modal.IsOpen = false;
+            ResetTimer();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e) {
+            timer.Stop();
+            NavigationService.Navigate(new StartPage());
+        }
+
+        private void InitTimer() {
+            timer.Tick += new EventHandler(dispatcherTimer_Tick);
+            timer.Interval = TimeSpan.FromSeconds(AppSettingsHelper.Settings.ScreensaverTimerIntervalSeconds);
+            timer.Start();
+        }
+
+        private void ResetTimer() {
+            timer.Stop();
+            timer.Start();
         }
 
     }

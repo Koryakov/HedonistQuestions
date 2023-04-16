@@ -112,6 +112,26 @@ namespace Hedonist.Models {
         
     }
 
+    [Table("login_attempt")]
+    public class LoginAttempt {
+        [Key]
+        [Column("id")]
+        public int Id { get; set; }
+
+        [Column("psw")]
+        public string Psw { get; set; }
+
+        [Column("created_date")]
+        public DateTime CreatedDate { get; set; }
+
+        [Column("ticket")]
+        public string? Ticket { get; set; }
+
+        [Column("terminal_name")]
+        public string TerminalName { get; set; }
+
+    }
+
     public class AuthenticatedResult<T> {
         public static AuthenticatedResult<T> NotAuthenticated() {
             return new AuthenticatedResult<T>() {

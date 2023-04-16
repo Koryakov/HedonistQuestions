@@ -28,7 +28,8 @@ namespace Hedonist.Wpf {
     }
 
     internal class Settings {
-        public double HttpTimeoutMilliseconds { get; set; }
+        public double HttpTimeoutSeconds { get; set; }
+        public double ScreensaverTimerIntervalSeconds { get; set; }
         public string TerminalName { get; set; }
         public string QuizHost { get; set; }
     }
@@ -42,7 +43,7 @@ namespace Hedonist.Wpf {
             settings = config.GetRequiredSection("Settings").Get<Settings>();
 
             httpClient = new HttpClient();
-            httpClient.Timeout = TimeSpan.FromMilliseconds(settings.HttpTimeoutMilliseconds);
+            httpClient.Timeout = TimeSpan.FromSeconds(settings.HttpTimeoutSeconds);
 
             logger.Info($"new ClientEngine() completed; Settings: QuizHost='{settings.QuizHost}', TerminalName='{settings.TerminalName}';");
         }
@@ -74,8 +75,8 @@ namespace Hedonist.Wpf {
                 logger.Debug("OUT AuthorizeAndGetTicketAsync();");
                 return authResult;
 
-            } catch (HttpRequestException) {
-                logger.Error("AuthorizeAndGetTicketAsync GetAsync TIMEOUT;");
+            } catch (HttpRequestException ex) {
+                logger.Error(ex, "AuthorizeAndGetTicketAsync GetAsync TIMEOUT;");
                 return new AutorizeResult() {
                     Result = AutorizeResultType.Timeout
                 };
@@ -112,8 +113,8 @@ namespace Hedonist.Wpf {
                 return (resultType, quizData);
 
             }
-            catch (HttpRequestException) {
-                logger.Error("GetQuizByTicketAsync GetAsync TIMEOUT;");
+            catch (HttpRequestException ex) {
+                logger.Error(ex, "GetQuizByTicketAsync GetAsync TIMEOUT;");
                 return (AutorizeResultType.Timeout, null);
             }
 

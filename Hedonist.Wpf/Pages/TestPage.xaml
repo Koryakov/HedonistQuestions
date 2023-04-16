@@ -14,7 +14,7 @@
         <local:StateViewModel x:Key="viewmodel"></local:StateViewModel>
     </Page.Resources>
 
-    <Grid Background="Wheat" Margin="0" Width="1080" Height="1920">
+    <Grid Margin="0" Width="1080" Height="1920">
         <custom:Modal x:Name="modal" Panel.ZIndex="10">
             <Grid Width="300" Height="300">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -30,7 +30,7 @@
         </custom:Modal>
 
         <StackPanel Orientation="Vertical" Margin="0">
-            <!--<Grid>
+            <Grid>
                 <Image Width="1080" Height="753" Source="..\\Images\relax_in_water.png"
                     VerticalAlignment = "Top" Margin = "0"/>
 
@@ -40,20 +40,22 @@
                 <TextBlock Style="{StaticResource textLarge}" Width="934"
                     Margin="76 96 0 0"
                     Text="Гедонизм: как быть профессионалом в удовольствии" />
-            </Grid>-->
+            </Grid>
 
             <StackPanel Orientation="Vertical" Background="Black" Margin="0 48 0 0" Width="894">
                 <TextBlock Style="{StaticResource textMiddle}" Text="Давай разберемся, насколько ты любишь отдыхать и умеешь ли правильно это делать?"/>
                 <TextBlock Margin="0 20 0 0" Style="{StaticResource textMiddle}" Text="Ответь на несколько вопросов и узнай, гедонист ты или нет!"/>
             </StackPanel>
 
-            <StackPanel Orientation="Vertical" Background="Black" Margin="0 48 0 0" Width="931">
+            <StackPanel Orientation="Vertical" Background="Black" Margin="30 48 0 0" Width="931">
                 <TextBlock Style="{StaticResource textMiddle}" x:Name="txtQuestion"/>
 
                 <ItemsControl ItemsSource="{Binding States}" x:Name="ctlAnswers">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <RadioButton GroupName="Same" Click="RadioButton_Click" IsChecked="{Binding IsSelected}" Content="{Binding StateName}" Foreground="White"></RadioButton>
+                            <RadioButton GroupName="Same" Click="RadioButton_Click"
+                                         IsChecked="{Binding IsSelected}" Content="{Binding StateName}"
+                                         Style="{StaticResource answersRadio}"></RadioButton>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

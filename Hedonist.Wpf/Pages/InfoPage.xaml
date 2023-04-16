@@ -9,7 +9,7 @@
       Background="Black"
       Title="InfoPage">
 
-    <Grid Background="Black" Margin="0" Width="1080" Height="1920">
+    <Grid PreviewMouseDown="GridClick" Background="Black" Margin="0" Width="1080" Height="1920">
         <StackPanel Orientation="Vertical" Margin="0">
             <Grid>
                 <Image Width="1080" Height="753" Source="..\\Images\relax_in_water.png"
