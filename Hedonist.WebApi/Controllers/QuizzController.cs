@@ -34,7 +34,7 @@ namespace Hedonist.WebApi.Controllers {
                 }
             }
             catch (Exception ex) {
-                logger.Error(ex);
+                logger.Error(ex, "Authenticate() with EXCEPTION");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
@@ -64,7 +64,7 @@ namespace Hedonist.WebApi.Controllers {
                 return quizData;
             }
             catch (Exception ex) {
-                logger.Debug($"GetQuizData(ticket={ticket}) EXCEPTION", ex);
+                logger.Error(ex, $"GetQuizData(ticket={ticket}) EXCEPTION");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }

@@ -7,6 +7,7 @@ namespace Hedonist.Repositories {
         public DbSet<Question> Question { get; set; }
         public DbSet<Answer> Answer { get; set; }
         public DbSet<PasswordInfo> PasswordInfo { get; set; }
+        public DbSet<LoginAttempt> LoginAttempt { get; set; }
 
         public HedonistDbContext(DbContextOptions<HedonistDbContext> options) : base(options) {
         }

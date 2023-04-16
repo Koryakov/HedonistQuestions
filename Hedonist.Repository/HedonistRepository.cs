@@ -26,24 +26,33 @@ namespace Hedonist.Repository {
         /// <returns>returns ticket for next requests</returns>
         public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(string passwordHash, string psw, string terminalName) {
             using (var db = CreateContext()) {
+
+                string ticket = Guid.NewGuid().ToString();
                 var pswInfo = await db.PasswordInfo.FirstOrDefaultAsync(p => p.PasswordHash == passwordHash);
+                bool isSuccess = (pswInfo != null);
+
+                logger.Info($"UsePasswordAndReturnTicketAsync() isSuccess={isSuccess},  passwordHash={passwordHash}. Ticket='{ticket}'");
+
+                LoginAttempt la = new LoginAttempt() {
+                    Psw = psw,
+                    CreatedDate = DateTime.UtcNow,
+                    TerminalName = terminalName,
+                    Ticket = ticket,
+                    IsSuccess = isSuccess
+                };
+
+                await db.LoginAttempt.AddAsync(la);
+                await db.SaveChangesAsync();
+
                 if (pswInfo != null) {
-                    logger.Info($"passwordHash={passwordHash} found. IsUsed={pswInfo.IsUsed}. Ticket='{pswInfo.Ticket}'");
-
-                    if (!pswInfo.IsUsed) {
-                        pswInfo.IsUsed = true;
-                        pswInfo.Ticket = Guid.NewGuid().ToString();
-                        pswInfo.TerminalName = terminalName;
-                        await db.SaveChangesAsync();
-
-                        return new AuthenticatedResult<string>() {
-                            IsAuthorized = true,
-                            Result = pswInfo.Ticket
-                        };
-                    }                    
+                    return new AuthenticatedResult<string>() {
+                        IsAuthorized = true,
+                        Result = ticket
+                    };
                 }
-                logger.Info($"passwordHash={passwordHash} not found.");
-                return AuthenticatedResult<string>.NotAuthenticated();
+                else {
+                    return AuthenticatedResult<string>.NotAuthenticated();
+                }
             }
         }
 

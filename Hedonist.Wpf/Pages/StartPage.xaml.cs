@@ -19,7 +19,11 @@ namespace Hedonist.Wpf.Pages {
     /// Interaction logic for StartPage.xaml
     /// </summary>
     public partial class StartPage : Page {
+
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public StartPage() {
+            logger.Info("StartPage() constructor called");
             InitializeComponent();
         }
         

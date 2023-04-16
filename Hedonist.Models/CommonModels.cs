@@ -130,6 +130,9 @@ namespace Hedonist.Models {
         [Column("terminal_name")]
         public string TerminalName { get; set; }
 
+        [Column("is_success")]
+        public bool IsSuccess { get; set; }
+
     }
 
     public class AuthenticatedResult<T> {
