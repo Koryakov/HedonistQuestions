@@ -90,7 +90,7 @@ namespace Hedonist.Wpf.Pages {
             spinner.IsLoading = false;
 
             if (isErrorHappens) {
-                logger.Error("TestPageBgWorker_RunWorkerCompleted() isErrorHappens=TRUE")
+                logger.Error("TestPageBgWorker_RunWorkerCompleted() isErrorHappens=TRUE");
                 isErrorHappens = false;
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;

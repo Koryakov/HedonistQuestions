@@ -59,7 +59,7 @@ namespace Hedonist.Repository {
         public async Task<AuthenticatedResult<(List<Question>? questions, List<Answer>? answers)>> GetQuizByTicketAsync(string ticket) {
             const int group = 1;
             using (var db = CreateContext()) {
-                bool isTicketCorrect = await db.PasswordInfo.AnyAsync(p => p.Ticket == ticket);
+                bool isTicketCorrect = await db.LoginAttempt.AnyAsync(p => p.Ticket == ticket);
 
                 if (isTicketCorrect) {
                     var questions = await db.Question.Where(q => q.Group == group).Include(q => q.Answers).ToListAsync();
