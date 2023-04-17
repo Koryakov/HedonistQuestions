@@ -31,6 +31,7 @@ namespace Hedonist.Wpf {
         public double HttpTimeoutSeconds { get; set; }
         public double ScreensaverTimerIntervalSeconds { get; set; }
         public string TerminalName { get; set; }
+        public string TerminalIdentifier { get; set; }
         public string QuizHost { get; set; }
     }
 
@@ -52,8 +53,15 @@ namespace Hedonist.Wpf {
             logger.Debug("IN AuthorizeAndGetTicketAsync();");
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             try {
-                response = await httpClient.GetAsync(
-                    settings.QuizHost + $"/api/Quizz/Authenticate?password={password}&terminalName={settings.TerminalName}");
+                var authData = new AuthenticationData() {
+                    Password = password,
+                    TerminalName = settings.TerminalName,
+                    DeviceIdentifier = settings.TerminalIdentifier
+                };
+                var json = JsonConvert.SerializeObject(authData);
+                var requestContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+
+                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/Authenticate", requestContent);
                 logger.Info($"Authenticate request StatusCode = {response.StatusCode};");
 
                 var authResult = new AutorizeResult();

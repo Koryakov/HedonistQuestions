@@ -9,8 +9,13 @@
       mc:Ignorable="d"
       Title="Number">
 
-    <Grid Width="616" VerticalAlignment="Center">
-        
+    <Grid VerticalAlignment="Center">
+        <Grid>
+            <Image Width="1080" Height="1920" Source="..\\Images\hypno-backgrnd.png"
+                    VerticalAlignment = "Top" Margin = "0"/>
+        </Grid>
+        <StackPanel Orientation="Vertical"
+            VerticalAlignment="Center" HorizontalAlignment="Center" >        
         <custom:Modal x:Name="modal" Panel.ZIndex="10">
             <Grid Width="300" Height="300">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -24,8 +29,8 @@
                 </StackPanel>
             </Grid>
         </custom:Modal>
-        
-        <StackPanel Orientation="Vertical">
+
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" >
             <StackPanel Orientation="Vertical">
                 <Grid Margin="0 0 0 65">
                     <PasswordBox x:Name="pswBox" Width="420" Height="100"
@@ -57,7 +62,8 @@
                 <Button x:Name="btnApplyPassword" Content="Продолжить" Width="420" Style="{StaticResource commonDarkButton}" Click="btnApplyPassword_Click"></Button>
             </StackPanel>
         </StackPanel>
-
+        </StackPanel>
+    
         <spinner:LoadingSpinner  x:Name="spinner"
             Grid.Row="1"
             Margin="10"

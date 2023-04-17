@@ -12,36 +12,20 @@
     <Grid PreviewMouseDown="GridClick" Background="Black" Margin="0" Width="1080" Height="1920">
         <StackPanel Orientation="Vertical" Margin="0">
             <Grid>
-                <Image Width="1080" Height="753" Source="..\\Images\relax_in_water.png"
+                <Image Width="1080" Height="753" Source="..\\Images\man_on_yacht.png"
                     VerticalAlignment = "Top" Margin = "0"/>
-
-                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
-                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
-
-                <TextBlock Style="{StaticResource textLarge}" Width="934"
-                    Margin="76 96 0 0"
-                    Text="Гедонизм: как быть профессионалом в удовольствии" />
             </Grid>
-
-            <StackPanel Orientation="Vertical" Height="76" Background="Black" Margin="0 48 0 0" Width="931">
-                <TextBlock Style="{StaticResource textMiddle}" Text="Гедонизм, наверное, самая приятная философия – "/>
-                <TextBlock Style="{StaticResource textMiddle}" Text="она о близком каждому человеку, об удовольствии. "/>
-            </StackPanel>
 
             <StackPanel Orientation="Vertical" Background="Black" Margin="0 48 0 0" Width="931">
                 <Rectangle Width="200" Height="10" Fill="#0BDAF2" 
                            HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <TextBlock Style="{StaticResource textLarge}" Text="Что такое гедонизм?!"/>
-                <TextBlock Margin="0 15 0 0" Style="{StaticResource textSmall}" Text="Гедонизм — это этическая установка, согласно которой в основе человеческой природы лежит стремление к наслаждению. Следовательно, деятельность человека подчиняется этой главной цели — достижению наслаждения. Слово происходит от древнегреческого «хедонэ», которое так и переводится — наслаждение, удовольствие. Зачастую неверно ставится знак равенства между гедонизмом и эпикурейством — в строгом смысле эти два течения античной философии хоть и говорят об удовольствии как о центре человеческой жизни, все же различаются в понимании сущности удовольствия как такового."/>
+                <TextBlock Margin="0 15 0 0" Style="{StaticResource textSmall}" Text="Гедонизм – учение, образ жизни, в котором получать удовольствие является высшим благом. Это ли не лучшая философия на свете?
+Само слово «гедонизм» происходит от древнегреческого и означает «наслаждение, удовольствие».
+Основоположником философии считается древнегреческий философ Аристипп. По его мнению, путь к счастью лежит в достижении максимального удовольствия, избегая при этом боли.
+Достижение удовольствия дело важное, но сугубо индивидуальное. То, от чего каждый будет получать удовольствие, зависит от его уровня развития и личных предпочтений. Например, для одного удовольствие – посмотреть сериал или послушать музыку, для другого – выпить коктейль в баре, а для третьего – забраться на самую высокую гору.
+Так давай узнаем, от чего получаешь удовольствие именно ты?"/>
             </StackPanel>
-
-            <StackPanel Orientation="Vertical" Background="Black" Margin="0 48 0 0" Width="931">
-                <Rectangle Width="200" Height="10" Fill="#0BDAF2" 
-                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBlock Style="{StaticResource textLarge}" Text="Идеи гедонизма"/>
-                <TextBlock Margin="0 15 0 0" Style="{StaticResource textSmall}" Text="В широком смысле гедонизм — это стремление к максимизации счастья и удовольствия и минимизации страданий и боли. Гедонизм признает безусловную ценность земной жизни, поэтому в отличие от христианства и ислама не рассматривает наслаждение как награду за праведную жизнь, как нечто, что следует отложить до жизни вечной, когда можно будет бесконечно наслаждаться высшим счастьем."/>
-            </StackPanel>
-
         </StackPanel>
     </Grid>
 </Page>

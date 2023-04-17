@@ -5,23 +5,19 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1080" d:DesignWidth="1920"
+      Background="Black" 
       Title="Variants">
 
-    <Grid Width="1080" VerticalAlignment="Center">
+    <Grid Width="1080">
         <StackPanel Grid.Row="1">
-            <Grid Height="320" Background="Black" Margin="0">
-                <Grid.Resources >
-                    <Style TargetType="Border" >
-                        <Setter Property="Padding" Value="0" />
-                    </Style>
-                </Grid.Resources>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left"
-                    Width="934" Height="196" TextWrapping="Wrap"
-                    FontFamily="Montserrat" Margin="53 0 0 0" Padding="0"
-                    Foreground="#FFFFFF"
-                    FontSize="50 pt" FontWeight="ExtraBlack" FontStyle="Normal"
-                    Text="От чего получаешь удовольствие ты?"/>
+            <Grid>
+                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
+                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <TextBlock Style="{StaticResource textLarge}" Width="934"
+                    Margin="76 96 0 0"
+                    Text="От чего получаешь удовольствие ты?" />
             </Grid>
             <Button Tag="Images\Art.png" Style="{StaticResource variantsButton}"></Button>
             <Button Tag="Images\Music.png" Style="{StaticResource variantsButton}"></Button>
@@ -29,6 +25,7 @@
             <Button Tag="Images\Food.png" Style="{StaticResource variantsButton}"></Button>
             <Button Tag="Images\Movement.png" Style="{StaticResource variantsButton}"></Button>
             <Button Tag="Images\Mixology.png" Style="{StaticResource variantsButton}"></Button>
+            <Button Tag="Images\Communication.png" Style="{StaticResource variantsButton}"></Button>
         </StackPanel>
     </Grid>
 </Page>

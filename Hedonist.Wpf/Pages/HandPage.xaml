@@ -1,0 +1,39 @@
+﻿<Page x:Class="Hedonist.Wpf.Pages.HandPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
+      mc:Ignorable="d"
+      xmlns:gif="http://wpfanimatedgif.codeplex.com"
+      gif:ImageBehavior.AnimateInDesignMode="True"
+      d:DesignHeight="1920" d:DesignWidth="1080"
+      Title="HandPage">
+
+    <Grid Background="Black" Margin="0" Width="1080" Height="1920">
+        <StackPanel Orientation="Vertical" Margin="0">
+            <Grid>
+                <Image Name="img" Tag="ScreenSaver"
+                    Stretch="Fill"
+                    gif:ImageBehavior.AnimatedSource="/Images/Palm-scanner-2_10.gif"
+                    gif:ImageBehavior.AutoStart="True"
+                    />
+
+                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
+                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+                <TextBlock Style="{StaticResource textLarge}" Width="934"
+                    Margin="76 96 0 0"
+                    Text="Приложи руку к экрану и сканер определит уровень твоего удовольствия" />
+                
+                <StackPanel Orientation="Vertical" Margin="0 0 0 211" Panel.ZIndex="10"
+                            VerticalAlignment="Bottom">
+                    <Button x:Name="btnShowResult" Content="Покажи результат" Width="420" Style="{StaticResource commonDarkButton}" Click="btnShowResult_Click"></Button>
+                </StackPanel>
+
+            </Grid>
+            
+            
+        </StackPanel>
+    </Grid>
+</Page>

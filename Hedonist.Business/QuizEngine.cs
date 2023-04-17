@@ -21,10 +21,10 @@ namespace Hedonist.Business {
             repository = new HedonistRepository(connectionString);
         }
 
-        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(PasswordData passwordData) {
+        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(AuthenticationData authData) {
 
-            string hashPsw = PasswordHasher.Hash(passwordData.PasswordText);
-            return  await repository.UsePasswordAndReturnTicketAsync(hashPsw, passwordData.PasswordText, passwordData.TerminalName);
+            string hashPsw = PasswordHasher.Hash(authData.Password);
+            return  await repository.UsePasswordAndReturnTicketAsync(hashPsw, authData);
         }
 
         public async Task<AuthenticatedResult<List<Question>?>> GetQuizAsync(Ticket ticket) {

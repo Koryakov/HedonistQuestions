@@ -24,19 +24,21 @@ namespace Hedonist.Repository {
             return new HedonistDbContext(connectionString);
         }
         /// <returns>returns ticket for next requests</returns>
-        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(string passwordHash, string psw, string terminalName) {
+        public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(string passwordHash, AuthenticationData authData) {
             using (var db = CreateContext()) {
 
                 string ticket = Guid.NewGuid().ToString();
                 var pswInfo = await db.PasswordInfo.FirstOrDefaultAsync(p => p.PasswordHash == passwordHash);
+                var terminal = await db.Terminal.FirstOrDefaultAsync(t => t.DeviceIdentifier == authData.DeviceIdentifier);
                 bool isSuccess = (pswInfo != null);
 
                 logger.Info($"UsePasswordAndReturnTicketAsync() isSuccess={isSuccess},  passwordHash={passwordHash}. Ticket='{ticket}'");
 
                 LoginAttempt la = new LoginAttempt() {
-                    Psw = psw,
+                    Psw = authData.Password,
                     CreatedDate = DateTime.UtcNow,
-                    TerminalName = terminalName,
+                    TerminalName = authData.TerminalName,
+                    DeviceIdentifier = authData.DeviceIdentifier,
                     Ticket = ticket,
                     IsSuccess = isSuccess
                 };

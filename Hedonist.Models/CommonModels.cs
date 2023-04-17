@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
 
 namespace Hedonist.Models {
     [Table("terminal")]
@@ -12,8 +13,8 @@ namespace Hedonist.Models {
         [Column("name")]
         public string Name { get; set; }
 
-        [Column("mac_address")]
-        public string MacAddress { get; set; }
+        [Column("device_identifier")]
+        public string DeviceIdentifier { get; set; }
     }
 
     [Table("question")]
@@ -129,6 +130,9 @@ namespace Hedonist.Models {
 
         [Column("terminal_name")]
         public string TerminalName { get; set; }
+
+        [Column("device_identifier")]
+        public string DeviceIdentifier { get; set; }
 
         [Column("is_success")]
         public bool IsSuccess { get; set; }

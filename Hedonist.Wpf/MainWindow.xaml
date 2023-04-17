@@ -7,5 +7,7 @@
         mc:Ignorable="d"
         WindowState="Maximized"
         WindowStyle="None">
-    <Frame x:Name="frame" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></Frame>
+    <Frame x:Name="frame"
+           NavigationUIVisibility="Hidden"
+           HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"></Frame>
 </Window>

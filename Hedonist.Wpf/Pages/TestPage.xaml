@@ -31,8 +31,8 @@
 
         <StackPanel Orientation="Vertical" Margin="0">
             <Grid>
-                <Image Width="1080" Height="753" Source="..\\Images\relax_in_water.png"
-                    VerticalAlignment = "Top" Margin = "0"/>
+                <!--<Image Width="1080" Height="753" Source="..\\Images\relax_in_water.png"
+                    VerticalAlignment = "Top" Margin = "0"/>-->
 
                 <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
                            HorizontalAlignment="Left" VerticalAlignment="Top"/>

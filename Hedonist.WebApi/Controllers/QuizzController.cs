@@ -16,16 +16,16 @@ namespace Hedonist.WebApi.Controllers {
             logger.Info("constructor");
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Authenticate")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<string>> Authenticate(string password, string terminalName) {
+        public async Task<ActionResult<string>> Authenticate(AuthenticationData authData) {
             try {
-                logger.Info($"IN Authenticate(password={password})");
+                logger.Info($"IN Authenticate(password={authData.Password}, terminal name = {authData.TerminalName}, device id= {authData.DeviceIdentifier})");
                 var engine = new QuizEngine();
-                var res = await engine.UsePasswordAndReturnTicketAsync(new PasswordData(password, terminalName));
+                var res = await engine.UsePasswordAndReturnTicketAsync(authData);
                 if (res.IsAuthorized) {
                     return res.Result;
                 }

@@ -159,7 +159,7 @@ namespace Hedonist.Wpf.Pages {
                     if (quizState.QuestionQueue.Count != 0) {
                         BindQuiz();
                     } else {
-                        NavigationService.Navigate(new VariantsPage());
+                        NavigationService.Navigate(new HandPage());
                     }
                 }
             }

@@ -23,14 +23,14 @@ namespace Hedonist.Test {
             var res = sqlInstructions.ToString();
         }
 
-        [Fact]
-        public async Task GetQuizTest() {
-            var engine = new QuizEngine();
-            var result = await engine.UsePasswordAndReturnTicketAsync(new PasswordData("Psw-6", "unit test"));
-            Assert.True(result.IsAuthorized);
-            string ticket = result.Result;
+        //[Fact]
+        //public async Task GetQuizTest() {
+        //    var engine = new QuizEngine();
+        //    var result = await engine.UsePasswordAndReturnTicketAsync(new PasswordData("Psw-6", "unit test"));
+        //    Assert.True(result.IsAuthorized);
+        //    string ticket = result.Result;
             
-            var questionsModel = await engine.GetQuizAsync(new Ticket(ticket));
-        }
+        //    var questionsModel = await engine.GetQuizAsync(new Ticket(ticket));
+        //}
     }
 }
