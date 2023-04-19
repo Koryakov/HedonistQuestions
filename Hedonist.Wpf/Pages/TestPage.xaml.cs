@@ -1,4 +1,5 @@
 ﻿using Hedonist.Models;
+using Hedonist.Wpf.Pages.GiftPages;
 using ModalControl;
 using System;
 using System.Collections;
@@ -26,22 +27,22 @@ namespace Hedonist.Wpf.Pages {
     public partial class TestPage : Page {
 
         public class QuizState {
-            //public QuizData Quiz { get; set; } = new QuizData();
-            public Queue<Question> QuestionQueue { get; set; } = new Queue<Question>();
-            public List<Answer> Answers { get; set; } = new List<Answer>();
-            public Queue<Answer> SelectedAnswers { get; set; } = new Queue<Answer> ();
+            //public QuizData Quiz { get; set; } = new ();
+            public Queue<Question> QuestionQueue { get; set; } = new ();
+            public List<Answer> Answers { get; set; } = new();
+            public Queue<Answer> SelectedAnswers { get; set; } = new();
         }
 
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        private BackgroundWorker bgWorker = new BackgroundWorker();
+        private BackgroundWorker bgWorker = new();
         private (AutorizeResultType resultType, QuizData quiz) quizDataResponse;
         private bool isErrorHappens = false;
-        private string ticket;
         private QuizState quizState;
+        private GiftPageModel giftPageModel = new();
 
         public TestPage(string ticket) {
             logger.Debug($"IN TestPage() constructor");
-            this.ticket = ticket;
+            giftPageModel.Ticket = ticket;
             InitializeComponent();
             btnNext.Visibility = Visibility.Hidden;
 
@@ -72,7 +73,7 @@ namespace Hedonist.Wpf.Pages {
                 Task getAuthTask = Task.Run(async () => {
                     logger.Debug("TestPageBgWorker_DoWork() Task Run()...");
 
-                    quizDataResponse = await ClientEngine.GetQuizByTicketAsync(ticket);
+                    quizDataResponse = await ClientEngine.GetQuizByTicketAsync(giftPageModel.Ticket);
                 });
                 Task.WaitAll(getAuthTask);
                 logger.Debug("OUT TestPageBgWorker_DoWork; resetEvent.Wait() ended");
@@ -154,14 +155,44 @@ namespace Hedonist.Wpf.Pages {
             if(selectedState != null) {
                 Answer answer = quizState.Answers.First(a => a.Id == selectedState.StateId);
                 if (answer != null) {
+                    giftPageModel.SelectedAnswers.Add(answer);
+
                     quizState.SelectedAnswers.Enqueue(answer);
 
                     if (quizState.QuestionQueue.Count != 0) {
                         BindQuiz();
                     } else {
-                        NavigationService.Navigate(new HandPage());
+                        Navigate(giftPageModel);
                     }
                 }
+            }
+        }
+
+        private void Navigate(GiftPageModel giftPageModel) {
+            switch (giftPageModel.SelectedAnswers.Last().Id) {
+                case 17:
+                    //Mixology
+                    break;
+                case 18:
+                    //Music
+                        NavigationService.Navigate(new GiftMusicPage_1(giftPageModel));
+                    break;
+                case 19:
+                    //Movement
+                    break;
+                case 20:
+                    //Communication
+                    break;
+                case 21:
+                    //Food
+                    break;
+                case 23:
+                    //Art
+                    break;
+                case 24:
+                    //Trends
+                    break;
+
             }
         }
 

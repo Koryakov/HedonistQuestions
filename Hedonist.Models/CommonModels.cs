@@ -3,18 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Xml.Linq;
 
 namespace Hedonist.Models {
-    [Table("terminal")]
     public class Terminal {
-
         [Key]
-        [Column("id")]
         public int Id { get; set; }
-
-        [Column("name")]
         public string Name { get; set; }
-
-        [Column("device_identifier")]
         public string DeviceIdentifier { get; set; }
+        public int StoreId { get; set; }
     }
 
     [Table("question")]
@@ -37,61 +31,73 @@ namespace Hedonist.Models {
         public ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }
 
-    [Table("answer")]
+
+    public class GiftType {
+        
+        [Key]
+        public int Id { get; set; }
+        
+        public string Name { get; set; }
+
+        public string DescriptionPattern { get; set; }
+        
+        public string Key { get; set; }
+
+        public List<Answer> Answers { get; } = new();
+        public List<Store> Stores { get; } = new();
+    }
+
+
     public class Answer {
 
         [Key]
-        [Column("id")]
         public int Id { get; set; }
-
-        [Column("parent_answer_id")]
         public int? ParentAnswerId { get; set; }
-        [Column("group")]
         public int Group { get; set; }
-
-        [Column("order")]
         public int Order { get; set; }
-
-        [Column("text")]
         public string Text { get; set; }
-        
-        [Column("question_id")]
-        //[ForeignKey("question_id")]
         public int QuestionId { get; set; }
-
-        //[NotMapped]        public List<Answer> ChildAnswers { get; set; } = new List<Answer>();
-
+        public List<GiftType> GiftTypes { get; } = new();
     }
 
-    [Table("gift")]
+
+    public class Store {
+
+        [Key]
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<GiftType> GiftTypes { get; } = new();
+    }
+
+
     public class Gift {
 
         [Key]
-        [Column("id")]
         public int Id { get; set; }
 
-        [Column("sertificate_code")]
-        public string SertificateCode { get; set; }
-        [Column("remaining_count")]
-        public int RemainingCount { get; set; }
-    }
-
-    [Table("gift_history")]
-    public class GiftHistory {
-
-        [Key]
-        [Column("id")]
-        public int Id { get; set; }
-
-        [Column("sertificate_code")]
-        public string SertificateCode { get; set; }
-        
-        [Column("remaining_count")]
-        public int RemainingCount { get; set; }
-        
-        [Column("created_date")]
+        public string CertificateCode { get; set; }
+        public int GiftTypeId { get; set; }
+        public bool IsSold { get; set; }
         public DateTime CreatedDate { get; set; }
+        public GiftType GiftType { get; } = new();
     }
+
+    //[Table("gift_history")]
+    //public class GiftHistory {
+
+    //    [Key]
+    //    [Column("id")]
+    //    public int Id { get; set; }
+
+    //    [Column("sertificate_code")]
+    //    public string SertificateCode { get; set; }
+        
+    //    [Column("remaining_count")]
+    //    public int RemainingCount { get; set; }
+        
+    //    [Column("created_date")]
+    //    public DateTime CreatedDate { get; set; }
+    //}
 
     [Table("password_info")]
     public class PasswordInfo {
@@ -113,30 +119,16 @@ namespace Hedonist.Models {
         
     }
 
-    [Table("login_attempt")]
     public class LoginAttempt {
         [Key]
-        [Column("id")]
         public int Id { get; set; }
-
-        [Column("psw")]
         public string Psw { get; set; }
-
-        [Column("created_date")]
         public DateTime CreatedDate { get; set; }
-
-        [Column("ticket")]
         public string? Ticket { get; set; }
-
-        [Column("terminal_name")]
-        public string TerminalName { get; set; }
-
-        [Column("device_identifier")]
-        public string DeviceIdentifier { get; set; }
-
-        [Column("is_success")]
+        public string SentTerminalName { get; set; }
+        public string SentDeviceIdentifier { get; set; }
         public bool IsSuccess { get; set; }
-
+        public bool IsExpired { get; set; }
     }
 
     public class AuthenticatedResult<T> {

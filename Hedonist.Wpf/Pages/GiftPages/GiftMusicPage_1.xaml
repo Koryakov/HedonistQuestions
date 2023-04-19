@@ -1,0 +1,43 @@
+﻿<Page x:Class="Hedonist.Wpf.Pages.GiftPages.GiftMusicPage_1"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Hedonist.Wpf.Pages.GiftPages"
+      mc:Ignorable="d" 
+      d:DesignHeight="1920" d:DesignWidth="1080"
+      Title="GiftMusicPage_1">
+
+    <Grid Margin="0" Width="1080" Height="1920">
+        <Image Name="imgBackground" Stretch="Fill" 
+               Source="/Pages/GiftPages/back-music.png"/>
+        <Grid>
+            <StackPanel Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <TextBlock Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
+                    Margin="0 96 0 0" Text="Ты гедонист в музыке!" />
+
+                <TextBlock Text="«Музыка нас связала!»" Margin="0 75 0 0"
+                               HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
+                <TextBlock Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" Text="А тебя так вообще по рукам и ногам, ведь ты истинный гедонист в музыке! Если бы можно было слушать музыку во сне ты бы и это делал. 
+А может уже?..
+Тебя редко можно встретить без наушников и новых треков в телефоне. Ты точно с легкостью отличишь Инстасамку от Мари Краймбрери. А чтобы
+ты продолжал быть в курсе новых треков, лови промокод на подписку в Яндекс. Музыке."/>
+
+                <Button x:Name="btnShowResult" Content="Получить" Width="270"
+                        Click="btnShowResult_Click"
+                        Margin="0 132 0 167" Style="{StaticResource commonDarkButton}" />
+
+                <TextBlock Text="Есть вопросики?!" Margin="0 0 0 60"
+                               HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button x:Name="btnOneMore" Content="Заново" Click="btnOneMore_Click"
+                                Width="270" Style="{StaticResource commonDarkButton}" />
+                    <Separator Opacity="0" Width="70"/>
+                    <Button x:Name="btnChoose" Content="Выбери" Click="btnChoose_Click"
+                                Width="270" Style="{StaticResource commonDarkButton}" />
+                </StackPanel>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</Page>

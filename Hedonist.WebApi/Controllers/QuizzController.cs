@@ -39,6 +39,34 @@ namespace Hedonist.WebApi.Controllers {
             }
         }
 
+        [HttpPost]
+        [Route("GetGift")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Question>))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<HedonistGiftQrCodeData>> GetGift(RequestedGiftInfo requestedGiftInfo) {
+            try {
+                logger.Info($"IN GetGift(), ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                var giftResult = await new QuizEngine().GetGiftAsync(requestedGiftInfo);
+
+                if (!giftResult.IsAuthorized) {
+                    logger.Debug($"OUT GetQuizData(ticket={requestedGiftInfo.Ticket.Value}), return Status401Unauthorized");
+                    return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                }
+                else if (giftResult.Result == null) {
+                    logger.Debug($"OUT GetGift() return Status404NotFound, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                    return new StatusCodeResult(StatusCodes.Status404NotFound);
+                }
+                logger.Debug($"OUT GetGift() return OK, CertificateCode={giftResult.Result.CertificateCode}, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                return giftResult.Result;
+            }
+            catch (Exception ex) {
+                logger.Error(ex, $"GetGift() EXCEPTION, return Status401Unauthorized, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // GET: api/<QuizzController>
         [HttpGet]
         [Route("GetQuizData")]

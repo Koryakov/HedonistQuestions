@@ -1,6 +1,8 @@
 using Hedonist.Business;
 using Hedonist.Models;
 using Microsoft.Extensions.Configuration;
+using System.Drawing;
+using System.IO;
 using System.Text;
 
 namespace Hedonist.Test {
@@ -23,13 +25,32 @@ namespace Hedonist.Test {
             var res = sqlInstructions.ToString();
         }
 
+        [Fact]
+        public async Task GetGiftTest() {
+            var engine = new QuizEngine();
+
+            RequestedGiftInfo giftData = new RequestedGiftInfo() {
+                Ticket = new Ticket("46b1e824-cd2d-4973-96b0-b00bd2acc8dc"),
+                SelectedAnswerId = 21
+            };
+            var result = await engine.GetGiftAsync(giftData);
+
+            Assert.True(result.IsAuthorized);
+
+            if(result.IsAuthorized) {
+                using (var ms = new MemoryStream(result.Result.QrCodeByteArr)) {
+                    var img = Image.FromStream(ms);
+                }
+            }
+        }
+
         //[Fact]
         //public async Task GetQuizTest() {
         //    var engine = new QuizEngine();
         //    var result = await engine.UsePasswordAndReturnTicketAsync(new PasswordData("Psw-6", "unit test"));
         //    Assert.True(result.IsAuthorized);
         //    string ticket = result.Result;
-            
+
         //    var questionsModel = await engine.GetQuizAsync(new Ticket(ticket));
         //}
     }

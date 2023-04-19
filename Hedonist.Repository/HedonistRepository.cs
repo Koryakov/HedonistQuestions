@@ -10,6 +10,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Intrinsics.Arm;
+using System.Data;
 
 namespace Hedonist.Repository {
     public class HedonistRepository {
@@ -37,10 +38,11 @@ namespace Hedonist.Repository {
                 LoginAttempt la = new LoginAttempt() {
                     Psw = authData.Password,
                     CreatedDate = DateTime.UtcNow,
-                    TerminalName = authData.TerminalName,
-                    DeviceIdentifier = authData.DeviceIdentifier,
+                    SentTerminalName = authData.TerminalName,
+                    SentDeviceIdentifier = authData.DeviceIdentifier,
                     Ticket = ticket,
-                    IsSuccess = isSuccess
+                    IsSuccess = isSuccess,
+                    IsExpired = false
                 };
 
                 await db.LoginAttempt.AddAsync(la);
@@ -61,7 +63,7 @@ namespace Hedonist.Repository {
         public async Task<AuthenticatedResult<(List<Question>? questions, List<Answer>? answers)>> GetQuizByTicketAsync(string ticket) {
             const int group = 1;
             using (var db = CreateContext()) {
-                bool isTicketCorrect = await db.LoginAttempt.AnyAsync(p => p.Ticket == ticket);
+                bool isTicketCorrect = await db.LoginAttempt.AnyAsync(p => p.Ticket == ticket && p.IsExpired == false);
 
                 if (isTicketCorrect) {
                     var questions = await db.Question.Where(q => q.Group == group).Include(q => q.Answers).ToListAsync();
@@ -76,22 +78,70 @@ namespace Hedonist.Repository {
             }
         }
 
-        public async Task<AuthenticatedResult<(List<Question>?, List<Answer>?)>> GetQuizByTicketAsyncOld(string ticket) {
-            const int group = 1;
+        public async Task<AuthenticatedResult<(Gift gift, GiftType giftType)>> GetGiftAsync(RequestedGiftInfo soldGiftData) {
+            logger.Info($"IN GetGiftAsync(), ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
             using (var db = CreateContext()) {
-                bool isTicketCorrect = await db.PasswordInfo.AnyAsync(p => p.Ticket == ticket);
+                
+                LoginAttempt? loginAttempt = await db.LoginAttempt
+                    .FirstOrDefaultAsync(l => l.Ticket == soldGiftData.Ticket.Value && l.IsExpired == false);
 
-                if (isTicketCorrect) {
-                    var questions = await db.Question.Where(q => q.Group == group).ToListAsync();
-                    var answers = await db.Answer.Where(a => a.Group == group).ToListAsync();
+                if (loginAttempt != null) {
+                    Terminal? terminal = await db.Terminal.FirstOrDefaultAsync(t => t.DeviceIdentifier == loginAttempt.SentDeviceIdentifier);
+                
+                    if (terminal != null) {
+                        Answer? answer = await db.Answer
+                            .Include(answer => answer.GiftTypes)
+                            .ThenInclude(giftType => giftType.Stores.Where(s => s.Id == terminal.StoreId))
+                            .FirstOrDefaultAsync(a => a.Id == soldGiftData.SelectedAnswerId);
 
-                    return new AuthenticatedResult<(List<Question>?, List<Answer>?)>() {
-                        IsAuthorized = true,
-                        Result = (questions, answers)
-                    };
+                        if(answer != null) {
+
+                            foreach(var giftType in answer.GiftTypes) {
+                                
+                                if(giftType.Stores.Any(s => s.Id == terminal.StoreId)) {
+                                    var gift = await db.Gift
+                                        //.Include(g => g.GiftType)
+                                        .FirstOrDefaultAsync(g => !g.IsSold && g.GiftTypeId == giftType.Id);
+
+                                    if(gift != null) {
+                                        gift.IsSold = true;
+                                        await db.SaveChangesAsync();
+
+                                        logger.Info($"OUT GetGiftAsync() successed, sold giftId={gift.Id}");
+                                        return new AuthenticatedResult<(Gift gift, GiftType giftType)>() {
+                                            IsAuthorized = true,
+                                            Result = (gift, giftType)
+                                        };
+                                    }
+                                }
+                            }
+                            logger.Error($"GetGiftAsync(), STORE for answer.GiftTypes NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+                        }
+                        logger.Error($"GetGiftAsync(), ANSWER NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+                    }
+                    logger.Error($"GetGiftAsync(), TERMINAL NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
                 }
-                return AuthenticatedResult<(List<Question>?, List<Answer>?)>.NotAuthenticated();
             }
+            logger.Info($"OUT GetGiftAsync(), gift NOT FOUND");
+            return AuthenticatedResult<(Gift gift, GiftType giftType)>.NotAuthenticated();
         }
+
+        //public async Task<AuthenticatedResult<(List<Question>?, List<Answer>?)>> GetQuizByTicketAsyncOld(string ticket) {
+        //    const int group = 1;
+        //    using (var db = CreateContext()) {
+        //        bool isTicketCorrect = await db.LoginAttempt.AnyAsync(l => l.Ticket == ticket && l.IsExpired == false);
+
+        //        if (isTicketCorrect) {
+        //            var questions = await db.Question.Where(q => q.Group == group).ToListAsync();
+        //            var answers = await db.Answer.Where(a => a.Group == group).ToListAsync();
+
+        //            return new AuthenticatedResult<(List<Question>?, List<Answer>?)>() {
+        //                IsAuthorized = true,
+        //                Result = (questions, answers)
+        //            };
+        //        }
+        //        return AuthenticatedResult<(List<Question>?, List<Answer>?)>.NotAuthenticated();
+        //    }
+        //}
     }
 }

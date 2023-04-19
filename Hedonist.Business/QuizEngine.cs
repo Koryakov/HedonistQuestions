@@ -1,8 +1,10 @@
 ﻿using Hedonist.Models;
 using Hedonist.Repository;
 using Microsoft.Extensions.Configuration;
+using QRCoder;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -61,6 +63,29 @@ namespace Hedonist.Business {
             else {
                 return AuthenticatedResult<QuizData>.NotAuthenticated();
             }
+        }
+
+        public async Task<AuthenticatedResult<HedonistGiftQrCodeData>> GetGiftAsync(RequestedGiftInfo requestedGiftInfo) {
+
+            var giftResult = await repository.GetGiftAsync(requestedGiftInfo);
+            if (giftResult.IsAuthorized) {
+                string qrCodeText = String.Format($"{giftResult.Result.giftType.DescriptionPattern}", giftResult.Result.gift.CertificateCode);
+
+                var qrGenerator = new QRCodeGenerator();
+                QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrCodeText, QRCodeGenerator.ECCLevel.Q);
+
+                var qrCode = new BitmapByteQRCode(qrCodeData);
+                byte[] qrCodeByteArr = qrCode.GetGraphic(20);
+
+                return new AuthenticatedResult<HedonistGiftQrCodeData>() {
+                    IsAuthorized = true,
+                    Result = new HedonistGiftQrCodeData() {
+                        CertificateCode = giftResult.Result.gift.CertificateCode,
+                        QrCodeByteArr = qrCodeByteArr
+                    }
+                };
+            }
+            return AuthenticatedResult<HedonistGiftQrCodeData>.NotAuthenticated();
         }
     }
 }
