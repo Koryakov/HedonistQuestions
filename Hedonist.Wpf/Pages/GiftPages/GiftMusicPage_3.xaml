@@ -6,7 +6,8 @@
       xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
       xmlns:spinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages.GiftPages"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
+      Background="Black"
       d:DesignHeight="1920" d:DesignWidth="1080"
       Title="GiftMusicPage_3">
 
@@ -40,14 +41,17 @@
                 <TextBlock Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
                     Margin="0 96 0 0" Text="Ты гедонист в музыке!" />
 
-                <Image Name="imgQrCode"/>
-
-                <TextBlock Text="«Музыка нас связала!»" Margin="0 75 0 0"
+                <TextBlock Text="«Твой комплимент доступен по ссылке:»" Margin="0 75 0 30"
                                HorizontalAlignment="Center" Style="{StaticResource textGiftSmall}" />
                 
-                
-                <TextBlock Text="Есть вопросики?!" Margin="0 0 0 60"
-                               HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
+                <Image Name="imgQrCode" Width="600" Height="600"/>
+
+                <TextBlock Text="«Отсканируй QR-код»" Margin="0 10 0 0"
+                               HorizontalAlignment="Center" Style="{StaticResource textGiftSmaller}" />
+
+
+                <TextBlock x:Name="txtQrCode" Margin="0 75 0 0"
+                               HorizontalAlignment="Center" Style="{StaticResource textGiftSmall}" />
                 
             </StackPanel>
 

@@ -23,7 +23,31 @@ namespace Hedonist.Models {
     }
 
     public class HedonistGiftQrCodeData {
+        public enum GiftResultType {
+            Unknown = 0,
+            GiftFound = 1,
+            NoFreeGift = 2,
+            InconsistentData = 3,
+        }
+        public GiftResultType GiftResult { get; set;}
         public string? CertificateCode { get; set;}
+        public string QrCodeText { get; set; }
         public byte[] QrCodeByteArr { get; set;}
     }
+
+    public enum GetGiftResultType {
+        Unknown = 0,
+        GiftFound = 1,
+        NoFreeGift = 2,
+        AnswerNotFound = 3,
+        TerminalNotFound = 4,
+    }
+
+    public class GiftFromDbResult {
+        public GetGiftResultType GetGiftResultType { get; set;}
+        public Gift? Gift { get; set;}
+        public GiftType GiftType { get; set;}
+
+    }
+
 }

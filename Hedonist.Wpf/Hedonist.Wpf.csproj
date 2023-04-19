@@ -20,7 +20,6 @@
     <None Remove="Images\Food.png" />
     <None Remove="Images\free-icon-lock.png" />
     <None Remove="Images\hypno-backgrnd.png" />
-    <None Remove="Images\Hypno.gif" />
     <None Remove="Images\man_on_yacht.png" />
     <None Remove="Images\Mixology.png" />
     <None Remove="Images\Movement.png" />
@@ -87,9 +86,6 @@
 	    <Resource Include="Images\Food.png">
 	      <CopyToOutputDirectory></CopyToOutputDirectory>
 	    </Resource>
-	    <Content Include="Images\Hypno.gif">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Content>
 	    <Resource Include="Images\hypno-backgrnd.png" />
 	    <Resource Include="Images\man_on_yacht.png" />
 	    <Resource Include="Images\Mixology.png">
@@ -126,6 +122,12 @@
       <Resource Include="Pages\GiftPages\back-music.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Images\hypno.mp4">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

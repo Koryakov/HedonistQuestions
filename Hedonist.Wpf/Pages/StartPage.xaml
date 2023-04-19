@@ -5,23 +5,17 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
       mc:Ignorable="d"
-      xmlns:gif="http://wpfanimatedgif.codeplex.com"
-      gif:ImageBehavior.AnimateInDesignMode="True"
       Background="Black"
       Title="StartPage">
-    <Grid>
+    
         <Grid PreviewMouseDown="GridClick">
-            <Image Name="img" Tag="ScreenSaver"
-                    Stretch="Fill"
-                    gif:ImageBehavior.AnimatedSource="/Images/Hypno.gif"
-                    gif:ImageBehavior.AutoStart="True"
-                    />
+            <MediaElement Source="Images\hypno.mp4" Name="hypnoVideo" 
+                Width="1080" Height="1920" LoadedBehavior="Manual" />
             <Image Tag="LockButton" Source="..\\Images\free-icon-lock.png" PreviewMouseDown="LockButtonClick"
-                   Width="64" Height="64" Panel.ZIndex="50"
-                   VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 150 163 0"/>
+                    Width="64" Height="64" Panel.ZIndex="50"
+                    VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 150 163 0"/>
             <TextBlock Style="{StaticResource textHypno}" Width="920"
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Text="В чем твой гедонизм?" />
         </Grid>
-    </Grid>
 </Page>

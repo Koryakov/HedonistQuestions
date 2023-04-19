@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -92,14 +93,15 @@ namespace Hedonist.Wpf.Pages.GiftPages
 
         private void InitGiftScreenInformation() {
             using (var ms = new MemoryStream(giftDataResponse.qrCodeData.QrCodeByteArr)) {
-
-                var imageSource = new BitmapImage();
+                ms.Position = 0;
+                BitmapImage imageSource = new BitmapImage();
                 imageSource.BeginInit();
                 imageSource.StreamSource = ms;
+                imageSource.CacheOption = BitmapCacheOption.OnLoad;
                 imageSource.EndInit();
-
-                // Assign the Source property of your image
                 imgQrCode.Source = imageSource;
+
+                txtQrCode.Text = giftDataResponse.qrCodeData.QrCodeText;
             }
         }
 

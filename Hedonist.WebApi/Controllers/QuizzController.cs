@@ -2,6 +2,8 @@
 using Hedonist.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Newtonsoft.Json;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -59,7 +61,8 @@ namespace Hedonist.WebApi.Controllers {
                     return new StatusCodeResult(StatusCodes.Status404NotFound);
                 }
                 logger.Debug($"OUT GetGift() return OK, CertificateCode={giftResult.Result.CertificateCode}, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
-                return giftResult.Result;
+
+                return Ok(giftResult.Result);
             }
             catch (Exception ex) {
                 logger.Error(ex, $"GetGift() EXCEPTION, return Status401Unauthorized, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");

@@ -25,6 +25,7 @@ namespace Hedonist.Wpf.Pages {
         public StartPage() {
             logger.Info("StartPage() constructor called");
             InitializeComponent();
+            hypnoVideo.Play();
         }
         
         private void GridClick(object sender, MouseButtonEventArgs e) {
