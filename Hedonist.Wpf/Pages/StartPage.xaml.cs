@@ -26,11 +26,17 @@ namespace Hedonist.Wpf.Pages {
             logger.Info("StartPage() constructor called");
             InitializeComponent();
             hypnoVideo.Play();
+            hypnoVideo.MediaEnded += HypnoVideo_MediaEnded;
         }
-        
+
+        private void HypnoVideo_MediaEnded(object sender, RoutedEventArgs e) {
+            hypnoVideo.Position = TimeSpan.Zero;
+            hypnoVideo.Play();
+        }
+
         private void GridClick(object sender, MouseButtonEventArgs e) {
             var mouseWasDownOn = e.Source as FrameworkElement;
-            if (mouseWasDownOn.Tag.ToString() == "ScreenSaver") {
+            if (mouseWasDownOn.Tag == null || mouseWasDownOn.Tag.ToString() != "LockButton") {
                 NavigationService.Navigate(new InfoPage());
             }
         }
