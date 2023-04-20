@@ -1,0 +1,66 @@
+﻿<Page x:Class="Hedonist.Wpf.Pages.GiftPages.GiftsOver"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Hedonist.Wpf.Pages.GiftPages"
+      xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
+      xmlns:spinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
+      mc:Ignorable="d"
+      Background="Black"
+      d:DesignHeight="1920" d:DesignWidth="1080"
+      Title="GiftsOver">
+
+    <Grid Margin="0" Width="1080" Height="1920">
+        <Image Name="imgBackground" Stretch="Fill" 
+               Source="..\\..\\Images\Back\Congrats.png"/>
+
+        <custom:Modal x:Name="modal" Panel.ZIndex="10">
+            <Grid Width="300" Height="300">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock x:Name="modalMessage"/>
+                    <Button
+                        x:Name="btnCloseModal"
+                         Click="OnCloseModalClick"
+                        Margin="0 10 0 0"
+                        Padding="10 5"
+                        Content="Закрыть" />
+                </StackPanel>
+            </Grid>
+        </custom:Modal>
+
+        <spinner:LoadingSpinner  x:Name="spinner"
+            Grid.Row="1"
+            Margin="10"
+            Cap="Triangle"
+            Diameter="150"
+            Thickness="7"
+            Color="#DD01E5" />
+        <Grid>
+            <StackPanel Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <TextBlock Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
+                    Margin="0 212 0 0" Text="Поздравляем!" />
+                <StackPanel>
+                    <TextBlock Text="Мы думаем, что ты гедонист в ____________, но уверены, что ты знаешь лучше."
+                    Margin="0 60 0 0"
+                    HorizontalAlignment="Center" Style="{StaticResource textGiftSmall}" />
+
+                    <TextBlock Text="Скажешь нам, кто ты? Или попытай счастья еще раз,
+                           пройдя тест. Ты точно справишься!"
+                    Margin="0 20 0 30"
+                    HorizontalAlignment="Center" Style="{StaticResource textGiftSmall}" />
+                </StackPanel>
+            
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                            Margin="0 1100 0 0" >
+                    <Button x:Name="btnOneMore" Content="Давай по новой" Click="btnOneMore_Click"
+                                Width="420" Style="{StaticResource commonDarkButton}" />
+                    <Separator Opacity="0" Width="70"/>
+                    <Button x:Name="btnChoose" Content="Скажи мне, кто я" Click="btnChoose_Click"
+                                Width="420" Style="{StaticResource commonDarkButton}" />
+                </StackPanel>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</Page>

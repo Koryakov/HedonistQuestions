@@ -13,7 +13,7 @@
 
     <Grid Margin="0" Width="1080" Height="1920">
         <Image Name="imgBackground" Stretch="Fill" 
-               Source="back-music.png"/>
+               Source="..\\..\\Images\Back\back-music.png"/>
         
         <custom:Modal x:Name="modal" Panel.ZIndex="10">
             <Grid Width="300" Height="300">

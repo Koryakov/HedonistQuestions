@@ -9,13 +9,6 @@
 
   <ItemGroup>
     <None Remove="Images\Art.png" />
-    <None Remove="Images\Back\back-art.png" />
-    <None Remove="Images\Back\back-communication.png" />
-    <None Remove="Images\Back\back-food.png" />
-    <None Remove="Images\Back\back-mixology.png" />
-    <None Remove="Images\Back\back-movement.png" />
-    <None Remove="Images\Back\back-music.png" />
-    <None Remove="Images\Back\back-trends.png" />
     <None Remove="Images\Communication.png" />
     <None Remove="Images\Food.png" />
     <None Remove="Images\free-icon-lock.png" />
@@ -52,27 +45,6 @@
     <ItemGroup>
 	    <Content Include="appsettings.json">
 		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	    </Content>
-	    <Content Include="Images\Back\back-art.png">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Content>
-	    <Content Include="Images\Back\back-communication.png">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Content>
-	    <Content Include="Images\Back\back-food.png">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Content>
-	    <Content Include="Images\Back\back-mixology.png">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Content>
-	    <Content Include="Images\Back\back-movement.png">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Content>
-	    <Content Include="Images\Back\back-music.png">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Content>
-	    <Content Include="Images\Back\back-trends.png">
-	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Content>
 	    <Resource Include="Images\Palm-scanner-2_10.gif">
 	      <CopyToOutputDirectory></CopyToOutputDirectory>
@@ -119,12 +91,33 @@
       </Resource>
       <Resource Include="Images\relax_in_water.png" />
       <Resource Include="Images\who_is_hedonist.png" />
-      <Resource Include="Pages\GiftPages\back-music.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
     </ItemGroup>
 
     <ItemGroup>
+      <None Update="Images\Back\back-art.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\Back\back-communication.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\Back\back-food.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\Back\back-mixology.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\Back\back-movement.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\Back\back-music.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\Back\back-trends.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\Back\Congrats.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
       <None Update="Images\hypno.mp4">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
