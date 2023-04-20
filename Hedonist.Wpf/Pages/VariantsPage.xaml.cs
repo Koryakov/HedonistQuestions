@@ -18,7 +18,7 @@ namespace Hedonist.Wpf.Pages {
     /// Interaction logic for Variants.xaml
     /// </summary>
     public partial class VariantsPage : Page {
-        public VariantsPage() {
+        public VariantsPage(string ticket) {
             InitializeComponent();
         }
     }

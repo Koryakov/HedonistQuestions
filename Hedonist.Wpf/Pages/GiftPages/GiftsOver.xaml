@@ -15,20 +15,6 @@
         <Image Name="imgBackground" Stretch="Fill" 
                Source="..\\..\\Images\Back\Congrats.png"/>
 
-        <custom:Modal x:Name="modal" Panel.ZIndex="10">
-            <Grid Width="300" Height="300">
-                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock x:Name="modalMessage"/>
-                    <Button
-                        x:Name="btnCloseModal"
-                         Click="OnCloseModalClick"
-                        Margin="0 10 0 0"
-                        Padding="10 5"
-                        Content="Закрыть" />
-                </StackPanel>
-            </Grid>
-        </custom:Modal>
-
         <spinner:LoadingSpinner  x:Name="spinner"
             Grid.Row="1"
             Margin="10"
@@ -41,7 +27,8 @@
                 <TextBlock Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
                     Margin="0 212 0 0" Text="Поздравляем!" />
                 <StackPanel>
-                    <TextBlock Text="Мы думаем, что ты гедонист в ____________, но уверены, что ты знаешь лучше."
+                    <TextBlock Name="txtBlock1" Text="Мы думаем, что ты гедонист в ТЕСТОВЫЙ БЛОК,
+но уверены, что ты знаешь лучше."
                     Margin="0 60 0 0"
                     HorizontalAlignment="Center" Style="{StaticResource textGiftSmall}" />
 
@@ -52,11 +39,11 @@
                 </StackPanel>
             
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                            Margin="0 1100 0 0" >
-                    <Button x:Name="btnOneMore" Content="Давай по новой" Click="btnOneMore_Click"
+                            Margin="0 100 0 0" >
+                    <Button x:Name="btnAgain" Content="Давай по новой" Click="btnAgain_Click"
                                 Width="420" Style="{StaticResource commonDarkButton}" />
                     <Separator Opacity="0" Width="70"/>
-                    <Button x:Name="btnChoose" Content="Скажи мне, кто я" Click="btnChoose_Click"
+                    <Button x:Name="btnSayWhoAmI" Content="Скажи мне, кто я" Click="btnSayWhoAmI_Click"
                                 Width="420" Style="{StaticResource commonDarkButton}" />
                 </StackPanel>
             </StackPanel>

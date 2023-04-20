@@ -42,6 +42,7 @@ namespace Hedonist.Models {
         public string DescriptionPattern { get; set; }
         
         public string Key { get; set; }
+        public bool HasQrCode { get; set; }
 
         public List<Answer> Answers { get; } = new();
         public List<Store> Stores { get; } = new();

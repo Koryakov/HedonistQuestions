@@ -34,6 +34,7 @@ namespace Hedonist.Wpf {
         public string TerminalName { get; set; }
         public string TerminalIdentifier { get; set; }
         public string QuizHost { get; set; }
+        public bool HideMouseCursor { get; set; }
     }
 
     internal class ClientEngine {
@@ -133,7 +134,7 @@ namespace Hedonist.Wpf {
 
         }
 
-        public static async Task<(AutorizeResultType resultType, HedonistGiftQrCodeData qrCodeData)> GetGiftAsync(string ticket, int answerId) {
+        public static async Task<(AutorizeResultType resultType, GiftQrCodeRawData qrCodeData)> GetGiftAsync(string ticket, int answerId) {
             logger.Debug("IN GetGiftAsync();");
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             AutorizeResultType resultType = AutorizeResultType.Unknown;
@@ -151,7 +152,7 @@ namespace Hedonist.Wpf {
                 logger.Info($"GetGiftAsync request StatusCode = {response.StatusCode};");
 
                 var strData = await response.Content.ReadAsStringAsync();
-                var qrCodeData = JsonConvert.DeserializeObject<HedonistGiftQrCodeData>(strData);
+                var qrCodeData = JsonConvert.DeserializeObject<GiftQrCodeRawData>(strData);
 
                 switch (response.StatusCode) {
                     case HttpStatusCode.OK:

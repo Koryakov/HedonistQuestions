@@ -28,15 +28,20 @@ namespace Hedonist.Wpf.Pages.GiftPages
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private BackgroundWorker bgWorker = new();
-        private bool isErrorHappens = false;
+        private GiftWorker giftWorker;
         private GiftPageModel giftPageModel;
-        private (AutorizeResultType resultType, HedonistGiftQrCodeData qrCodeData) giftDataResponse;
+        private (AutorizeResultType resultType, GiftQrCodeRawData qrCodeData) giftDataResponse;
 
         public GiftMusicPage_3(GiftPageModel giftPageModel)
         {
             this.giftPageModel = giftPageModel;
             logger.Debug($"IN GiftMusicPage_3() constructor");
+            giftWorker = new GiftWorker("GiftMusicPage_3", giftPageModel);
             InitializeComponent();
+
+            gridQrCodeBlock.Visibility = Visibility.Hidden;
+            gridStoreGiftBlock.Visibility = Visibility.Hidden;
+
             bgWorker.DoWork += BgWorker_DoWork;
             bgWorker.RunWorkerCompleted += BgWorker_RunWorkerCompleted;
 
@@ -45,66 +50,49 @@ namespace Hedonist.Wpf.Pages.GiftPages
                 logger.Debug("starting bgWorker.RunWorkerAsync()...");
                 bgWorker.RunWorkerAsync();
             }
-
             logger.Debug("OUT GiftMusicPage_3() constructor");
         }
 
         private void BgWorker_DoWork(object? sender, DoWorkEventArgs e) {
-            try {
-                logger.Debug("IN BgWorker_DoWork()");
-
-                Task getAuthTask = Task.Run(async () => {
-                    logger.Debug("BgWorker_DoWork() Task Run()...");
-                    giftDataResponse = await ClientEngine.GetGiftAsync(giftPageModel.Ticket, giftPageModel.SelectedAnswers.Last().Id);
-                });
-                Task.WaitAll(getAuthTask);
-                logger.Debug("OUT BgWorker_DoWork; resetEvent.Wait() ended");
-
-            }
-            catch (Exception ex) {
-                isErrorHappens = true;
-                logger.Error(ex, "BgWorker_DoWork() EXCEPTION");
-            }
+            giftWorker.DoWork();
         }
 
         private void BgWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
-            logger.Debug("IN BgWorker_RunWorkerCompleted()");
             spinner.IsLoading = false;
 
-            if (isErrorHappens) {
-                logger.Error("BgWorker_RunWorkerCompleted() isErrorHappens=TRUE");
-                isErrorHappens = false;
+            GiftQrCodeCompleteData qrCompletedData;
+            if (giftWorker.ProcessObtainedGiftData(out qrCompletedData)) {
+                if (qrCompletedData.RawData.GiftResult == GiftQrCodeRawData.GiftResultType.NoFreeGift) {
+
+                    var model = new GiftsOver.GiftsOverModel() {
+                        HeaderText = "музыке",
+                        Ticket = giftPageModel.Ticket
+                    };
+                    NavigationService.Navigate(new GiftsOver(model));
+                }
+                else {
+                    //QR код подарка
+                    if (qrCompletedData.RawData.GiftType.HasQrCode) {
+                        imgQrCode.Source = qrCompletedData.QrCodeImageSource;
+                        txtQrCode.Text = qrCompletedData.RawData.QrCodeText;
+
+                        gridQrCodeBlock.Visibility = Visibility.Visible;
+                        gridStoreGiftBlock.Visibility = Visibility.Hidden;
+                    }
+                    //Подарок на точке
+                    else {
+                        gridQrCodeBlock.Visibility = Visibility.Hidden;
+                        gridStoreGiftBlock.Visibility = Visibility.Visible;
+                    }
+                }
+            }
+            else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
-            else {
-                switch (giftDataResponse.resultType) {
-                    case AutorizeResultType.Authorized:
-                        InitGiftScreenInformation();
-                        break;
-                    default:
-                        modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
-                        modal.IsOpen = true;
-                        break;
-                }
-            }
             logger.Debug("OUT BgWorker_RunWorkerCompleted()");
         }
-
-        private void InitGiftScreenInformation() {
-            using (var ms = new MemoryStream(giftDataResponse.qrCodeData.QrCodeByteArr)) {
-                ms.Position = 0;
-                BitmapImage imageSource = new BitmapImage();
-                imageSource.BeginInit();
-                imageSource.StreamSource = ms;
-                imageSource.CacheOption = BitmapCacheOption.OnLoad;
-                imageSource.EndInit();
-                imgQrCode.Source = imageSource;
-
-                txtQrCode.Text = giftDataResponse.qrCodeData.QrCodeText;
-            }
-        }
-
+     
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
             modal.IsOpen = false;
         }

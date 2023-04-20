@@ -65,43 +65,50 @@ namespace Hedonist.Business {
             }
         }
 
-        public async Task<AuthenticatedResult<HedonistGiftQrCodeData>> GetGiftAsync(RequestedGiftInfo requestedGiftInfo) {
+
+        public async Task<AuthenticatedResult<GiftQrCodeRawData>> GetGiftAsync(RequestedGiftInfo requestedGiftInfo) {
             var giftResult = await repository.GetGiftAsync(requestedGiftInfo);
             
             if (!giftResult.IsAuthorized) {
-                return AuthenticatedResult<HedonistGiftQrCodeData>.NotAuthenticated();
+                return AuthenticatedResult<GiftQrCodeRawData>.NotAuthenticated();
             }
             else {
                 GiftFromDbResult giftFromDb = giftResult.Result;
-                var qRCodeData = new HedonistGiftQrCodeData();
+                var qrCodeData = new GiftQrCodeRawData();
 
                 if (giftFromDb.GetGiftResultType == GetGiftResultType.GiftFound) {
                     string qrCodeText = String.Format($"{giftResult.Result.GiftType.DescriptionPattern}", giftResult.Result.Gift.CertificateCode);
+                    
+                    qrCodeData.GiftType = giftFromDb.GiftType;
+                    if (qrCodeData.GiftType.HasQrCode) {
+                        //qrCodeData.QrCodeByteArr = CreateQrCodeByteArray(qrCodeText);
+                        qrCodeData.CertificateCode = giftFromDb.Gift.CertificateCode;
+                    }
 
-                    var qrGenerator = new QRCodeGenerator();
-                    QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrCodeText, QRCodeGenerator.ECCLevel.Q);
-
-                    var qrCode = new BitmapByteQRCode(qrCodeData);
-                    byte[] qrCodeByteArr = qrCode.GetGraphic(20);
-
-                    qRCodeData.GiftResult = HedonistGiftQrCodeData.GiftResultType.GiftFound;
-                    qRCodeData.CertificateCode = giftFromDb.Gift.CertificateCode;
-                    qRCodeData.QrCodeText = qrCodeText;
-                    qRCodeData.QrCodeByteArr = qrCodeByteArr;
+                    qrCodeData.GiftResult = GiftQrCodeRawData.GiftResultType.GiftFound;
+                    qrCodeData.QrCodeText = qrCodeText;
 
                 }
                 else if (giftFromDb.GetGiftResultType == GetGiftResultType.NoFreeGift) {
-                    qRCodeData.GiftResult = HedonistGiftQrCodeData.GiftResultType.NoFreeGift;
+                    qrCodeData.GiftResult = GiftQrCodeRawData.GiftResultType.NoFreeGift;
                 }
                 else {
-                    qRCodeData.GiftResult = HedonistGiftQrCodeData.GiftResultType.InconsistentData;
+                    qrCodeData.GiftResult = GiftQrCodeRawData.GiftResultType.InconsistentData;
                 }
 
-                return new AuthenticatedResult<HedonistGiftQrCodeData>() {
+                return new AuthenticatedResult<GiftQrCodeRawData>() {
                     IsAuthorized = true,
-                    Result = qRCodeData
+                    Result = qrCodeData
                 };
             }
+        }
+
+        private static byte[] CreateQrCodeByteArray(string qrCodeText) {
+            var qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrCodeText, QRCodeGenerator.ECCLevel.Q);
+
+            var qrCode = new BitmapByteQRCode(qrCodeData);
+            return qrCode.GetGraphic(20);
         }
     }
 }

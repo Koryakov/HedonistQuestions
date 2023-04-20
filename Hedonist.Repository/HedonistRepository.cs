@@ -112,7 +112,7 @@ namespace Hedonist.Repository {
                                         gift.IsSold = true;
                                         await db.SaveChangesAsync();
 
-                                        logger.Info($"OUT GetGiftAsync() successed, sold giftId={gift.Id}");
+                                        logger.Info($"GetGiftAsync() found, sold giftId={gift.Id}");
                                         result = new GiftFromDbResult() {
                                             Gift = gift,
                                             GiftType = giftType,
@@ -136,27 +136,9 @@ namespace Hedonist.Repository {
                         logger.Error($"GetGiftAsync(), TERMINAL NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
                     }
                 }
-                logger.Info($"OUT GetGiftAsync(), gift NOT FOUND");
+                logger.Info($"OUT GetGiftAsync()");
                 return new AuthenticatedResult<GiftFromDbResult>(result);
             }
         }
-
-        //public async Task<AuthenticatedResult<(List<Question>?, List<Answer>?)>> GetQuizByTicketAsyncOld(string ticket) {
-        //    const int group = 1;
-        //    using (var db = CreateContext()) {
-        //        bool isTicketCorrect = await db.LoginAttempt.AnyAsync(l => l.Ticket == ticket && l.IsExpired == false);
-
-        //        if (isTicketCorrect) {
-        //            var questions = await db.Question.Where(q => q.Group == group).ToListAsync();
-        //            var answers = await db.Answer.Where(a => a.Group == group).ToListAsync();
-
-        //            return new AuthenticatedResult<(List<Question>?, List<Answer>?)>() {
-        //                IsAuthorized = true,
-        //                Result = (questions, answers)
-        //            };
-        //        }
-        //        return AuthenticatedResult<(List<Question>?, List<Answer>?)>.NotAuthenticated();
-        //    }
-        //}
     }
 }

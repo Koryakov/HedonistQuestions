@@ -23,7 +23,7 @@ namespace Hedonist.Wpf.Pages {
         }
 
         private void btnShowResult_Click(object sender, RoutedEventArgs e) {
-            NavigationService.Navigate(new VariantsPage());
+            //NavigationService.Navigate(new VariantsPage());
         }
     }
 }

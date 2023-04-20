@@ -1,5 +1,6 @@
 ﻿using Hedonist.Models;
 using Hedonist.Wpf.Pages;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +20,16 @@ namespace Hedonist.Wpf {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        static Settings settings = new();
         public MainWindow() {
+
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddEnvironmentVariables().Build();
+            settings = config.GetRequiredSection("Settings").Get<Settings>();
+
+            if (settings.HideMouseCursor) {
+                Cursor = Cursors.None;
+            }
+
             InitializeComponent();
             Loaded += MainWindow_Loaded;
         }

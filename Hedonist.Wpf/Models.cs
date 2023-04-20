@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace Hedonist.Wpf {
 
@@ -25,5 +26,10 @@ namespace Hedonist.Wpf {
     public class GiftTypeRelation {
         public int GiftType { get; set; }
         public string BgImageName { get; set; }
+    }
+
+    public class GiftQrCodeCompleteData {
+        public GiftQrCodeRawData RawData { get; set; }
+        public BitmapImage QrCodeImageSource { get; set; }
     }
 }

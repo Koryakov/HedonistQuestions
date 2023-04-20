@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 namespace Hedonist.Models {
 
     public class AuthenticationData {
-        public string Password { get; set;}
-        public string DeviceIdentifier { get; set;}
+        public string Password { get; set; }
+        public string DeviceIdentifier { get; set; }
         public string TerminalName { get; set; }
 
     }
@@ -18,21 +18,23 @@ namespace Hedonist.Models {
     }
 
     public class RequestedGiftInfo {
-        public Ticket Ticket{ get; set;}
-        public int SelectedAnswerId { get; set;}
+        public Ticket Ticket { get; set; }
+        public int SelectedAnswerId { get; set; }
     }
 
-    public class HedonistGiftQrCodeData {
+    public class GiftQrCodeRawData {
         public enum GiftResultType {
             Unknown = 0,
             GiftFound = 1,
             NoFreeGift = 2,
             InconsistentData = 3,
         }
-        public GiftResultType GiftResult { get; set;}
-        public string? CertificateCode { get; set;}
+
+        public GiftResultType GiftResult { get; set; }
+        public GiftType GiftType { get; set; }
+        public string? CertificateCode { get; set; }
         public string QrCodeText { get; set; }
-        public byte[] QrCodeByteArr { get; set;}
+        public byte[] QrCodeByteArr { get; set; }
     }
 
     public enum GetGiftResultType {
@@ -44,10 +46,9 @@ namespace Hedonist.Models {
     }
 
     public class GiftFromDbResult {
-        public GetGiftResultType GetGiftResultType { get; set;}
-        public Gift? Gift { get; set;}
-        public GiftType GiftType { get; set;}
+        public GetGiftResultType GetGiftResultType { get; set; }
+        public Gift? Gift { get; set; }
+        public GiftType GiftType { get; set; }
 
     }
-
 }

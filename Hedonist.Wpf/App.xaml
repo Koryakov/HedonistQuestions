@@ -4,18 +4,21 @@
              xmlns:local="clr-namespace:Hedonist.Wpf"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        
+
         <Style x:Key="roundButton" TargetType="Button">
             <Setter Property="FontFamily" Value="Montserrat"/>
             <Setter Property="FontSize" Value="62"/>
             <Setter Property="FontWeight" Value="600"/>
+            <Setter Property="Background" Value="#E4E4E9"/>
+            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <ContentControl>
                             <Border x:Name="normalBorder" Width="165" Height="165"
-                                    CornerRadius="150" Background="#E4E4E9"
-                                    BorderThickness="1" Margin="20">
+                                    CornerRadius="150" 
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}" Margin="20">
                                 <ContentPresenter HorizontalAlignment="Center"
                                     VerticalAlignment="Center" Margin="{TemplateBinding Padding}">
                                 </ContentPresenter>
@@ -23,18 +26,16 @@
                         </ContentControl>
                         <ControlTemplate.Triggers>
                             <Trigger Property="Button.IsPressed" Value="True" >
-                                <Setter Property="Effect">
-                                    <Setter.Value>
-                                        <DropShadowEffect BlurRadius="10" ShadowDepth="5"/>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="BorderBrush" Value="#0BDAF2" />
+                                <Setter Property="FontWeight" Value="Bold" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style x:Key="commonDarkButton" TargetType="Button">
             <Setter Property="FontFamily" Value="Montserrat"/>
             <Setter Property="FontWeight" Value="Medium"/>

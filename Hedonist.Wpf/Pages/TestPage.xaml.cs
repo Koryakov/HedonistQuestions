@@ -1,6 +1,7 @@
 ﻿using Hedonist.Models;
 using Hedonist.Wpf.Pages.GiftPages;
 using ModalControl;
+using QRCoder;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,11 +35,15 @@ namespace Hedonist.Wpf.Pages {
         }
 
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        private BackgroundWorker bgWorker = new();
+        private BackgroundWorker bgWorkerQuiz = new();
+        private BackgroundWorker bgWorkerGift = new();
+        private GiftWorker giftWorker;
+
         private (AutorizeResultType resultType, QuizData quiz) quizDataResponse;
         private bool isErrorHappens = false;
         private QuizState quizState;
         private GiftPageModel giftPageModel = new();
+        private (AutorizeResultType resultType, GiftQrCodeRawData qrCodeData) giftDataResponse;
 
         public TestPage(string ticket) {
             logger.Debug($"IN TestPage() constructor");
@@ -56,13 +61,13 @@ namespace Hedonist.Wpf.Pages {
 
         public void StartFirstTime() {
             quizState = new QuizState();
-            bgWorker.DoWork += TestPageBgWorker_DoWork;
-            bgWorker.RunWorkerCompleted += TestPageBgWorker_RunWorkerCompleted;
+            bgWorkerQuiz.DoWork += TestPageBgWorker_DoWork;
+            bgWorkerQuiz.RunWorkerCompleted += TestPageBgWorker_RunWorkerCompleted;
 
-            if (!bgWorker.IsBusy) {
+            if (!bgWorkerQuiz.IsBusy) {
                 spinner.IsLoading = true;
                 logger.Debug("starting bgWorker.RunWorkerAsync()...");
-                bgWorker.RunWorkerAsync();
+                bgWorkerQuiz.RunWorkerAsync();
             }
         }
 
@@ -162,38 +167,80 @@ namespace Hedonist.Wpf.Pages {
                     if (quizState.QuestionQueue.Count != 0) {
                         BindQuiz();
                     } else {
-                        Navigate(giftPageModel);
+                        bgWorkerGift.DoWork += BgWorkerGift_DoWork;
+                        bgWorkerGift.RunWorkerCompleted += BgWorkerGift_RunWorkerCompleted;
+
+                        //Navigate(giftPageModel);
                     }
                 }
             }
         }
 
-        private void Navigate(GiftPageModel giftPageModel) {
-            switch (giftPageModel.SelectedAnswers.Last().Id) {
-                case 17:
-                    //Mixology
-                    break;
-                case 18:
-                    //Music
-                        NavigationService.Navigate(new GiftMusicPage_1(giftPageModel));
-                    break;
-                case 19:
-                    //Movement
-                    break;
-                case 20:
-                    //Communication
-                    break;
-                case 21:
-                    //Food
-                    break;
-                case 23:
-                    //Art
-                    break;
-                case 24:
-                    //Trends
-                    break;
+        private void BgWorkerGift_DoWork(object? sender, DoWorkEventArgs e) {
+            try {
+                logger.Debug("IN BgWorkerGift_DoWork()");
+
+                Task getAuthTask = Task.Run(async () => {
+                    logger.Debug("BgWorkerGift_DoWork() Task Run()...");
+                    giftDataResponse = await ClientEngine.GetGiftAsync(giftPageModel.Ticket, giftPageModel.SelectedAnswers.Last().Id);
+                });
+                Task.WaitAll(getAuthTask);
+                logger.Debug("OUT BgWorkerGift_DoWork; resetEvent.Wait() ended");
 
             }
+            catch (TaskCanceledException ex) {
+                giftDataResponse = new(AutorizeResultType.Timeout, null);
+                logger.Error(ex, "BgWorkerGift_DoWork() TIMEOUT");
+            }
+            catch (Exception ex) {
+                giftDataResponse = new(AutorizeResultType.Error, null);
+                logger.Error(ex, "BgWorkerGift_DoWork() EXCEPTION");
+            }
+        }
+
+        private void BgWorkerGift_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
+            logger.Debug($"IN BgWorkerGift_RunWorkerCompleted()");
+            spinner.IsLoading = false;
+
+            GiftQrCodeCompleteData qrCompletedData;
+            if(giftWorker.ProcessObtainedGiftData(out qrCompletedData)) {
+                Navigate(qrCompletedData);
+
+            } else {
+                modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
+                modal.IsOpen = true;
+            }
+            logger.Debug($"OUT BgWorkerGift_RunWorkerCompleted()");
+        }
+
+        private void Navigate(GiftQrCodeCompleteData qrCompletedData) {
+            //switch (qrCompletedData.RawData.GiftResult) {
+            //    case 17:
+            //        //Mixology
+            //        break;
+            //    case 18:
+            //        //Music
+            //            NavigationService.Navigate(new GiftMusicPage_1(giftPageModel));
+            //        break;
+            //    case 19:
+            //        //Movement
+            //        break;
+            //    case 20:
+            //        //Communication
+            //        break;
+            //    case 21:
+            //        //Food
+            //        NavigationService.Navigate(new GiftMusicPage_1(giftPageModel));
+
+            //        break;
+            //    case 23:
+            //        //Art
+            //        break;
+            //    case 24:
+            //        //Trends
+            //        break;
+
+            //}
         }
 
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {

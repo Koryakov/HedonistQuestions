@@ -6,11 +6,12 @@
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages.GiftPages"
       mc:Ignorable="d" 
       d:DesignHeight="1920" d:DesignWidth="1080"
+      Background="Black"
       Title="GiftMusicPage_1">
 
     <Grid Margin="0" Width="1080" Height="1920">
-        <Image Name="imgBackground" Stretch="Fill" 
-               Source="/Pages/GiftPages/back-music.png"/>
+        <Image Width="1080" Height="1920" Source="..\..\\Images\Back\back-music.png"
+                    VerticalAlignment = "Top" Margin = "0"/>
         <Grid>
             <StackPanel Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
                 <TextBlock Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
@@ -18,7 +19,7 @@
 
                 <TextBlock Text="«Музыка нас связала!»" Margin="0 75 0 0"
                                HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
-                <TextBlock Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" Text="А тебя так вообще по рукам и ногам, ведь ты истинный гедонист в музыке! Если бы можно было слушать музыку во сне ты бы и это делал. 
+                <TextBlock TextAlignment="Center" Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" Text="А тебя так вообще по рукам и ногам, ведь ты истинный гедонист в музыке! Если бы можно было слушать музыку во сне ты бы и это делал. 
 А может уже?..
 Тебя редко можно встретить без наушников и новых треков в телефоне. Ты точно с легкостью отличишь Инстасамку от Мари Краймбрери. А чтобы
 ты продолжал быть в курсе новых треков, лови промокод на подписку в Яндекс. Музыке."/>
