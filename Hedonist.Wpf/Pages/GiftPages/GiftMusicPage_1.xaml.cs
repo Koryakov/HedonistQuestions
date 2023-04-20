@@ -20,8 +20,8 @@ namespace Hedonist.Wpf.Pages.GiftPages
     /// </summary>
     public partial class GiftMusicPage_1 : Page
     {
-        private GiftPageModel giftPageModel;
-        public GiftMusicPage_1(GiftPageModel giftPageModel)
+        private TestPageModel giftPageModel;
+        public GiftMusicPage_1(TestPageModel giftPageModel)
         {
             this.giftPageModel = giftPageModel;
             InitializeComponent();

@@ -40,7 +40,8 @@ namespace Hedonist.Models {
         public string Name { get; set; }
 
         public string DescriptionPattern { get; set; }
-        
+        public string? ExtendedData { get; set; }
+
         public string Key { get; set; }
         public bool HasQrCode { get; set; }
 

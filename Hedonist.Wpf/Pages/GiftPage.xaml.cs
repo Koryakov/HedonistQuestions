@@ -40,7 +40,7 @@ namespace Hedonist.Wpf.Pages {
 
             }
         }
-        public GiftPage(GiftPageModel model) {
+        public GiftPage(TestPageModel model) {
             InitializeComponent();
             GiftTypeRelation selectedRelation = GiftTypeRelations[0];
 

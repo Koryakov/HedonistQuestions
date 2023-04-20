@@ -17,11 +17,11 @@ namespace Hedonist.Wpf {
     public class GiftWorker
     {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        private (AutorizeResultType resultType, GiftQrCodeRawData qrCodeData) giftDataResponse;
-        private GiftPageModel giftPageModel;
+        private (AutorizeResultType resultType, GiftCommonData qrCodeData) giftDataResponse;
+        private TestPageModel giftPageModel;
         private string pageName;
 
-        public GiftWorker(string pageName, GiftPageModel giftPageModel) { 
+        public GiftWorker(string pageName, TestPageModel giftPageModel) { 
             this.pageName = pageName;
             this.giftPageModel = giftPageModel;
         }

@@ -29,10 +29,10 @@ namespace Hedonist.Wpf.Pages.GiftPages
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private BackgroundWorker bgWorker = new();
         private GiftWorker giftWorker;
-        private GiftPageModel giftPageModel;
-        private (AutorizeResultType resultType, GiftQrCodeRawData qrCodeData) giftDataResponse;
+        private TestPageModel giftPageModel;
+        private (AutorizeResultType resultType, GiftCommonData qrCodeData) giftDataResponse;
 
-        public GiftMusicPage_3(GiftPageModel giftPageModel)
+        public GiftMusicPage_3(TestPageModel giftPageModel)
         {
             this.giftPageModel = giftPageModel;
             logger.Debug($"IN GiftMusicPage_3() constructor");
@@ -62,7 +62,7 @@ namespace Hedonist.Wpf.Pages.GiftPages
 
             GiftQrCodeCompleteData qrCompletedData;
             if (giftWorker.ProcessObtainedGiftData(out qrCompletedData)) {
-                if (qrCompletedData.RawData.GiftResult == GiftQrCodeRawData.GiftResultType.NoFreeGift) {
+                if (qrCompletedData.RawData.GiftResult == GiftCommonData.GiftResultType.NoFreeGift) {
 
                     var model = new GiftsOver.GiftsOverModel() {
                         HeaderText = "музыке",

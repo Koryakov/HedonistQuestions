@@ -47,7 +47,7 @@ namespace Hedonist.WebApi.Controllers {
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<GiftQrCodeRawData>> GetGift(RequestedGiftInfo requestedGiftInfo) {
+        public async Task<ActionResult<GiftCommonData>> GetGift(RequestedGiftInfo requestedGiftInfo) {
             try {
                 logger.Info($"IN GetGift(), ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
                 var giftResult = await new QuizEngine().GetGiftAsync(requestedGiftInfo);

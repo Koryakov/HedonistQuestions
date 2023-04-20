@@ -22,7 +22,7 @@ namespace Hedonist.Models {
         public int SelectedAnswerId { get; set; }
     }
 
-    public class GiftQrCodeRawData {
+    public class GiftCommonData {
         public enum GiftResultType {
             Unknown = 0,
             GiftFound = 1,

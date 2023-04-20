@@ -134,7 +134,7 @@ namespace Hedonist.Wpf {
 
         }
 
-        public static async Task<(AutorizeResultType resultType, GiftQrCodeRawData qrCodeData)> GetGiftAsync(string ticket, int answerId) {
+        public static async Task<(AutorizeResultType resultType, GiftCommonData qrCodeData)> GetGiftAsync(string ticket, int answerId) {
             logger.Debug("IN GetGiftAsync();");
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             AutorizeResultType resultType = AutorizeResultType.Unknown;
@@ -152,7 +152,7 @@ namespace Hedonist.Wpf {
                 logger.Info($"GetGiftAsync request StatusCode = {response.StatusCode};");
 
                 var strData = await response.Content.ReadAsStringAsync();
-                var qrCodeData = JsonConvert.DeserializeObject<GiftQrCodeRawData>(strData);
+                var qrCodeData = JsonConvert.DeserializeObject<GiftCommonData>(strData);
 
                 switch (response.StatusCode) {
                     case HttpStatusCode.OK:

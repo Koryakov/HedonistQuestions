@@ -19,7 +19,7 @@ namespace Hedonist.Wpf {
     //    Communication = 7
     //}
 
-    public class GiftPageModel {
+    public class TestPageModel {
         public string Ticket { get; set; }
         public List<Answer> SelectedAnswers { get; set; } = new();
     }
@@ -29,7 +29,7 @@ namespace Hedonist.Wpf {
     }
 
     public class GiftQrCodeCompleteData {
-        public GiftQrCodeRawData RawData { get; set; }
+        public GiftCommonData RawData { get; set; }
         public BitmapImage QrCodeImageSource { get; set; }
     }
 }

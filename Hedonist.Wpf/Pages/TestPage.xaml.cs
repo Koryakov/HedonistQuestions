@@ -42,12 +42,12 @@ namespace Hedonist.Wpf.Pages {
         private (AutorizeResultType resultType, QuizData quiz) quizDataResponse;
         private bool isErrorHappens = false;
         private QuizState quizState;
-        private GiftPageModel giftPageModel = new();
-        private (AutorizeResultType resultType, GiftQrCodeRawData qrCodeData) giftDataResponse;
+        private TestPageModel testPageModel = new();
+        private (AutorizeResultType resultType, GiftCommonData giftData) giftDataResponse;
 
         public TestPage(string ticket) {
             logger.Debug($"IN TestPage() constructor");
-            giftPageModel.Ticket = ticket;
+            testPageModel.Ticket = ticket;
             InitializeComponent();
             btnNext.Visibility = Visibility.Hidden;
 
@@ -66,7 +66,7 @@ namespace Hedonist.Wpf.Pages {
 
             if (!bgWorkerQuiz.IsBusy) {
                 spinner.IsLoading = true;
-                logger.Debug("starting bgWorker.RunWorkerAsync()...");
+                logger.Debug("starting bgWorkerQuiz.RunWorkerAsync()...");
                 bgWorkerQuiz.RunWorkerAsync();
             }
         }
@@ -78,7 +78,7 @@ namespace Hedonist.Wpf.Pages {
                 Task getAuthTask = Task.Run(async () => {
                     logger.Debug("TestPageBgWorker_DoWork() Task Run()...");
 
-                    quizDataResponse = await ClientEngine.GetQuizByTicketAsync(giftPageModel.Ticket);
+                    quizDataResponse = await ClientEngine.GetQuizByTicketAsync(testPageModel.Ticket);
                 });
                 Task.WaitAll(getAuthTask);
                 logger.Debug("OUT TestPageBgWorker_DoWork; resetEvent.Wait() ended");
@@ -160,7 +160,7 @@ namespace Hedonist.Wpf.Pages {
             if(selectedState != null) {
                 Answer answer = quizState.Answers.First(a => a.Id == selectedState.StateId);
                 if (answer != null) {
-                    giftPageModel.SelectedAnswers.Add(answer);
+                    testPageModel.SelectedAnswers.Add(answer);
 
                     quizState.SelectedAnswers.Enqueue(answer);
 
@@ -171,6 +171,11 @@ namespace Hedonist.Wpf.Pages {
                         bgWorkerGift.RunWorkerCompleted += BgWorkerGift_RunWorkerCompleted;
 
                         //Navigate(giftPageModel);
+                        if (!bgWorkerGift.IsBusy) {
+                            spinner.IsLoading = true;
+                            logger.Debug("starting bgWorkerGift.RunWorkerAsync()...");
+                            bgWorkerGift.RunWorkerAsync();
+                        }
                     }
                 }
             }
@@ -182,7 +187,7 @@ namespace Hedonist.Wpf.Pages {
 
                 Task getAuthTask = Task.Run(async () => {
                     logger.Debug("BgWorkerGift_DoWork() Task Run()...");
-                    giftDataResponse = await ClientEngine.GetGiftAsync(giftPageModel.Ticket, giftPageModel.SelectedAnswers.Last().Id);
+                    giftDataResponse = await ClientEngine.GetGiftAsync(testPageModel.Ticket, testPageModel.SelectedAnswers.Last().Id);
                 });
                 Task.WaitAll(getAuthTask);
                 logger.Debug("OUT BgWorkerGift_DoWork; resetEvent.Wait() ended");
@@ -202,47 +207,37 @@ namespace Hedonist.Wpf.Pages {
             logger.Debug($"IN BgWorkerGift_RunWorkerCompleted()");
             spinner.IsLoading = false;
 
-            GiftQrCodeCompleteData qrCompletedData;
-            if(giftWorker.ProcessObtainedGiftData(out qrCompletedData)) {
-                Navigate(qrCompletedData);
-
-            } else {
+            if(giftDataResponse.resultType == AutorizeResultType.Authorized) {
+                NavigationService.Navigate(new GiftPage1(testPageModel.Ticket, giftDataResponse.giftData));
+            }
+            else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
             logger.Debug($"OUT BgWorkerGift_RunWorkerCompleted()");
         }
-
-        private void Navigate(GiftQrCodeCompleteData qrCompletedData) {
-            //switch (qrCompletedData.RawData.GiftResult) {
-            //    case 17:
-            //        //Mixology
-            //        break;
-            //    case 18:
-            //        //Music
-            //            NavigationService.Navigate(new GiftMusicPage_1(giftPageModel));
-            //        break;
-            //    case 19:
-            //        //Movement
-            //        break;
-            //    case 20:
-            //        //Communication
-            //        break;
-            //    case 21:
-            //        //Food
-            //        NavigationService.Navigate(new GiftMusicPage_1(giftPageModel));
-
-            //        break;
-            //    case 23:
-            //        //Art
-            //        break;
-            //    case 24:
-            //        //Trends
-            //        break;
-
-            //}
+/*
+        private void NavigateAsync() {
+            switch(giftDataResponse.giftData.GiftType.Id) {
+                case 1://Искусство
+                    break;
+                case 2://Музыка
+                    break;
+                case 3://Тренды
+                    break;
+                case 41://Еда-яндекс
+                    break;
+                case 42://Еда-store
+                    break;
+                case 5://Движение
+                    break;
+                case 6://Миксология
+                    break;
+                case 7://Общение
+                    break;
+            }
         }
-
+*/
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
             modal.IsOpen = false;
         }
