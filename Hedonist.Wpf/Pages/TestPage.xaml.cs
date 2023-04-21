@@ -49,6 +49,8 @@ namespace Hedonist.Wpf.Pages {
             logger.Debug($"IN TestPage() constructor");
             testPageModel.Ticket = ticket;
             InitializeComponent();
+            imgHeader.Source = GiftWorker.GetImageSource($"Images", "TestPage-1.jpg");
+
             btnNext.Visibility = Visibility.Hidden;
 
             if (quizState == null) {
@@ -90,7 +92,6 @@ namespace Hedonist.Wpf.Pages {
             }
         }
 
-        //TODO: we dont need call WebApi for second question. We must skip this functions
         private void TestPageBgWorker_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
             logger.Debug("IN TestPageBgWorker_RunWorkerCompleted()");
             spinner.IsLoading = false;
@@ -165,6 +166,8 @@ namespace Hedonist.Wpf.Pages {
                     quizState.SelectedAnswers.Enqueue(answer);
 
                     if (quizState.QuestionQueue.Count != 0) {
+                        imgHeader.Source = GiftWorker.GetImageSource($"Images", "TestPage-2.png");
+                        
                         BindQuiz();
                     } else {
                         bgWorkerGift.DoWork += BgWorkerGift_DoWork;

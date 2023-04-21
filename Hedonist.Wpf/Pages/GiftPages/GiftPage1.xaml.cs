@@ -1,5 +1,4 @@
 ﻿using Hedonist.Models;
-using Hedonist.Wpf.Helpers;
 using ModalControl;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -58,12 +57,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 giftPage1Data = exData["GiftPage1Data"];
 
                 string bgImageFileName = giftPage1Data["bgImageName"].ToString();
-                string imgPath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"Images\\Back", bgImageFileName);
-                BitmapImage myBitmapImage = new BitmapImage();
-                myBitmapImage.BeginInit();
-                myBitmapImage.UriSource = new Uri(imgPath);
-                myBitmapImage.EndInit();
-                imgBackground.Source = myBitmapImage;
+                imgBackground.Source = GiftWorker.GetImageSource($"Images\\Back", bgImageFileName);
 
                 txtHeader1.Text = giftPage1Data["Text1"].ToString();
                 txtHeader2.Text = giftPage1Data["Text2"].ToString();

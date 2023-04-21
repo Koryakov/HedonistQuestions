@@ -73,6 +73,21 @@ namespace Hedonist.Wpf {
             }
         }
 
+        public static BitmapImage GetImageSource(string imgRelativePath, string imgFileName) {
+            try {
+                string imgPath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, imgRelativePath, imgFileName);
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.UriSource = new Uri(imgPath);
+                bitmapImage.EndInit();
+
+                return bitmapImage;
+            } catch (Exception ex) {
+                logger.Error(ex, $"GiftWorker.GetImageControl() EXCEPTION. imgRelativePath={imgRelativePath}, imgFileName={imgFileName}");
+                return new BitmapImage();
+            }
+        }
+
         
     }
 

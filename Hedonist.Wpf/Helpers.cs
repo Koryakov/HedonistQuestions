@@ -6,9 +6,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Hedonist.Wpf.Helpers {
+namespace Hedonist.Wpf {
     internal class AppSettingsHelper {
         public static Settings Settings { get; set; } = new Settings();
         static AppSettingsHelper() {
@@ -42,6 +45,20 @@ namespace Hedonist.Wpf.Helpers {
                 //imgQrCode.Source = imageSource;
                 //txtQrCode.Text = giftDataResponse.qrCodeData.QrCodeText;
             }
+        }
+    }
+
+    public class DpiDecorator : Decorator {
+        public DpiDecorator() {
+            this.Loaded += (s, e) =>
+            {
+                System.Windows.Media.Matrix m = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice;
+                //ScaleTransform dpiTransform = new ScaleTransform(1 / m.M11, 1 / m.M22);
+                ScaleTransform dpiTransform = new ScaleTransform(0.5 / m.M11, 0.5 / m.M22);
+                if (dpiTransform.CanFreeze)
+                    dpiTransform.Freeze();
+                this.LayoutTransform = dpiTransform;
+            };
         }
     }
 }

@@ -15,14 +15,13 @@
     <None Remove="Images\Food.png" />
     <None Remove="Images\free-icon-lock.png" />
     <None Remove="Images\hypno-backgrnd.png" />
-    <None Remove="Images\man_on_yacht.png" />
     <None Remove="Images\Mixology.png" />
     <None Remove="Images\Movement.png" />
     <None Remove="Images\Music.png" />
     <None Remove="Images\Palm-scanner-2_10.gif" />
     <None Remove="Images\relax_in_water.png" />
+    <None Remove="Images\TestPage-2.png" />
     <None Remove="Images\Trends.png" />
-    <None Remove="Images\who_is_hedonist.png" />
     <None Remove="NLog.config" />
     <None Remove="start-test.gif" />
   </ItemGroup>
@@ -54,30 +53,31 @@
 	    </Content>
 	    <Resource Include="Images\Back\hypno-backgrnd.png" />
 	    <Resource Include="Images\Palm-scanner-2_10.gif">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Art.png">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Communication.png">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Food.png">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
-	    <Resource Include="Images\hypno-backgrnd.png" />
-	    <Resource Include="Images\man_on_yacht.png" />
+	    <Resource Include="Images\hypno-backgrnd.png">
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </Resource>
 	    <Resource Include="Images\Mixology.png">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Movement.png">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Music.png">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Trends.png">
-	      <CopyToOutputDirectory></CopyToOutputDirectory>
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Content Include="NLog.config">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -96,8 +96,12 @@
       <Resource Include="Images\free-icon-lock.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Images\relax_in_water.png" />
-      <Resource Include="Images\who_is_hedonist.png" />
+      <Resource Include="Images\relax_in_water.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
+      <Resource Include="Images\TestPage-2.png">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Resource>
     </ItemGroup>
 
     <ItemGroup>
@@ -123,6 +127,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Images\Hypno.mp4">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\TestPage-1.jpg">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
