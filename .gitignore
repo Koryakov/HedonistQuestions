@@ -365,3 +365,4 @@ FodyWeavers.xsd
 /Hedonist.Test/appsettings.json
 /Hedonist.WebApi/appsettings.json
 /Hedonist.Wpf/appsettings.json
+/Hedonist.Wpf/NLog.config
