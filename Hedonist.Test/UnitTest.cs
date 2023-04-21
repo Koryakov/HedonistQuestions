@@ -30,18 +30,20 @@ namespace Hedonist.Test {
             var engine = new QuizEngine();
 
             RequestedGiftInfo giftData = new RequestedGiftInfo() {
-                Ticket = new Ticket("46b1e824-cd2d-4973-96b0-b00bd2acc8dc"),
+                //Ticket = new Ticket("46b1e824-cd2d-4973-96b0-b00bd2acc8dc"),//Gypsy еда без кода, НЕ яндекс
+                Ticket = new Ticket("1a75bcec-9d50-47a1-a540-c02ac78b8e4c"),//Депо (яндекс еда с куар кодом)
+
                 SelectedAnswerId = 21
             };
             var result = await engine.GetGiftAsync(giftData);
 
             Assert.True(result.IsAuthorized);
 
-            if(result.IsAuthorized) {
-                using (var ms = new MemoryStream(result.Result.QrCodeByteArr)) {
-                    var img = Image.FromStream(ms);
-                }
-            }
+            //if(result.IsAuthorized) {
+            //    using (var ms = new MemoryStream(result.Result.QrCodeByteArr)) {
+            //        var img = Image.FromStream(ms);
+            //    }
+            //}
         }
 
         //[Fact]

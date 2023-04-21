@@ -101,29 +101,30 @@ namespace Hedonist.Repository {
                             .FirstOrDefaultAsync(a => a.Id == soldGiftData.SelectedAnswerId);
 
                         if (answer != null) {
-                            foreach (var giftType in answer.GiftTypes) {
 
-                                if (giftType.Stores.Any(s => s.Id == terminal.StoreId)) {
-                                    var gift = await db.Gift
-                                        //.Include(g => g.GiftType)
-                                        .FirstOrDefaultAsync(g => !g.IsSold && g.GiftTypeId == giftType.Id);
+                            result.GiftType = answer.GiftTypes.Where(t => t.Stores.Any(s => s.Id == terminal.StoreId)).FirstOrDefault();
 
-                                    if (gift != null) {
-                                        gift.IsSold = true;
-                                        await db.SaveChangesAsync();
+                            if (result.GiftType != null) {
+                                var gift = await db.Gift
+                                //.Include(g => g.GiftType)
+                                .FirstOrDefaultAsync(g => !g.IsSold && g.GiftTypeId == result.GiftType.Id);
 
-                                        logger.Info($"GetGiftAsync() found, sold giftId={gift.Id}");
-                                        result = new GiftFromDbResult() {
-                                            Gift = gift,
-                                            GiftType = giftType,
-                                            GetGiftResultType = GetGiftResultType.GiftFound
-                                        };
-                                    }
+                                if (gift != null) {
+                                    gift.IsSold = true;
+                                    await db.SaveChangesAsync();
+
+                                    result.GetGiftResultType = GetGiftResultType.GiftFound;
+                                    result.Gift = gift;
+                                    logger.Info($"GetGiftAsync() found, sold giftId={gift.Id}");
+                                }
+                                else {
+                                    result.GetGiftResultType = GetGiftResultType.NoFreeGift;
+                                    logger.Error($"GetGiftAsync(), FREE GIFT NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
                                 }
                             }
-                            if (result.GetGiftResultType != GetGiftResultType.GiftFound) {
-                                result.GetGiftResultType = GetGiftResultType.NoFreeGift;
-                                logger.Error($"GetGiftAsync(), FREE GIFT NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+                            else {
+                                result.GetGiftResultType = GetGiftResultType.StoreHasNoGiftType;
+                                logger.Error($"GetGiftAsync(), STORE HAS NO GIFTTYPE. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
                             }
                         }
                         else {

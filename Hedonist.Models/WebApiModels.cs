@@ -43,6 +43,7 @@ namespace Hedonist.Models {
         NoFreeGift = 2,
         AnswerNotFound = 3,
         TerminalNotFound = 4,
+        StoreHasNoGiftType = 6
     }
 
     public class GiftFromDbResult {
