@@ -11,7 +11,12 @@
       Title="InfoPage">
     <helpers:DpiDecorator>
         <Grid PreviewMouseDown="GridClick" Background="Black" Margin="0" Width="1080" Height="1920">
-        <StackPanel Orientation="Vertical" Margin="0">
+
+            <Image Tag="HomeButton" Source="..\\Images\home.png"  PreviewMouseDown="HomeButtonClick"
+                    Width="91" Height="91" Panel.ZIndex="50"
+                    VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 40 40 0"/>
+            
+            <StackPanel Orientation="Vertical" Margin="0">
             <Grid>
                 <Image Width="1080" Height="753" Source="..\\Images\man_on_yacht.jpg"
                     VerticalAlignment = "Top" Margin = "0"/>

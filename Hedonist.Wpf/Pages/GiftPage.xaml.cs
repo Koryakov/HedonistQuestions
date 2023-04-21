@@ -51,5 +51,9 @@ namespace Hedonist.Wpf.Pages {
             myBitmapImage.EndInit();
             imgBackground.Source = myBitmapImage;
         }
+
+        private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }

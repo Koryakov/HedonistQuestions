@@ -16,6 +16,7 @@
     <None Remove="Images\DemoQrCode.png" />
     <None Remove="Images\Food.png" />
     <None Remove="Images\free-icon-lock.png" />
+    <None Remove="Images\home.png" />
     <None Remove="Images\hypno-backgrnd.png" />
     <None Remove="Images\man_on_yacht.jpg" />
     <None Remove="Images\Mixology.png" />
@@ -60,6 +61,9 @@
 	    </Resource>
 	    <Resource Include="Images\Back\hypno-backgrnd.png" />
 	    <Resource Include="Images\DemoQrCode.png" />
+	    <Resource Include="Images\home.png">
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </Resource>
 	    <Resource Include="Images\man_on_yacht.jpg">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>

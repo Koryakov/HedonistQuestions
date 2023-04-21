@@ -54,5 +54,9 @@ namespace Hedonist.Wpf.Pages {
                     break;
             }
         }
+
+        private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }

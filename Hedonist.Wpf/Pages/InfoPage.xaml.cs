@@ -46,5 +46,10 @@ namespace Hedonist.Wpf.Pages
             timer.Stop();
             timer.Start();
         }
+
+        private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
+            timer.Stop();
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }

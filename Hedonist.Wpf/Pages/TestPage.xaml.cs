@@ -227,5 +227,9 @@ namespace Hedonist.Wpf.Pages {
         private void RadioButton_Click(object sender, RoutedEventArgs e) {
             btnNext.Visibility = Visibility.Visible;
         }
+
+        private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }

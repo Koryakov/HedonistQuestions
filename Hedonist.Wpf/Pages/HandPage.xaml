@@ -20,8 +20,10 @@
                     gif:ImageBehavior.AnimatedSource="/Images/Palm-scanner-2_10.gif"
                     gif:ImageBehavior.AutoStart="True"
                     />
-
-                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
+                <Image Tag="HomeButton" Source="..\\Images\home.png"  PreviewMouseDown="HomeButtonClick"
+                    Width="91" Height="91" Panel.ZIndex="50"
+                    VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 40 40 0"/>
+                    <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
                            HorizontalAlignment="Left" VerticalAlignment="Top"/>
 
                 <TextBlock Style="{StaticResource textLarge}" Width="934"

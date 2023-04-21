@@ -122,5 +122,9 @@ namespace Hedonist.Wpf.Pages.GiftPages {
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
             modal.IsOpen = false;
         }
+
+        private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }

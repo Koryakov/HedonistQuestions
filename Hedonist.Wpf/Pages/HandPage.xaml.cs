@@ -25,5 +25,9 @@ namespace Hedonist.Wpf.Pages {
         private void btnShowResult_Click(object sender, RoutedEventArgs e) {
             //NavigationService.Navigate(new VariantsPage());
         }
+
+        private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
+            NavigationService.Navigate(new StartPage());
+        }
     }
 }
