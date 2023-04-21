@@ -56,10 +56,11 @@ namespace Hedonist.Wpf.Helpers {
             Settings = config.GetRequiredSection("Settings").Get<Settings>();
         }
         public DpiDecorator() {
+            var scale = Settings.DisplayScale ?? 1;
             this.Loaded += (s, e) =>
             {
                 System.Windows.Media.Matrix m = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice;
-                ScaleTransform dpiTransform = new ScaleTransform(Settings.DisplayScale / m.M11, Settings.DisplayScale / m.M22);
+                ScaleTransform dpiTransform = new ScaleTransform(scale / m.M11, scale / m.M22);
                 if (dpiTransform.CanFreeze)
                     dpiTransform.Freeze();
                 this.LayoutTransform = dpiTransform;

@@ -10,11 +10,14 @@
   <ItemGroup>
     <None Remove="Images\Art.png" />
     <None Remove="Images\Back\back-music.png" />
+    <None Remove="Images\Back\Congrats.png" />
     <None Remove="Images\Back\hypno-backgrnd.png" />
     <None Remove="Images\Communication.png" />
+    <None Remove="Images\DemoQrCode.png" />
     <None Remove="Images\Food.png" />
     <None Remove="Images\free-icon-lock.png" />
     <None Remove="Images\hypno-backgrnd.png" />
+    <None Remove="Images\man_on_yacht.jpg" />
     <None Remove="Images\Mixology.png" />
     <None Remove="Images\Movement.png" />
     <None Remove="Images\Music.png" />
@@ -23,6 +26,7 @@
     <None Remove="Images\TestPage-2.png" />
     <None Remove="Images\Trends.png" />
     <None Remove="NLog.config" />
+    <None Remove="Pages\GiftPages\DemoQrCode.png" />
     <None Remove="start-test.gif" />
   </ItemGroup>
 
@@ -51,7 +55,14 @@
 	    <Content Include="Images\Back\back-music.png">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Content>
+	    <Resource Include="Images\Back\Congrats.png">
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </Resource>
 	    <Resource Include="Images\Back\hypno-backgrnd.png" />
+	    <Resource Include="Images\DemoQrCode.png" />
+	    <Resource Include="Images\man_on_yacht.jpg">
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </Resource>
 	    <Resource Include="Images\Palm-scanner-2_10.gif">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
@@ -99,9 +110,10 @@
       <Resource Include="Images\relax_in_water.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Resource>
-      <Resource Include="Images\TestPage-2.png">
+      <Resource Include="Pages\GiftPages\DemoQrCode.png" />
+      <Content Include="Images\TestPage-2.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Resource>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
@@ -121,9 +133,6 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Images\Back\back-trends.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Images\Back\Congrats.png">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Images\Hypno.mp4">

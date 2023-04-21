@@ -15,8 +15,8 @@
     <helpers:DpiDecorator>
 
     <Grid Margin="0" Width="1080" Height="1920">
-        <Image Name="imgBackground" Stretch="Fill" 
-               Source="..\\..\\Images\Back\Congrats.png"/>
+            <Image  Width="1080" Height="1920" Name="imgBackground" Stretch="Fill" 
+               Source="..\..\Images\Back\Congrats.png"/>
 
         <spinner:LoadingSpinner  x:Name="spinner"
             Grid.Row="1"

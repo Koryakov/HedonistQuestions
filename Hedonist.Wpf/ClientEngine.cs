@@ -31,7 +31,7 @@ namespace Hedonist.Wpf {
     internal class Settings {
         public double HttpTimeoutSeconds { get; set; }
         public double ScreensaverTimerIntervalSeconds { get; set; }
-        public double DisplayScale { get; set; }
+        public double? DisplayScale { get; set; }
         public string TerminalName { get; set; }
         public string TerminalIdentifier { get; set; }
         public string QuizHost { get; set; }

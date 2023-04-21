@@ -41,17 +41,17 @@
             Color="#DD01E5" />
         
         <Grid>
-            <TextBlock Name="txtHeader1" Text="test" Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
+                <TextBlock Name="txtHeader1" Text="Ты гедонист в!" Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
                     Margin="0 96 0 0" />
             
             <!---PANEL START-->
-            <StackPanel x:Name="panelStart" Visibility="Hidden"
-                Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <StackPanel x:Name="panelStart" Visibility="Visible"
+                Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                <TextBlock x:Name="txtHeader2" Margin="0 75 0 0" Text=""
+                <TextBlock x:Name="txtHeader2" Margin="0 291 0 0" Text="«Музыка нас связала!»"
                                HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
-                <TextBlock x:Name="txtDescription1" Text="" TextAlignment="Center" Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
-                <TextBlock x:Name="txtDescription2" Text="" TextAlignment="Center" Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
+                    <TextBlock x:Name="txtDescription1" Text="Нет ничего важнее получения удовольствия  от еды, верно? Конечно, ведь ты гедонист еды!  Ох уж эта пюрешечка с котлетками, тонны шоколада и хачапури по-аджарски. Ты не можешь пройти мимо ни одного кафе с шикарной едой. " TextAlignment="Center" Margin="0 20 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
+                    <TextBlock x:Name="txtDescription2" Text=" Не переживай, голодным у нас не останешься,  вот твой подарок" TextAlignment="Center" Margin="0 0 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
 
                 <Button x:Name="btnShowResult" Content="Получить" Width="270"
                         Click="btnShowResult_Click"
@@ -69,30 +69,29 @@
             </StackPanel>
 
             <!---PANEL STORE GIFT-->
-            <Grid x:Name="panelStoreGift" HorizontalAlignment="Center" Visibility="Hidden">
-                <TextBlock TextAlignment="Center" Text="Обратитесь к консультанту за получением комплимента" Margin="0 903 0 30"
+                <StackPanel x:Name="panelStoreGift" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Visibility="Hidden">
+                <TextBlock TextAlignment="Center" Text="Обратитесь к консультанту за получением комплимента" Margin="0 0 0 30"
                     Width="930" Style="{StaticResource textGiftMiddle}" />
 
-            </Grid>
+            </StackPanel>
             <!---PANEL QRCODE-->
-            <Grid x:Name="panelQrCode" Visibility="Hidden">
-                <StackPanel Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
+                <StackPanel x:Name="panelQrCode" Visibility="Hidden"
+                    Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <TextBlock Text="«Твой комплимент доступен по ссылке:»" Margin="0 75 0 30"
-                               TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
+                    <TextBlock Text="Твой комплимент доступен по ссылке:" Margin="0 75 0 30"
+                            TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
 
-                    <Image Name="imgQrCode" Width="600" Height="600"/>
+                    <Image Name="imgQrCode" Width="600" Height="600" Source="/Pages/GiftPages/DemoQrCode.png"/>
 
-                    <TextBlock Text="«Отсканируй QR-код»" Margin="0 10 0 0"
-                               HorizontalAlignment="Center" Style="{StaticResource textGiftSmaller}" />
+                <TextBlock Text="«Отсканируй QR-код»" Margin="0 10 0 0"
+                            HorizontalAlignment="Center" Style="{StaticResource textGiftSmaller}" />
 
 
-                    <TextBlock x:Name="txtQrCode" Margin="0 75 0 0"
-                               TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
+                <TextBlock x:Name="txtQrCode" Margin="0 75 0 0"
+                            TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
 
-                </StackPanel>
-
-            </Grid>
+            </StackPanel>
 
         </Grid>
     </Grid>
