@@ -1,5 +1,8 @@
 ﻿using Hedonist.Models;
+using Hedonist.Wpf.Helpers;
+using ModalControl;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -23,33 +26,106 @@ namespace Hedonist.Wpf.Pages.GiftPages {
     public partial class GiftPage1 : Page {
 
         private GiftCommonData GiftData { get; set; }
+        private JObject exData;
+        private int pageState = 0;
+        private string ticket;
+        private JToken giftPage1Data;
         public GiftPage1(string ticket, GiftCommonData giftData) {
+
+            this.ticket = ticket;
             this.GiftData = giftData;
+            exData = JObject.Parse(GiftData.GiftType.ExtendedData);
+
             InitializeComponent();
-           
-            dynamic jsonData = JsonConvert.DeserializeObject(GiftData.GiftType.ExtendedData);
-            if (Exists(jsonData, "GiftPage1Data")) {
-                var giftPage1Data = jsonData.GiftPage1Data;
-                if (Exists(giftData, "Text1")) {
-                    txtDescription.Text = giftPage1Data.Text1;
-                }
+            Bind();
+        }
+
+        private void Bind() {
+            switch(pageState) {
+                case 0:
+                    BindPage1();
+                    pageState = 1;
+                    break;
+                case 1:
+                    BindPage2(); 
+                    pageState = 2;
+                    break;
             }
         }
-        public static bool Exists(dynamic settings, string name) {
-            if (settings is ExpandoObject)
-                return ((IDictionary<string, object>)settings).ContainsKey(name);
 
-            return settings.GetType().GetProperty(name) != null;
+        private void BindPage1() {
+            try {
+                giftPage1Data = exData["GiftPage1Data"];
+
+                string bgImageFileName = giftPage1Data["bgImageName"].ToString();
+                string imgPath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, $"Images\\Back", bgImageFileName);
+                BitmapImage myBitmapImage = new BitmapImage();
+                myBitmapImage.BeginInit();
+                myBitmapImage.UriSource = new Uri(imgPath);
+                myBitmapImage.EndInit();
+                imgBackground.Source = myBitmapImage;
+
+                txtHeader1.Text = giftPage1Data["Text1"].ToString();
+                txtHeader2.Text = giftPage1Data["Text2"].ToString();
+                txtDescription1.Text = giftPage1Data["Text3"].ToString();
+                txtDescription2.Text = giftPage1Data["Text4"].ToString();
+
+                panelStoreGift.Visibility = Visibility.Hidden;
+                panelQrCode.Visibility = Visibility.Hidden;
+                panelStart.Visibility = Visibility.Visible;
+            } catch (Exception ex) {
+                modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
+                modal.IsOpen = true;
+            }
         }
 
+        private void BindPage2() {
+            try {
+                if (GiftData.GiftResult == GiftCommonData.GiftResultType.GiftFound) {
+
+                    if (GiftData.GiftType.HasQrCode) {
+                        txtQrCode.Text = GiftData.QrCodeText;
+                        imgQrCode.Source = BitmapHelper.CreateQrCodeBitmap(txtQrCode.Text);
+
+                        panelStoreGift.Visibility = Visibility.Hidden;
+                        panelQrCode.Visibility = Visibility.Visible;
+                        panelStart.Visibility = Visibility.Hidden;
+                    }
+                    else {
+                        panelStoreGift.Visibility = Visibility.Visible;
+                        panelQrCode.Visibility = Visibility.Hidden;
+                        panelStart.Visibility = Visibility.Hidden;
+                    }
+                }
+                else if (GiftData.GiftResult == GiftCommonData.GiftResultType.NoFreeGift) {
+                    var model = new GiftsOver.GiftsOverModel() {
+                        HeaderText = giftPage1Data["GiftOverText"].ToString(),
+                        Ticket = ticket
+                    };
+                    NavigationService.Navigate(new GiftsOver(model, GiftData));
+                }
+                else {
+                    modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
+                    modal.IsOpen = true;
+                }
+            }
+            catch (Exception ex) {
+                modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
+                modal.IsOpen = true;
+            }
+        }
 
         private void btnShowResult_Click(object sender, RoutedEventArgs e) {
-            //NavigationService.Navigate(new GiftMusicPage_3(giftPageModel));
+            Bind();
         }
         private void btnOneMore_Click(object sender, RoutedEventArgs e) {
-
+            NavigationService.Navigate(new TestPage(ticket));
         }
         private void btnChoose_Click(object sender, RoutedEventArgs e) {
+            NavigationService.Navigate(new VariantsPage(ticket, GiftData));
+        }
+        private void OnCloseModalClick(object sender, RoutedEventArgs e) {
+            modal.IsOpen = false;
         }
     }
 }

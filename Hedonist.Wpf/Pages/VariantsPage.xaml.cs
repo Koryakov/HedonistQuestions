@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Hedonist.Models;
+using Hedonist.Wpf.Pages.GiftPages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +20,39 @@ namespace Hedonist.Wpf.Pages {
     /// Interaction logic for Variants.xaml
     /// </summary>
     public partial class VariantsPage : Page {
-        public VariantsPage(string ticket) {
+        private string ticket;
+        private GiftCommonData GiftData { get; set; }
+        public VariantsPage(string ticket, GiftCommonData giftData) {
+            this.ticket = ticket;
+            this.GiftData = giftData;
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            string btnName = ((Button)sender).Name as string;
+            switch (btnName) {
+                case "btnArt":
+                    NavigationService.Navigate(new GiftPage1(ticket, GiftData));
+                    break;
+                case "btnMusic":
+                    NavigationService.Navigate(new GiftPage1(ticket, GiftData));
+                    break;
+                case "btnTrends":
+                    NavigationService.Navigate(new GiftPage1(ticket, GiftData));
+                    break;
+                case "btnFood":
+                    NavigationService.Navigate(new GiftPage1(ticket, GiftData));
+                    break;
+                case "btnMovement":
+                    NavigationService.Navigate(new GiftPage1(ticket, GiftData));
+                    break;
+                case "btnMixology":
+                    NavigationService.Navigate(new GiftPage1(ticket, GiftData));
+                    break;
+                case "btnCommunication":
+                    NavigationService.Navigate(new GiftPage1(ticket, GiftData));
+                    break;
+            }
         }
     }
 }

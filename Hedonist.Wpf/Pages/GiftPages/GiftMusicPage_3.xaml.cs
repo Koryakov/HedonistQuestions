@@ -68,7 +68,7 @@ namespace Hedonist.Wpf.Pages.GiftPages
                         HeaderText = "музыке",
                         Ticket = giftPageModel.Ticket
                     };
-                    NavigationService.Navigate(new GiftsOver(model));
+                    //NavigationService.Navigate(new GiftsOver(model));
                 }
                 else {
                     //QR код подарка

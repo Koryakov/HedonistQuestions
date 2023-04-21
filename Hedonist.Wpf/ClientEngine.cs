@@ -67,7 +67,7 @@ namespace Hedonist.Wpf {
                 var json = JsonConvert.SerializeObject(authData);
                 var requestContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
 
-                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/Authenticate", requestContent);
+                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/Authenticate?{Guid.NewGuid}", requestContent);
                 logger.Info($"Authenticate request StatusCode = {response.StatusCode};");
 
                 var authResult = new AutorizeResult();
@@ -103,7 +103,7 @@ namespace Hedonist.Wpf {
             AutorizeResultType resultType = AutorizeResultType.Unknown;
             try {
                 response = await httpClient.GetAsync(
-                    settings.QuizHost + $"/api/Quizz/GetQuizData?ticket={ticket}");
+                    settings.QuizHost + $"/api/Quizz/GetQuizData?ticket={ticket}&{Guid.NewGuid}");
                 logger.Info($"GetQuizByTicketAsync request StatusCode = {response.StatusCode};");
 
                 var strQuiz = await response.Content.ReadAsStringAsync();
@@ -147,7 +147,7 @@ namespace Hedonist.Wpf {
                 var json = JsonConvert.SerializeObject(requestedGiftInfo);
                 var requestContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
 
-                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/GetGift", requestContent);
+                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/GetGift?{Guid.NewGuid}", requestContent);
 
                 logger.Info($"GetGiftAsync request StatusCode = {response.StatusCode};");
 

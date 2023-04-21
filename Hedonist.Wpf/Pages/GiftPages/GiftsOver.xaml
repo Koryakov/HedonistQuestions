@@ -27,8 +27,7 @@
                 <TextBlock Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
                     Margin="0 212 0 0" Text="Поздравляем!" />
                 <StackPanel>
-                    <TextBlock Name="txtBlock1" Text="Мы думаем, что ты гедонист в ТЕСТОВЫЙ БЛОК,
-но уверены, что ты знаешь лучше."
+                    <TextBlock Name="txtWeThink" Text=""
                     Margin="0 60 0 0"
                     HorizontalAlignment="Center" Style="{StaticResource textGiftSmall}" />
 

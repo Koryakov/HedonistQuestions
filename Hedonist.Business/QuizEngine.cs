@@ -75,11 +75,11 @@ namespace Hedonist.Business {
             else {
                 GiftFromDbResult giftFromDb = giftResult.Result;
                 var qrCodeData = new GiftCommonData();
+                qrCodeData.GiftType = giftFromDb.GiftType;
 
                 if (giftFromDb.GetGiftResultType == GetGiftResultType.GiftFound) {
                     string qrCodeText = String.Format($"{giftResult.Result.GiftType.DescriptionPattern}", giftResult.Result.Gift.CertificateCode);
                     
-                    qrCodeData.GiftType = giftFromDb.GiftType;
                     if (qrCodeData.GiftType.HasQrCode) {
                         //qrCodeData.QrCodeByteArr = CreateQrCodeByteArray(qrCodeText);
                         qrCodeData.CertificateCode = giftFromDb.Gift.CertificateCode;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Hedonist.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,21 +24,22 @@ namespace Hedonist.Wpf.Pages.GiftPages {
             public string Ticket { get; set; }
         }
 
-
         private GiftsOverModel model;
-        private const string TextBlock1Pattern = "Мы думаем, что ты гедонист в {0},\r\nно уверены, что ты знаешь лучше.";
+        private GiftCommonData GiftData { get; set; }
+        private const string TextBlock1Pattern = "{0},\r\nно уверены, что ты знаешь лучше.";
         
-        public GiftsOver(GiftsOverModel model) {
+        public GiftsOver(GiftsOverModel model, GiftCommonData giftData) {
             InitializeComponent();
             this.model = model;
-            txtBlock1.Text = string.Format(TextBlock1Pattern, model.HeaderText);
+            this.GiftData = giftData;
+            txtWeThink.Text = string.Format(TextBlock1Pattern, model.HeaderText);
         }
         private void btnAgain_Click(object sender, RoutedEventArgs e) {
             NavigationService.Navigate(new TestPage(model.Ticket));
         }
 
         private void btnSayWhoAmI_Click(object sender, RoutedEventArgs e) {
-            NavigationService.Navigate(new VariantsPage(model.Ticket));
+            NavigationService.Navigate(new VariantsPage(model.Ticket, GiftData));
         }
     }
 }

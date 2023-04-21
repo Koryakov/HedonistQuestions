@@ -49,9 +49,9 @@
 	    <Content Include="appsettings.json">
 		    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Content>
-	    <Resource Include="Images\Back\back-music.png">
+	    <Content Include="Images\Back\back-music.png">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	    </Resource>
+	    </Content>
 	    <Resource Include="Images\Back\hypno-backgrnd.png" />
 	    <Resource Include="Images\Palm-scanner-2_10.gif">
 	      <CopyToOutputDirectory></CopyToOutputDirectory>

@@ -216,28 +216,7 @@ namespace Hedonist.Wpf.Pages {
             }
             logger.Debug($"OUT BgWorkerGift_RunWorkerCompleted()");
         }
-/*
-        private void NavigateAsync() {
-            switch(giftDataResponse.giftData.GiftType.Id) {
-                case 1://Искусство
-                    break;
-                case 2://Музыка
-                    break;
-                case 3://Тренды
-                    break;
-                case 41://Еда-яндекс
-                    break;
-                case 42://Еда-store
-                    break;
-                case 5://Движение
-                    break;
-                case 6://Миксология
-                    break;
-                case 7://Общение
-                    break;
-            }
-        }
-*/
+
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
             modal.IsOpen = false;
         }

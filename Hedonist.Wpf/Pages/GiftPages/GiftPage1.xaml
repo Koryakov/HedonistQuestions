@@ -4,6 +4,8 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages.GiftPages"
+      xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
+      xmlns:spinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
       mc:Ignorable="d" 
       d:DesignHeight="1920" d:DesignWidth="1080"
       Background="Black"
@@ -11,16 +13,43 @@
 
 
     <Grid Margin="0" Width="1080" Height="1920">
-        <Image Width="1080" Height="1920" Source="..\..\\Images\Back\back-music.png"
+        <Image x:Name="imgBackground" Width="1080" Height="1920" Source="..\..\\Images\Back\back-music.png"
                     VerticalAlignment = "Top" Margin = "0"/>
-        <Grid>
-            <StackPanel Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
-                <TextBlock Name="txtHeader1" Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
-                    Margin="0 96 0 0" />
 
-                <TextBlock Name="txtHeader2" Margin="0 75 0 0"
+        <custom:Modal x:Name="modal" Panel.ZIndex="10">
+            <Grid Width="300" Height="300">
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock x:Name="modalMessage"/>
+                    <Button
+                        x:Name="btnCloseModal"
+                         Click="OnCloseModalClick"
+                        Margin="0 10 0 0"
+                        Padding="10 5"
+                        Content="Закрыть" />
+                </StackPanel>
+            </Grid>
+        </custom:Modal>
+
+        <spinner:LoadingSpinner  x:Name="spinner"
+            Grid.Row="1"
+            Margin="10"
+            Cap="Triangle"
+            Diameter="150"
+            Thickness="7"
+            Color="#DD01E5" />
+        
+        <Grid>
+            <TextBlock Name="txtHeader1" Text="test" Style="{StaticResource textGiftLarge}" HorizontalAlignment="Center"
+                    Margin="0 96 0 0" />
+            
+            <!---PANEL START-->
+            <StackPanel x:Name="panelStart" Visibility="Hidden"
+                Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
+
+                <TextBlock x:Name="txtHeader2" Margin="0 75 0 0" Text=""
                                HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
-                <TextBlock Name="txtDescription" TextAlignment="Center" Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
+                <TextBlock x:Name="txtDescription1" Text="" TextAlignment="Center" Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
+                <TextBlock x:Name="txtDescription2" Text="" TextAlignment="Center" Margin="0 35 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
 
                 <Button x:Name="btnShowResult" Content="Получить" Width="270"
                         Click="btnShowResult_Click"
@@ -36,6 +65,32 @@
                                 Width="270" Style="{StaticResource commonDarkButton}" />
                 </StackPanel>
             </StackPanel>
+
+            <!---PANEL STORE GIFT-->
+            <Grid x:Name="panelStoreGift" HorizontalAlignment="Center" Visibility="Hidden">
+                <TextBlock TextAlignment="Center" Text="Обратитесь к консультанту за получением комплимента" Margin="0 903 0 30"
+                    Width="930" Style="{StaticResource textGiftMiddle}" />
+
+            </Grid>
+            <!---PANEL QRCODE-->
+            <Grid x:Name="panelQrCode" Visibility="Hidden">
+                <StackPanel Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Top">
+
+                    <TextBlock Text="«Твой комплимент доступен по ссылке:»" Margin="0 75 0 30"
+                               TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
+
+                    <Image Name="imgQrCode" Width="600" Height="600"/>
+
+                    <TextBlock Text="«Отсканируй QR-код»" Margin="0 10 0 0"
+                               HorizontalAlignment="Center" Style="{StaticResource textGiftSmaller}" />
+
+
+                    <TextBlock x:Name="txtQrCode" Margin="0 75 0 0"
+                               TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
+
+                </StackPanel>
+
+            </Grid>
 
         </Grid>
     </Grid>
