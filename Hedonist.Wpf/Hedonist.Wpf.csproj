@@ -12,6 +12,7 @@
     <None Remove="Images\Back\back-music.png" />
     <None Remove="Images\Back\Congrats.png" />
     <None Remove="Images\Back\hypno-backgrnd.png" />
+    <None Remove="Images\close.png" />
     <None Remove="Images\Communication.png" />
     <None Remove="Images\DemoQrCode.png" />
     <None Remove="Images\Food.png" />
@@ -62,6 +63,9 @@
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Back\hypno-backgrnd.png" />
+	    <Resource Include="Images\close.png">
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </Resource>
 	    <Resource Include="Images\DemoQrCode.png" />
 	    <Resource Include="Images\home.png">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>

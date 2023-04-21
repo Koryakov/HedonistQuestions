@@ -78,7 +78,7 @@ namespace Hedonist.Wpf.Pages {
                         NavigationService.Navigate(new TestPage(autorizeResult.Ticket));
                         break;
                     case AutorizeResultType.Unauthorized:
-                        modalMessage.Text = "Неверный пароль";
+                        modalMessage.Text = "Пароль неверный";
                         modal.IsOpen = true;
                         ResetTimer();
                         break;
