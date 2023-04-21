@@ -4,13 +4,15 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
+      xmlns:helpers="clr-namespace:Hedonist.Wpf.Helpers"
       mc:Ignorable="d"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
       gif:ImageBehavior.AnimateInDesignMode="True"
       d:DesignHeight="1920" d:DesignWidth="1080"
       Title="HandPage">
 
-    <Grid Background="Black" Margin="0" Width="1080" Height="1920">
+    <helpers:DpiDecorator>
+        <Grid Background="Black" Margin="0" Width="1080" Height="1920">
         <StackPanel Orientation="Vertical" Margin="0">
             <Grid>
                 <Image Name="img" Tag="ScreenSaver"
@@ -36,4 +38,5 @@
             
         </StackPanel>
     </Grid>
+    </helpers:DpiDecorator>
 </Page>

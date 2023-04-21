@@ -4,12 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
+      xmlns:helpers="clr-namespace:Hedonist.Wpf.Helpers"
       mc:Ignorable="d" 
       d:DesignHeight="1920" d:DesignWidth="1080"
       Background="Black"
       Title="InfoPage">
-
-    <Grid PreviewMouseDown="GridClick" Background="Black" Margin="0" Width="1080" Height="1920">
+    <helpers:DpiDecorator>
+        <Grid PreviewMouseDown="GridClick" Background="Black" Margin="0" Width="1080" Height="1920">
         <StackPanel Orientation="Vertical" Margin="0">
             <Grid>
                 <Image Width="1080" Height="753" Source="..\\Images\man_on_yacht.jpg"
@@ -28,4 +29,5 @@
             </StackPanel>
         </StackPanel>
     </Grid>
+    </helpers:DpiDecorator>
 </Page>

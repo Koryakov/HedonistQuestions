@@ -3,11 +3,12 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
+      xmlns:local="clr-namespace:Hedonist.Wpf"
+      xmlns:helpers="clr-namespace:Hedonist.Wpf.Helpers"
       mc:Ignorable="d"
       Background="Black"
       Title="StartPage">
-    
+    <helpers:DpiDecorator>
         <Grid PreviewMouseDown="GridClick">
             <MediaElement Source="Images\hypno.mp4" Name="hypnoVideo" 
                 Width="1080" Height="1920" LoadedBehavior="Manual" />
@@ -18,4 +19,5 @@
                     VerticalAlignment="Center" HorizontalAlignment="Center"
                     Text="В чем твой гедонизм?" />
         </Grid>
+    </helpers:DpiDecorator>
 </Page>

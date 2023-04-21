@@ -1,4 +1,5 @@
 ﻿using Hedonist.Models;
+using Hedonist.Wpf.Helpers;
 using ModalControl;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

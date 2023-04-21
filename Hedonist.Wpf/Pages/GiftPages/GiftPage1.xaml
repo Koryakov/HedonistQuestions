@@ -5,12 +5,14 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages.GiftPages"
       xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
+      xmlns:helpers="clr-namespace:Hedonist.Wpf.Helpers"
       xmlns:spinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
       mc:Ignorable="d" 
       d:DesignHeight="1920" d:DesignWidth="1080"
       Background="Black"
       Title="GiftPage1">
 
+    <helpers:DpiDecorator>
 
     <Grid Margin="0" Width="1080" Height="1920">
         <Image x:Name="imgBackground" Width="1080" Height="1920" Source="..\..\\Images\Back\back-music.png"
@@ -94,4 +96,5 @@
 
         </Grid>
     </Grid>
+    </helpers:DpiDecorator>
 </Page>

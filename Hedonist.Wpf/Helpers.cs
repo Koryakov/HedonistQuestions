@@ -11,7 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace Hedonist.Wpf {
+namespace Hedonist.Wpf.Helpers {
     internal class AppSettingsHelper {
         public static Settings Settings { get; set; } = new Settings();
         static AppSettingsHelper() {
@@ -49,12 +49,17 @@ namespace Hedonist.Wpf {
     }
 
     public class DpiDecorator : Decorator {
+
+        static Settings Settings { get; set; } = new Settings();
+        static DpiDecorator() {
+            var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddEnvironmentVariables().Build();
+            Settings = config.GetRequiredSection("Settings").Get<Settings>();
+        }
         public DpiDecorator() {
             this.Loaded += (s, e) =>
             {
                 System.Windows.Media.Matrix m = PresentationSource.FromVisual(this).CompositionTarget.TransformToDevice;
-                //ScaleTransform dpiTransform = new ScaleTransform(1 / m.M11, 1 / m.M22);
-                ScaleTransform dpiTransform = new ScaleTransform(0.5 / m.M11, 0.5 / m.M22);
+                ScaleTransform dpiTransform = new ScaleTransform(Settings.DisplayScale / m.M11, Settings.DisplayScale / m.M22);
                 if (dpiTransform.CanFreeze)
                     dpiTransform.Freeze();
                 this.LayoutTransform = dpiTransform;

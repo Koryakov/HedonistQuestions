@@ -4,11 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Hedonist.Wpf.Pages"
+      xmlns:helpers="clr-namespace:Hedonist.Wpf.Helpers"
       xmlns:custom="clr-namespace:ModalControl;assembly=ModalControl"
       xmlns:spinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
       mc:Ignorable="d"
       Title="Number">
-
+    <helpers:DpiDecorator>
     <Grid VerticalAlignment="Center">
         <Grid>
             <Image Width="1080" Height="1920" Source="..\\Images\hypno-backgrnd.png"
@@ -74,4 +75,5 @@
             Thickness="7"
             Color="#DD01E5" />
     </Grid>
+    </helpers:DpiDecorator>
 </Page>
