@@ -45,8 +45,8 @@ namespace Hedonist.Models {
         public string Key { get; set; }
         public bool HasQrCode { get; set; }
 
-        public List<Answer> Answers { get; } = new();
-        public List<Store> Stores { get; } = new();
+        public List<Answer> Answers { get; set; } = new();
+        public List<Store> Stores { get; set; } = new();
     }
 
 
@@ -59,7 +59,7 @@ namespace Hedonist.Models {
         public int Order { get; set; }
         public string Text { get; set; }
         public int QuestionId { get; set; }
-        public List<GiftType> GiftTypes { get; } = new();
+        public List<GiftType> GiftTypes { get; set; } = new();
     }
 
 
@@ -68,7 +68,7 @@ namespace Hedonist.Models {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<GiftType> GiftTypes { get; } = new();
+        public List<GiftType> GiftTypes { get; set; } = new();
     }
 
 
@@ -81,7 +81,7 @@ namespace Hedonist.Models {
         public int GiftTypeId { get; set; }
         public bool IsSold { get; set; }
         public DateTime CreatedDate { get; set; }
-        public GiftType GiftType { get; } = new();
+        public GiftType GiftType { get; set; } = new();
     }
 
     //[Table("gift_history")]

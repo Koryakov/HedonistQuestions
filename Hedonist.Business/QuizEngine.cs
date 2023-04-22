@@ -103,6 +103,55 @@ namespace Hedonist.Business {
             }
         }
 
+        public async Task<AuthenticatedResult<GiftCommonData>> GetGiftByTypeAsync(RequestedGiftTypeInfo info) {
+            
+
+            var giftResult = await repository.GetGiftByTypeAsync(info);
+
+            if (!giftResult.IsAuthorized) {
+                return AuthenticatedResult<GiftCommonData>.NotAuthenticated();
+            }
+            else {
+                GiftFromDbResult giftFromDb = giftResult.Result;
+                var qrCodeData = new GiftCommonData();
+                qrCodeData.GiftType = giftFromDb.GiftType;
+
+                if (giftFromDb.GetGiftResultType == GetGiftResultType.GiftFound) {
+                    string qrCodeText = String.Format($"{giftResult.Result.GiftType.DescriptionPattern}", giftResult.Result.Gift.CertificateCode);
+
+                    if (qrCodeData.GiftType.HasQrCode) {
+                        //qrCodeData.QrCodeByteArr = CreateQrCodeByteArray(qrCodeText);
+                        qrCodeData.CertificateCode = giftFromDb.Gift.CertificateCode;
+                    }
+
+                    qrCodeData.GiftResult = GiftCommonData.GiftResultType.GiftFound;
+                    qrCodeData.QrCodeText = qrCodeText;
+
+                }
+                else if (giftFromDb.GetGiftResultType == GetGiftResultType.NoFreeGift) {
+                    qrCodeData.GiftResult = GiftCommonData.GiftResultType.NoFreeGift;
+                }
+                else {
+                    qrCodeData.GiftResult = GiftCommonData.GiftResultType.InconsistentData;
+                }
+
+                return new AuthenticatedResult<GiftCommonData>() {
+                    IsAuthorized = true,
+                    Result = qrCodeData
+                };
+            }
+        }
+
+        public async Task<AuthenticatedResult<Store>> GetStoreAsync(RequestedStoreInfo info) {
+
+            return await repository.GetStoreAsync(info);
+        }
+
+        public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByIdAsync(RequestedGiftTypeInfo info) {
+            
+            return await repository.GetGiftTypeByIdAsync(info);
+        }
+
         private static byte[] CreateQrCodeByteArray(string qrCodeText) {
             var qrGenerator = new QRCodeGenerator();
             QRCodeData qrCodeData = qrGenerator.CreateQrCode(qrCodeText, QRCodeGenerator.ECCLevel.Q);

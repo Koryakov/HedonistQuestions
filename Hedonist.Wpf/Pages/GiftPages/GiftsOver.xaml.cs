@@ -39,7 +39,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
         }
 
         private void btnSayWhoAmI_Click(object sender, RoutedEventArgs e) {
-            NavigationService.Navigate(new VariantsPage(model.Ticket, GiftData));
+            NavigationService.Navigate(new VariantsPage(model.Ticket));
         }
 
         private void HomeButtonClick(object sender, MouseButtonEventArgs e) {

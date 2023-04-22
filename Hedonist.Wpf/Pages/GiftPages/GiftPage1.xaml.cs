@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -25,16 +26,20 @@ namespace Hedonist.Wpf.Pages.GiftPages {
     /// </summary>
     public partial class GiftPage1 : Page {
 
-        private GiftCommonData GiftData { get; set; }
+        private GiftCommonData GiftDataFromTestPage { get; set; }
         private JObject exData;
         private int pageState = 0;
         private string ticket;
         private JToken giftPage1Data;
+        private BackgroundWorker bgWorkerGift = new();
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+        private (AutorizeResultType resultType, GiftCommonData giftCommonData) giftDataResponseFromDb;
+
         public GiftPage1(string ticket, GiftCommonData giftData) {
 
             this.ticket = ticket;
-            this.GiftData = giftData;
-            exData = JObject.Parse(GiftData.GiftType.ExtendedData);
+            this.GiftDataFromTestPage = giftData;
+            exData = JObject.Parse(GiftDataFromTestPage.GiftType.ExtendedData);
 
             InitializeComponent();
             Bind();
@@ -47,10 +52,56 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                     pageState = 1;
                     break;
                 case 1:
-                    BindPage2(); 
-                    pageState = 2;
+
+                    bgWorkerGift = new();
+                    bgWorkerGift.DoWork += BgWorkerGift_DoWork;
+                    bgWorkerGift.RunWorkerCompleted += BgWorkerGift_RunWorkerCompleted;
+
+                    if (!bgWorkerGift.IsBusy) {
+                        spinner.IsLoading = true;
+                        logger.Debug("starting bgWorkerGift.RunWorkerAsync()...");
+                        bgWorkerGift.RunWorkerAsync();
+                    }
                     break;
             }
+        }
+
+        private void BgWorkerGift_DoWork(object? sender, DoWorkEventArgs e) {
+            try {
+                logger.Debug("IN BgWorkerGift_DoWork()");
+
+                Task getAuthTask = Task.Run(async () => {
+                    logger.Debug("BgWorkerGift_DoWork() Task Run()...");
+                    giftDataResponseFromDb = await ClientEngine.GetGiftByTypeAsync(ticket, GiftDataFromTestPage.GiftType.Id);
+                });
+                Task.WaitAll(getAuthTask);
+                logger.Debug("OUT BgWorkerGift_DoWork; resetEvent.Wait() ended");
+
+            }
+            catch (TaskCanceledException ex) {
+                giftDataResponseFromDb = new(AutorizeResultType.Timeout, null);
+                logger.Error(ex, "BgWorkerGift_DoWork() TIMEOUT");
+            }
+            catch (Exception ex) {
+                giftDataResponseFromDb = new(AutorizeResultType.Error, null);
+                logger.Error(ex, "BgWorkerGift_DoWork() EXCEPTION");
+            }
+        }
+
+        private void BgWorkerGift_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
+            logger.Debug($"IN BgWorkerGift_RunWorkerCompleted()");
+            spinner.IsLoading = false;
+
+            if (giftDataResponseFromDb.resultType == AutorizeResultType.Authorized) {
+
+                BindPage2();
+                pageState = 2;
+            }
+            else {
+                modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
+                modal.IsOpen = true;
+            }
+            logger.Debug($"OUT BgWorkerGift_RunWorkerCompleted()");
         }
 
         private void BindPage1() {
@@ -76,10 +127,12 @@ namespace Hedonist.Wpf.Pages.GiftPages {
 
         private void BindPage2() {
             try {
-                if (GiftData.GiftResult == GiftCommonData.GiftResultType.GiftFound) {
+                var giftCommonData = giftDataResponseFromDb.giftCommonData;
 
-                    if (GiftData.GiftType.HasQrCode) {
-                        txtQrCode.Text = GiftData.QrCodeText;
+                if (giftCommonData.GiftResult == GiftCommonData.GiftResultType.GiftFound) {
+
+                    if (giftCommonData.GiftType.HasQrCode) {
+                        txtQrCode.Text = giftCommonData.QrCodeText;
                         imgQrCode.Source = BitmapHelper.CreateQrCodeBitmap(txtQrCode.Text);
 
                         panelStoreGift.Visibility = Visibility.Hidden;
@@ -92,12 +145,12 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                         panelStart.Visibility = Visibility.Hidden;
                     }
                 }
-                else if (GiftData.GiftResult == GiftCommonData.GiftResultType.NoFreeGift) {
+                else if (giftCommonData.GiftResult == GiftCommonData.GiftResultType.NoFreeGift) {
                     var model = new GiftsOver.GiftsOverModel() {
                         HeaderText = giftPage1Data["GiftOverText"].ToString(),
                         Ticket = ticket
                     };
-                    NavigationService.Navigate(new GiftsOver(model, GiftData));
+                    NavigationService.Navigate(new GiftsOver(model, GiftDataFromTestPage));
                 }
                 else {
                     modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
@@ -117,7 +170,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
             NavigationService.Navigate(new TestPage(ticket));
         }
         private void btnChoose_Click(object sender, RoutedEventArgs e) {
-            NavigationService.Navigate(new VariantsPage(ticket, GiftData));
+            NavigationService.Navigate(new VariantsPage(ticket));
         }
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
             modal.IsOpen = false;

@@ -60,6 +60,27 @@ namespace Hedonist.Repository {
             }
         }
 
+        public async Task<AuthenticatedResult<Store>> GetStoreAsync(RequestedStoreInfo info) {
+            
+            using (var db = CreateContext()) {
+                bool isTicketCorrect = await db.LoginAttempt.AnyAsync(p => p.Ticket == info.Ticket && p.IsExpired == false);
+
+                if (isTicketCorrect) {
+                    Terminal? terminal = await db.Terminal.FirstOrDefaultAsync(t => t.DeviceIdentifier == info.TerminalDeviceId);
+
+                    Store? store = null;
+                    if (terminal != null) {
+                        store = db.Store.Include(s => s.GiftTypes).FirstOrDefault(s => s.Id == terminal.StoreId);
+                    }
+                    return new AuthenticatedResult<Store>() {
+                        IsAuthorized = true,
+                        Result = store
+                    };
+                }
+                return AuthenticatedResult<Store>.NotAuthenticated();
+            }
+        }
+
         public async Task<AuthenticatedResult<(List<Question>? questions, List<Answer>? answers)>> GetQuizByTicketAsync(string ticket) {
             const int group = 1;
             using (var db = CreateContext()) {
@@ -79,6 +100,7 @@ namespace Hedonist.Repository {
         }
 
         public async Task<AuthenticatedResult<GiftFromDbResult>> GetGiftAsync(RequestedGiftInfo soldGiftData) {
+
             logger.Info($"IN GetGiftAsync(), ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
             var result = new GiftFromDbResult();
 
@@ -104,25 +126,7 @@ namespace Hedonist.Repository {
 
                             result.GiftType = answer.GiftTypes.Where(t => t.Stores.Any(s => s.Id == terminal.StoreId)).FirstOrDefault();
 
-                            if (result.GiftType != null) {
-                                var gift = await db.Gift
-                                //.Include(g => g.GiftType)
-                                .FirstOrDefaultAsync(g => !g.IsSold && g.GiftTypeId == result.GiftType.Id);
-
-                                if (gift != null) {
-                                    gift.IsSold = true;
-                                    await db.SaveChangesAsync();
-
-                                    result.GetGiftResultType = GetGiftResultType.GiftFound;
-                                    result.Gift = gift;
-                                    logger.Info($"GetGiftAsync() found, sold giftId={gift.Id}");
-                                }
-                                else {
-                                    result.GetGiftResultType = GetGiftResultType.NoFreeGift;
-                                    logger.Error($"GetGiftAsync(), FREE GIFT NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
-                                }
-                            }
-                            else {
+                            if (result.GiftType == null) {
                                 result.GetGiftResultType = GetGiftResultType.StoreHasNoGiftType;
                                 logger.Error($"GetGiftAsync(), STORE HAS NO GIFTTYPE. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
                             }
@@ -139,6 +143,74 @@ namespace Hedonist.Repository {
                 }
                 logger.Info($"OUT GetGiftAsync()");
                 return new AuthenticatedResult<GiftFromDbResult>(result);
+            }
+        }
+
+        public async Task<AuthenticatedResult<GiftFromDbResult>> GetGiftByTypeAsync(RequestedGiftTypeInfo info) {
+
+            logger.Info($"IN GetGiftByTypeAsync(), ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+            var result = new GiftFromDbResult();
+
+            using (var db = CreateContext()) {
+
+                LoginAttempt? loginAttempt = await db.LoginAttempt
+                    .FirstOrDefaultAsync(l => l.Ticket == info.Ticket && l.IsExpired == false);
+
+                if (loginAttempt == null) {
+                    return AuthenticatedResult<GiftFromDbResult>.NotAuthenticated();
+                }
+                else {
+                    var gift = await db.Gift.Include(g => g.GiftType).FirstOrDefaultAsync(g => !g.IsSold && g.GiftTypeId == info.GiftTypeId);
+                    if (gift != null) {
+                        gift.IsSold = true;
+                        await db.SaveChangesAsync();
+
+                        result.GetGiftResultType = GetGiftResultType.GiftFound;
+                        result.Gift = gift;
+                        result.GiftType = gift.GiftType;
+                        logger.Info($"GetGiftByTypeAsync() found, sold giftId={gift.Id}, DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                    }
+                    else {
+                        result.GiftType = await db.GiftType.FirstOrDefaultAsync(g => g.Id == info.GiftTypeId);
+                        result.GetGiftResultType = GetGiftResultType.NoFreeGift;
+                        logger.Error($"GetGiftByTypeAsync(), FREE GIFT NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                    }
+                }
+                logger.Info($"OUT GetGiftByTypeAsync()");
+                return new AuthenticatedResult<GiftFromDbResult>(result);
+            }
+        }
+
+        public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByIdAsync(RequestedGiftTypeInfo info) {
+            logger.Info($"IN GetGiftTypeByIdAsync(), ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+            var result = new GiftTypeResult();
+
+            using (var db = CreateContext()) {
+
+                LoginAttempt? loginAttempt = await db.LoginAttempt
+                    .FirstOrDefaultAsync(l => l.Ticket == info.Ticket && l.IsExpired == false);
+
+                if (loginAttempt == null) {
+                    return AuthenticatedResult<GiftTypeResult>.NotAuthenticated();
+                }
+                else {
+                    var giftType = db.GiftType.Where(gt => gt.Id == info.GiftTypeId).FirstOrDefault();
+                    if (giftType == null) {
+                        logger.Error($"OUT GetGiftTypeByIdAsync() GiftType not found. giftTypeId={info.GiftTypeId}");
+                        return new AuthenticatedResult<GiftTypeResult>(
+                            new GiftTypeResult() {
+                                GiftType = null
+                            });
+                    }
+                    else {
+                        logger.Info($"OUT GetGiftTypeByIdAsync()");
+
+                        return new AuthenticatedResult<GiftTypeResult>(
+                            new GiftTypeResult() {
+                                GiftType = giftType
+                            });
+                    }
+                }
             }
         }
     }

@@ -135,7 +135,50 @@ namespace Hedonist.Wpf {
 
         }
 
-        public static async Task<(AutorizeResultType resultType, GiftCommonData qrCodeData)> GetGiftAsync(string ticket, int answerId) {
+        public static async Task<(AutorizeResultType resultType, Store store)> GetStoreAsync(string ticket, string terminalDeviceId) {
+            logger.Debug("IN GetStoreAsync();");
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            AutorizeResultType resultType = AutorizeResultType.Unknown;
+            try {
+                var requestData = new RequestedStoreInfo() {
+                    Ticket = ticket,
+                    TerminalDeviceId = terminalDeviceId
+                };
+
+                var json = JsonConvert.SerializeObject(requestData);
+                var requestContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+
+                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/GetStore?{Guid.NewGuid}", requestContent);
+
+                var str = await response.Content.ReadAsStringAsync();
+                var store = JsonConvert.DeserializeObject<Store>(str);
+
+                switch (response.StatusCode) {
+                    case HttpStatusCode.OK:
+                        resultType = AutorizeResultType.Authorized;
+                        break;
+                    case HttpStatusCode.Unauthorized:
+                        resultType = AutorizeResultType.Unauthorized;
+                        break;
+                    case HttpStatusCode.InternalServerError:
+                        resultType = AutorizeResultType.Error;
+                        break;
+                    default:
+                        resultType = AutorizeResultType.Unknown;
+                        break;
+                }
+                logger.Debug("OUT GetStoreAsync();");
+                return (resultType, store);
+
+            }
+            catch (HttpRequestException ex) {
+                logger.Error(ex, "GetStoreAsync GetAsync TIMEOUT;");
+                return (AutorizeResultType.Timeout, null);
+            }
+
+        }
+
+        public static async Task<(AutorizeResultType resultType, GiftCommonData giftCommonData)> GetGiftAsync(string ticket, int answerId) {
             logger.Debug("IN GetGiftAsync();");
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             AutorizeResultType resultType = AutorizeResultType.Unknown;
@@ -175,6 +218,94 @@ namespace Hedonist.Wpf {
             }
             catch (HttpRequestException ex) {
                 logger.Error(ex, "GetGiftAsync TIMEOUT;");
+                return (AutorizeResultType.Timeout, null);
+            }
+        }
+
+        public static async Task<(AutorizeResultType resultType, GiftCommonData giftCommonData)> GetGiftByTypeAsync(string ticket, int giftTypeId) {
+            logger.Debug("IN GetGiftByTypeAsync();");
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            AutorizeResultType resultType = AutorizeResultType.Unknown;
+            try {
+                var requestedGiftTypeInfo = new RequestedGiftTypeInfo() {
+                    Ticket = ticket,
+                    GiftTypeId = giftTypeId
+                };
+
+                var json = JsonConvert.SerializeObject(requestedGiftTypeInfo);
+                var requestContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+
+                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/GetGiftByType?{Guid.NewGuid}", requestContent);
+
+                logger.Info($"GetGiftByTypeAsync request StatusCode = {response.StatusCode};");
+
+                var strData = await response.Content.ReadAsStringAsync();
+                var giftData = JsonConvert.DeserializeObject<GiftCommonData>(strData);
+
+                switch (response.StatusCode) {
+                    case HttpStatusCode.OK:
+                        resultType = AutorizeResultType.Authorized;
+                        break;
+                    case HttpStatusCode.Unauthorized:
+                        resultType = AutorizeResultType.Unauthorized;
+                        break;
+                    case HttpStatusCode.InternalServerError:
+                        resultType = AutorizeResultType.Error;
+                        break;
+                    default:
+                        resultType = AutorizeResultType.Unknown;
+                        break;
+                }
+                logger.Debug("OUT GetGiftAsync();");
+                return (resultType, giftData);
+
+            }
+            catch (HttpRequestException ex) {
+                logger.Error(ex, "GetGiftByTypeAsync TIMEOUT;");
+                return (AutorizeResultType.Timeout, null);
+            }
+        }
+
+        public static async Task<(AutorizeResultType resultType, GiftCommonData qrCodeData)> GetGiftTypeAsync(string ticket, int giftTypeId) {
+            logger.Debug("IN GetGiftTypeAsync();");
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            AutorizeResultType resultType = AutorizeResultType.Unknown;
+            try {
+                var parameters = new RequestedGiftTypeInfo {
+                    Ticket = ticket,
+                    GiftTypeId = giftTypeId
+                };
+
+                var json = JsonConvert.SerializeObject(parameters);
+                var requestContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
+
+                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/GetGiftType?{Guid.NewGuid}", requestContent);
+
+                logger.Info($"GetGiftTypeAsync request StatusCode = {response.StatusCode};");
+
+                var strData = await response.Content.ReadAsStringAsync();
+                var qrCodeData = JsonConvert.DeserializeObject<GiftCommonData>(strData);
+
+                switch (response.StatusCode) {
+                    case HttpStatusCode.OK:
+                        resultType = AutorizeResultType.Authorized;
+                        break;
+                    case HttpStatusCode.Unauthorized:
+                        resultType = AutorizeResultType.Unauthorized;
+                        break;
+                    case HttpStatusCode.InternalServerError:
+                        resultType = AutorizeResultType.Error;
+                        break;
+                    default:
+                        resultType = AutorizeResultType.Unknown;
+                        break;
+                }
+                logger.Debug("OUT GetGiftTypeAsync();");
+                return (resultType, qrCodeData);
+
+            }
+            catch (HttpRequestException ex) {
+                logger.Error(ex, "GetGiftTypeAsync TIMEOUT;");
                 return (AutorizeResultType.Timeout, null);
             }
 

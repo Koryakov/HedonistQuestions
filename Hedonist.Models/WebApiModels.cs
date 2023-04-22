@@ -22,6 +22,17 @@ namespace Hedonist.Models {
         public int SelectedAnswerId { get; set; }
     }
 
+    public class RequestedStoreInfo {
+        public string Ticket { get; set; }
+        public string TerminalDeviceId { get; set; }
+    }
+
+    public class RequestedGiftTypeInfo {
+        public string Ticket { get; set; }
+        public int GiftTypeId { get; set; }
+
+    }
+
     public class GiftCommonData {
         public enum GiftResultType {
             Unknown = 0,
@@ -50,6 +61,11 @@ namespace Hedonist.Models {
         public GetGiftResultType GetGiftResultType { get; set; }
         public Gift? Gift { get; set; }
         public GiftType GiftType { get; set; }
+
+    }
+
+    public class GiftTypeResult {
+        public GiftType? GiftType { get; set; }
 
     }
 }

@@ -21,7 +21,7 @@
         <Image Tag="HomeButton" Source="..\..\\Images\home.png"  PreviewMouseDown="HomeButtonClick"
                     Width="91" Height="91" Panel.ZIndex="50"
                     VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 40 40 0"/>
-            <custom:Modal x:Name="modal" Panel.ZIndex="10">
+        <custom:Modal x:Name="modal" Panel.ZIndex="10">
             <Grid Width="300" Height="300">
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock x:Name="modalMessage"/>
@@ -48,13 +48,19 @@
                     Margin="0 96 0 0" />
             
             <!---PANEL START-->
-            <StackPanel x:Name="panelStart" Visibility="Visible"
+                <StackPanel x:Name="panelStart" Visibility="Hidden"
                 Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                 <TextBlock x:Name="txtHeader2" Margin="0 291 0 0" Text="«Музыка нас связала!»"
                                HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
-                    <TextBlock x:Name="txtDescription1" Text="Нет ничего важнее получения удовольствия  от еды, верно? Конечно, ведь ты гедонист еды!  Ох уж эта пюрешечка с котлетками, тонны шоколада и хачапури по-аджарски. Ты не можешь пройти мимо ни одного кафе с шикарной едой. " TextAlignment="Center" Margin="0 20 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
-                    <TextBlock x:Name="txtDescription2" Text=" Не переживай, голодным у нас не останешься,  вот твой подарок" TextAlignment="Center" Margin="0 0 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
+                    <TextBlock x:Name="txtDescription1" Text="Нет ничего важнее получения удовольствия 
+от еды, верно? Конечно, ведь ты гедонист еды! 
+Ох уж эта пюрешечка с котлетками, тонны шоколада
+и хачапури по-аджарски. Ты не можешь пройти мимо
+ни одного кафе с шикарной едой. " TextAlignment="Center" Margin="0 20 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
+                    <TextBlock x:Name="txtDescription2" Text="
+Не переживай, голодным у нас не останешься, 
+вот твой подарок" TextAlignment="Center" Margin="0 0 0 0" Width="931" Style="{StaticResource textGiftSmall}" />
 
                 <Button x:Name="btnShowResult" Content="Получить" Width="270"
                         Click="btnShowResult_Click"
@@ -82,7 +88,7 @@
                 <StackPanel x:Name="panelQrCode" Visibility="Hidden"
                     Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <TextBlock Text="Твой комплимент доступен по ссылке:" Margin="0 75 0 30"
+                    <TextBlock HorizontalAlignment="Center" Text="Твой комплимент доступен по ссылке:" Margin="0 75 0 30"
                             TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
 
                     <Image Name="imgQrCode" Width="600" Height="600" Source="/Pages/GiftPages/DemoQrCode.png"/>

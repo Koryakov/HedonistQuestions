@@ -43,7 +43,7 @@ namespace Hedonist.WebApi.Controllers {
 
         [HttpPost]
         [Route("GetGift")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Question>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GiftCommonData))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -70,10 +70,97 @@ namespace Hedonist.WebApi.Controllers {
             }
         }
 
+        [HttpPost]
+        [Route("GetGiftType")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GiftCommonData))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<GiftCommonData>> GetGiftType(RequestedGiftTypeInfo info) {
+            try {
+                logger.Info($"IN GetGiftType(), ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                var giftResult = await new QuizEngine().GetGiftTypeByIdAsync(info);
+
+                if (!giftResult.IsAuthorized) {
+                    logger.Debug($"OUT GetQuizData(ticket={info.Ticket}), return Status401Unauthorized");
+                    return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                }
+                else if (giftResult.Result == null) {
+                    logger.Debug($"OUT GetGiftType() return Status404NotFound, ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                    return new StatusCodeResult(StatusCodes.Status404NotFound);
+                }
+                logger.Debug($"OUT GetGiftType() return OK, ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+
+                return Ok(giftResult.Result);
+            }
+            catch (Exception ex) {
+                logger.Error(ex, $"GetGiftType() EXCEPTION, return Status401Unauthorized, ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Route("GetGiftByType")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GiftCommonData))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<GiftCommonData>> GetGiftByType(RequestedGiftTypeInfo info) {
+            try {
+                logger.Info($"IN GetGiftByType(), ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                var giftResult = await new QuizEngine().GetGiftByTypeAsync(info);
+
+                if (!giftResult.IsAuthorized) {
+                    logger.Debug($"OUT GetGiftByType(ticket={info.Ticket}), return Status401Unauthorized");
+                    return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                }
+                else if (giftResult.Result == null) {
+                    logger.Debug($"OUT GetGiftByType() return Status404NotFound, ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                    return new StatusCodeResult(StatusCodes.Status404NotFound);
+                }
+                logger.Debug($"OUT GetGiftByType() return OK, ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+
+                return Ok(giftResult.Result);
+            }
+            catch (Exception ex) {
+                logger.Error(ex, $"GetGiftByType() EXCEPTION, return Status401Unauthorized, ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Route("GetStore")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Store))]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Store>> GetStore(RequestedStoreInfo info) {
+            try {
+                logger.Info($"IN GetStore(), ticket={info.Ticket}, TerminalDeviceId={info.TerminalDeviceId}");
+                var storeResult = await new QuizEngine().GetStoreAsync(info);
+
+                if (!storeResult.IsAuthorized) {
+                    logger.Debug($"OUT GetStore(ticket={info.Ticket}), return Status401Unauthorized");
+                    return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                }
+                else if (storeResult.Result == null) {
+                    logger.Debug($"OUT GetStore() return Status404NotFound, ticket={info.Ticket}, TerminalDeviceId={info.TerminalDeviceId}");
+                    return new StatusCodeResult(StatusCodes.Status404NotFound);
+                }
+                logger.Debug($"OUT GetStore() return OK, ticket={info.Ticket}, TerminalDeviceId={info.TerminalDeviceId}");
+
+                return Ok(storeResult.Result);
+            }
+            catch (Exception ex) {
+                logger.Error(ex, $"GetStore() EXCEPTION, return Status401Unauthorized, ticket={info.Ticket}, TerminalDeviceId={info.TerminalDeviceId}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // GET: api/<QuizzController>
         [HttpGet]
         [Route("GetQuizData")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Question>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(QuizData))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

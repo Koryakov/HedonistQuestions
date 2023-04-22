@@ -63,6 +63,7 @@ namespace Hedonist.Wpf.Pages {
 
         public void StartFirstTime() {
             quizState = new QuizState();
+            bgWorkerQuiz = new();
             bgWorkerQuiz.DoWork += TestPageBgWorker_DoWork;
             bgWorkerQuiz.RunWorkerCompleted += TestPageBgWorker_RunWorkerCompleted;
 
@@ -170,8 +171,9 @@ namespace Hedonist.Wpf.Pages {
                         
                         BindQuiz();
                     } else {
-                        bgWorkerGift.DoWork += BgWorkerGift_DoWork;
-                        bgWorkerGift.RunWorkerCompleted += BgWorkerGift_RunWorkerCompleted;
+                        bgWorkerGift = new ();
+                        bgWorkerGift.DoWork += BgWorkerGiftType_DoWork;
+                        bgWorkerGift.RunWorkerCompleted += BgWorkerGiftType_RunWorkerCompleted;
 
                         //Navigate(giftPageModel);
                         if (!bgWorkerGift.IsBusy) {
@@ -184,30 +186,31 @@ namespace Hedonist.Wpf.Pages {
             }
         }
 
-        private void BgWorkerGift_DoWork(object? sender, DoWorkEventArgs e) {
+        private void BgWorkerGiftType_DoWork(object? sender, DoWorkEventArgs e) {
             try {
-                logger.Debug("IN BgWorkerGift_DoWork()");
+                logger.Debug("IN BgWorkerGiftType_DoWork()");
 
                 Task getAuthTask = Task.Run(async () => {
-                    logger.Debug("BgWorkerGift_DoWork() Task Run()...");
-                    giftDataResponse = await ClientEngine.GetGiftAsync(testPageModel.Ticket, testPageModel.SelectedAnswers.Last().Id);
+                    logger.Debug("BgWorkerGiftType_DoWork() Task Run()...");
+                    giftDataResponse = await ClientEngine.
+                        GetGiftAsync(testPageModel.Ticket, testPageModel.SelectedAnswers.Last().Id);
                 });
                 Task.WaitAll(getAuthTask);
-                logger.Debug("OUT BgWorkerGift_DoWork; resetEvent.Wait() ended");
+                logger.Debug("OUT BgWorkerGiftType_DoWork; resetEvent.Wait() ended");
 
             }
             catch (TaskCanceledException ex) {
                 giftDataResponse = new(AutorizeResultType.Timeout, null);
-                logger.Error(ex, "BgWorkerGift_DoWork() TIMEOUT");
+                logger.Error(ex, "BgWorkerGiftType_DoWork() TIMEOUT");
             }
             catch (Exception ex) {
                 giftDataResponse = new(AutorizeResultType.Error, null);
-                logger.Error(ex, "BgWorkerGift_DoWork() EXCEPTION");
+                logger.Error(ex, "BgWorkerGiftType_DoWork() EXCEPTION");
             }
         }
 
-        private void BgWorkerGift_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
-            logger.Debug($"IN BgWorkerGift_RunWorkerCompleted()");
+        private void BgWorkerGiftType_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
+            logger.Debug($"IN BgWorkerGiftType_RunWorkerCompleted()");
             spinner.IsLoading = false;
 
             if(giftDataResponse.resultType == AutorizeResultType.Authorized) {
@@ -217,7 +220,7 @@ namespace Hedonist.Wpf.Pages {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
-            logger.Debug($"OUT BgWorkerGift_RunWorkerCompleted()");
+            logger.Debug($"OUT BgWorkerGiftType_RunWorkerCompleted()");
         }
 
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
