@@ -42,30 +42,30 @@ namespace Hedonist.WebApi.Controllers {
         }
 
         [HttpPost]
-        [Route("GetGift")]
+        [Route("GetGiftTypeByAnswerId")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GiftCommonData))]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<GiftCommonData>> GetGift(RequestedGiftInfo requestedGiftInfo) {
+        public async Task<ActionResult<GiftTypeResult>> GetGiftTypeByAnswerId(RequestedGiftInfo requestedGiftInfo) {
             try {
-                logger.Info($"IN GetGift(), ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
-                var giftResult = await new QuizEngine().GetGiftAsync(requestedGiftInfo);
+                logger.Info($"IN GetGiftTypeByAnswerId(), ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                var giftTypeResult = await new QuizEngine().GetGiftTypeByAnswerIdAsync(requestedGiftInfo);
 
-                if (!giftResult.IsAuthorized) {
-                    logger.Debug($"OUT GetQuizData(ticket={requestedGiftInfo.Ticket.Value}), return Status401Unauthorized");
+                if (!giftTypeResult.IsAuthorized) {
+                    logger.Debug($"OUT GetGiftTypeByAnswerId(ticket={requestedGiftInfo.Ticket.Value}), return Status401Unauthorized");
                     return new StatusCodeResult(StatusCodes.Status401Unauthorized);
                 }
-                else if (giftResult.Result == null) {
-                    logger.Debug($"OUT GetGift() return Status404NotFound, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                else if (giftTypeResult.Result == null) {
+                    logger.Debug($"OUT GetGiftTypeByAnswerId() return Status404NotFound, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
                     return new StatusCodeResult(StatusCodes.Status404NotFound);
                 }
-                logger.Debug($"OUT GetGift() return OK, CertificateCode={giftResult.Result.CertificateCode}, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                logger.Debug($"OUT GetGiftTypeByAnswerId() return OK, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
 
-                return Ok(giftResult.Result);
+                return Ok(giftTypeResult.Result);
             }
             catch (Exception ex) {
-                logger.Error(ex, $"GetGift() EXCEPTION, return Status401Unauthorized, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
+                logger.Error(ex, $"GetGiftTypeByAnswerId() EXCEPTION, return Status401Unauthorized, ticket={requestedGiftInfo.Ticket.Value}, answerId={requestedGiftInfo.SelectedAnswerId}");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
@@ -185,6 +185,14 @@ namespace Hedonist.WebApi.Controllers {
                 logger.Error(ex, $"GetQuizData(ticket={ticket}) EXCEPTION");
                 return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        // GET: api/<QuizzController>
+        [HttpGet]
+        [Route("GetStatus")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult GetStatus() {
+            return new StatusCodeResult(StatusCodes.Status200OK);
         }
 
     }

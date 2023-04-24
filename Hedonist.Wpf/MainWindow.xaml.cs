@@ -64,7 +64,7 @@ namespace Hedonist.Wpf {
             //            }
             //        }
             //}));
-            frame.NavigationService.Navigate(new VariantsPage("ca5ea469-82ff-4fb6-961d-9940766929ab"));
+            //frame.NavigationService.Navigate(new VariantsPage("ca5ea469-82ff-4fb6-961d-9940766929ab"));
         }
     }
 }

@@ -66,39 +66,16 @@ namespace Hedonist.Business {
         }
 
 
-        public async Task<AuthenticatedResult<GiftCommonData>> GetGiftAsync(RequestedGiftInfo requestedGiftInfo) {
-            var giftResult = await repository.GetGiftAsync(requestedGiftInfo);
+        public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByAnswerIdAsync(RequestedGiftInfo requestedGiftInfo) {
+            var result = await repository.GetGiftTypeByAnswerIdAsync(requestedGiftInfo);
             
-            if (!giftResult.IsAuthorized) {
-                return AuthenticatedResult<GiftCommonData>.NotAuthenticated();
+            if (!result.IsAuthorized) {
+                return AuthenticatedResult<GiftTypeResult>.NotAuthenticated();
             }
             else {
-                GiftFromDbResult giftFromDb = giftResult.Result;
-                var qrCodeData = new GiftCommonData();
-                qrCodeData.GiftType = giftFromDb.GiftType;
-
-                if (giftFromDb.GetGiftResultType == GetGiftResultType.GiftFound) {
-                    string qrCodeText = String.Format($"{giftResult.Result.GiftType.DescriptionPattern}", giftResult.Result.Gift.CertificateCode);
-                    
-                    if (qrCodeData.GiftType.HasQrCode) {
-                        //qrCodeData.QrCodeByteArr = CreateQrCodeByteArray(qrCodeText);
-                        qrCodeData.CertificateCode = giftFromDb.Gift.CertificateCode;
-                    }
-
-                    qrCodeData.GiftResult = GiftCommonData.GiftResultType.GiftFound;
-                    qrCodeData.QrCodeText = qrCodeText;
-
-                }
-                else if (giftFromDb.GetGiftResultType == GetGiftResultType.NoFreeGift) {
-                    qrCodeData.GiftResult = GiftCommonData.GiftResultType.NoFreeGift;
-                }
-                else {
-                    qrCodeData.GiftResult = GiftCommonData.GiftResultType.InconsistentData;
-                }
-
-                return new AuthenticatedResult<GiftCommonData>() {
+                return new AuthenticatedResult<GiftTypeResult>() {
                     IsAuthorized = true,
-                    Result = qrCodeData
+                    Result = result.Result
                 };
             }
         }

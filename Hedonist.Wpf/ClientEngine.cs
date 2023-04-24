@@ -178,8 +178,8 @@ namespace Hedonist.Wpf {
 
         }
 
-        public static async Task<(AutorizeResultType resultType, GiftCommonData giftCommonData)> GetGiftAsync(string ticket, int answerId) {
-            logger.Debug("IN GetGiftAsync();");
+        public static async Task<(AutorizeResultType resultType, GiftTypeResult giftCommonData)> GetGiftTypeByAnswerIdAsync(string ticket, int answerId) {
+            logger.Debug("IN GetGiftTypeByAnswerIdAsync();");
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             AutorizeResultType resultType = AutorizeResultType.Unknown;
             try {
@@ -191,12 +191,12 @@ namespace Hedonist.Wpf {
                 var json = JsonConvert.SerializeObject(requestedGiftInfo);
                 var requestContent = new StringContent(json, UnicodeEncoding.UTF8, "application/json");
 
-                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/GetGift?{Guid.NewGuid}", requestContent);
+                response = await httpClient.PostAsync(settings.QuizHost + $"/api/Quizz/GetGiftTypeByAnswerId?{Guid.NewGuid}", requestContent);
 
                 logger.Info($"GetGiftAsync request StatusCode = {response.StatusCode};");
 
                 var strData = await response.Content.ReadAsStringAsync();
-                var qrCodeData = JsonConvert.DeserializeObject<GiftCommonData>(strData);
+                var qrCodeData = JsonConvert.DeserializeObject<GiftTypeResult>(strData);
 
                 switch (response.StatusCode) {
                     case HttpStatusCode.OK:
@@ -212,12 +212,12 @@ namespace Hedonist.Wpf {
                         resultType = AutorizeResultType.Unknown;
                         break;
                 }
-                logger.Debug("OUT GetGiftAsync();");
+                logger.Debug("OUT GetGiftTypeByAnswerIdAsync();");
                 return (resultType, qrCodeData);
 
             }
             catch (HttpRequestException ex) {
-                logger.Error(ex, "GetGiftAsync TIMEOUT;");
+                logger.Error(ex, "GetGiftTypeByAnswerIdAsync TIMEOUT;");
                 return (AutorizeResultType.Timeout, null);
             }
         }

@@ -26,7 +26,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
     /// </summary>
     public partial class GiftPage1 : Page {
 
-        private GiftCommonData GiftDataFromTestPage { get; set; }
+        private GiftType GiftTypeFromTestPage { get; set; }
         private JObject exData;
         private int pageState = 0;
         private string ticket;
@@ -35,11 +35,11 @@ namespace Hedonist.Wpf.Pages.GiftPages {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         private (AutorizeResultType resultType, GiftCommonData giftCommonData) giftDataResponseFromDb;
 
-        public GiftPage1(string ticket, GiftCommonData giftData) {
+        public GiftPage1(string ticket, GiftType giftType) {
 
             this.ticket = ticket;
-            this.GiftDataFromTestPage = giftData;
-            exData = JObject.Parse(GiftDataFromTestPage.GiftType.ExtendedData);
+            this.GiftTypeFromTestPage = giftType;
+            exData = JObject.Parse(giftType.ExtendedData);
 
             InitializeComponent();
             Bind();
@@ -72,7 +72,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
 
                 Task getAuthTask = Task.Run(async () => {
                     logger.Debug("BgWorkerGift_DoWork() Task Run()...");
-                    giftDataResponseFromDb = await ClientEngine.GetGiftByTypeAsync(ticket, GiftDataFromTestPage.GiftType.Id);
+                    giftDataResponseFromDb = await ClientEngine.GetGiftByTypeAsync(ticket, GiftTypeFromTestPage.Id);
                 });
                 Task.WaitAll(getAuthTask);
                 logger.Debug("OUT BgWorkerGift_DoWork; resetEvent.Wait() ended");
@@ -150,7 +150,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                         HeaderText = giftPage1Data["GiftOverText"].ToString(),
                         Ticket = ticket
                     };
-                    NavigationService.Navigate(new GiftsOver(model, GiftDataFromTestPage));
+                    NavigationService.Navigate(new GiftsOver(model));
                 }
                 else {
                     modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";

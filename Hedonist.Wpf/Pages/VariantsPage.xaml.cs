@@ -72,7 +72,7 @@ namespace Hedonist.Wpf.Pages {
             spinner.IsLoading = false;
 
             if (storeResponse.resultType == AutorizeResultType.Authorized) {
-
+                BindButtonsForAvailableStoreGiftTypes(storeResponse.store.GiftTypes);
             }
             else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
@@ -112,6 +112,35 @@ namespace Hedonist.Wpf.Pages {
                     break;
             }
             RunGettingGiftData();
+        }
+
+        private void BindButtonsForAvailableStoreGiftTypes(List<GiftType> giftTypes) {
+            foreach (var giftType in giftTypes) {
+                switch(giftType.Key) {
+                    case "Art":
+                        btnArt.Visibility = Visibility.Visible;
+                        break;
+                    case "Communication":
+                        btnCommunication.Visibility = Visibility.Visible;
+                        break;
+                    case "FoodStore":
+                    case "FoodYa":
+                        btnFood.Visibility = Visibility.Visible;
+                        break;
+                    case "Mixology":
+                        btnMixology.Visibility = Visibility.Visible;
+                        break;
+                    case "Movement":
+                        btnMovement.Visibility = Visibility.Visible;
+                        break;
+                    case "Music":
+                        btnMusic.Visibility = Visibility.Visible;
+                        break;
+                    case "Trends":
+                        btnTrends.Visibility = Visibility.Visible;
+                        break;
+                }
+            }
         }
 
         private void RunGettingGiftData() {
@@ -156,7 +185,7 @@ namespace Hedonist.Wpf.Pages {
 
             if (giftDataResponse.resultType == AutorizeResultType.Authorized) {
 
-                NavigationService.Navigate(new GiftPage1(ticket, giftDataResponse.giftData));
+                NavigationService.Navigate(new GiftPage1(ticket, giftDataResponse.giftData.GiftType));
             }
             else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";

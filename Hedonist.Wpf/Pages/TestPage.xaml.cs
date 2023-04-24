@@ -1,12 +1,14 @@
 ﻿using Hedonist.Models;
 using Hedonist.Wpf.Pages.GiftPages;
 using ModalControl;
+using Newtonsoft.Json.Linq;
 using QRCoder;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,7 +45,7 @@ namespace Hedonist.Wpf.Pages {
         private bool isErrorHappens = false;
         private QuizState quizState;
         private TestPageModel testPageModel = new();
-        private (AutorizeResultType resultType, GiftCommonData giftData) giftDataResponse;
+        private (AutorizeResultType resultType, GiftTypeResult giftTypeResult) giftTypeResponse;
 
         public TestPage(string ticket) {
             logger.Debug($"IN TestPage() constructor");
@@ -192,19 +194,19 @@ namespace Hedonist.Wpf.Pages {
 
                 Task getAuthTask = Task.Run(async () => {
                     logger.Debug("BgWorkerGiftType_DoWork() Task Run()...");
-                    giftDataResponse = await ClientEngine.
-                        GetGiftAsync(testPageModel.Ticket, testPageModel.SelectedAnswers.Last().Id);
+                    giftTypeResponse = await ClientEngine.
+                        GetGiftTypeByAnswerIdAsync(testPageModel.Ticket, testPageModel.SelectedAnswers.Last().Id);
                 });
                 Task.WaitAll(getAuthTask);
                 logger.Debug("OUT BgWorkerGiftType_DoWork; resetEvent.Wait() ended");
 
             }
             catch (TaskCanceledException ex) {
-                giftDataResponse = new(AutorizeResultType.Timeout, null);
+                giftTypeResponse = new(AutorizeResultType.Timeout, null);
                 logger.Error(ex, "BgWorkerGiftType_DoWork() TIMEOUT");
             }
             catch (Exception ex) {
-                giftDataResponse = new(AutorizeResultType.Error, null);
+                giftTypeResponse = new(AutorizeResultType.Error, null);
                 logger.Error(ex, "BgWorkerGiftType_DoWork() EXCEPTION");
             }
         }
@@ -213,8 +215,24 @@ namespace Hedonist.Wpf.Pages {
             logger.Debug($"IN BgWorkerGiftType_RunWorkerCompleted()");
             spinner.IsLoading = false;
 
-            if(giftDataResponse.resultType == AutorizeResultType.Authorized) {
-                NavigationService.Navigate(new GiftPage1(testPageModel.Ticket, giftDataResponse.giftData));
+            if(giftTypeResponse.resultType == AutorizeResultType.Authorized) {
+                GiftTypeResult result = giftTypeResponse.giftTypeResult;
+
+                if (result.ResultType == GiftTypeResultType.StoreHasNoGiftType) {
+
+                    var exData = JObject.Parse(result.GiftType.ExtendedData);
+                    var giftPage1Data = exData["GiftPage1Data"];
+
+                    var model = new GiftsOver.GiftsOverModel() {
+                        HeaderText = giftPage1Data["GiftOverText"].ToString(),
+
+                        Ticket = testPageModel.Ticket
+                    };
+                    NavigationService.Navigate(new GiftsOver(model));
+                }
+                else {
+                    NavigationService.Navigate(new GiftPage1(testPageModel.Ticket, result.GiftType));
+                }
             }
             else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";

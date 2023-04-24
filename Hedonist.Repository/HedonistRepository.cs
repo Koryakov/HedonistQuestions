@@ -99,10 +99,10 @@ namespace Hedonist.Repository {
             }
         }
 
-        public async Task<AuthenticatedResult<GiftFromDbResult>> GetGiftAsync(RequestedGiftInfo soldGiftData) {
+        public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByAnswerIdAsync(RequestedGiftInfo soldGiftData) {
 
-            logger.Info($"IN GetGiftAsync(), ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
-            var result = new GiftFromDbResult();
+            logger.Info($"IN GetGiftTypeByAnswerIdAsync(), ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+            var result = new GiftTypeResult();
 
             using (var db = CreateContext()) {
 
@@ -110,7 +110,7 @@ namespace Hedonist.Repository {
                     .FirstOrDefaultAsync(l => l.Ticket == soldGiftData.Ticket.Value && l.IsExpired == false);
 
                 if (loginAttempt == null) {
-                    return AuthenticatedResult<GiftFromDbResult>.NotAuthenticated();
+                    return AuthenticatedResult<GiftTypeResult>.NotAuthenticated();
                 }
                 else {
 
@@ -123,26 +123,29 @@ namespace Hedonist.Repository {
                             .FirstOrDefaultAsync(a => a.Id == soldGiftData.SelectedAnswerId);
 
                         if (answer != null) {
-
                             result.GiftType = answer.GiftTypes.Where(t => t.Stores.Any(s => s.Id == terminal.StoreId)).FirstOrDefault();
-
+                            
                             if (result.GiftType == null) {
-                                result.GetGiftResultType = GetGiftResultType.StoreHasNoGiftType;
-                                logger.Error($"GetGiftAsync(), STORE HAS NO GIFTTYPE. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+                                result.ResultType = GiftTypeResultType.StoreHasNoGiftType;
+                                result.GiftType = answer.GiftTypes.FirstOrDefault();
+
+                                logger.Error($"GetGiftTypeByAnswerIdAsync(), STORE HAS NO GIFTTYPE. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+                            } else {
+                                result.ResultType = GiftTypeResultType.Success;
                             }
                         }
                         else {
-                            result.GetGiftResultType = GetGiftResultType.AnswerNotFound;
-                            logger.Error($"GetGiftAsync(), ANSWER NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+                            result.ResultType = GiftTypeResultType.AnswerNotFound;
+                            logger.Error($"GetGiftTypeByAnswerIdAsync(), ANSWER NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
                         }
                     }
                     else {
-                        result.GetGiftResultType = GetGiftResultType.TerminalNotFound;
-                        logger.Error($"GetGiftAsync(), TERMINAL NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
+                        result.ResultType = GiftTypeResultType.TerminalNotFound;
+                        logger.Error($"GetGiftTypeByAnswerIdAsync(), TERMINAL NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
                     }
                 }
-                logger.Info($"OUT GetGiftAsync()");
-                return new AuthenticatedResult<GiftFromDbResult>(result);
+                logger.Info($"OUT GetGiftTypeByAnswerIdAsync()");
+                return new AuthenticatedResult<GiftTypeResult>(result);
             }
         }
 

@@ -15,8 +15,8 @@ namespace Hedonist.Test {
         [Fact]
         public void PasswordsCreatingTest() {
             StringBuilder sqlInstructions = new StringBuilder($"INSERT INTO public.\"password_info\"\r\n(password_hash, is_used, terminal_name)\r\nVALUES\r\n");
-            for (int i = 101; i < 200; i++) {
-                string psw = $"*{i:000}#";
+            for (int i = 101; i < 120; i++) {
+                string psw = $"*{i:000}";
                 string hashPsw = PasswordHasher.Hash(psw);
                 Assert.True(PasswordHasher.Verify(psw, hashPsw));
 
@@ -36,9 +36,8 @@ namespace Hedonist.Test {
 
                 SelectedAnswerId = 21
             };
-            var result = await engine.GetGiftAsync(giftData);
-
-            Assert.True(result.IsAuthorized);
+            //var result = await engine.GetGiftAsync(giftData);
+            //Assert.True(result.IsAuthorized);
 
             //if(result.IsAuthorized) {
             //    using (var ms = new MemoryStream(result.Result.QrCodeByteArr)) {

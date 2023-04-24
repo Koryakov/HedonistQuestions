@@ -49,13 +49,13 @@
                     Margin="76 96 0 0"
                     Text="От чего получаешь удовольствие ты?" />
             </Grid>
-            <Button x:Name="btnArt" Tag="Images\Art.png" Style="{StaticResource variantsButton}" Click="Button_Click"></Button>
-            <Button x:Name="btnMusic" Tag="Images\Music.png" Style="{StaticResource variantsButton}" Click="Button_Click"></Button>
-            <Button x:Name="btnTrends" Tag="Images\Trends.png" Style="{StaticResource variantsButton}" Click="Button_Click"></Button>
-            <Button x:Name="btnFood" Tag="Images\Food.png" Style="{StaticResource variantsButton}" Click="Button_Click"></Button>
-            <Button x:Name="btnMovement" Tag="Images\Movement.png" Style="{StaticResource variantsButton}" Click="Button_Click"></Button>
-            <Button x:Name="btnMixology" Tag="Images\Mixology.png" Style="{StaticResource variantsButton}" Click="Button_Click"></Button>
-            <Button x:Name="btnCommunication" Tag="Images\Communication.png" Style="{StaticResource variantsButton}" Click="Button_Click"></Button>
+            <Button x:Name="btnArt" Tag="Images\Art.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+                <Button x:Name="btnMusic" Tag="Images\Music.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+                <Button x:Name="btnTrends" Tag="Images\Trends.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+                <Button x:Name="btnFood" Tag="Images\Food.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+                <Button x:Name="btnMovement" Tag="Images\Movement.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+                <Button x:Name="btnMixology" Tag="Images\Mixology.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+                <Button x:Name="btnCommunication" Tag="Images\Communication.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
         </StackPanel>
     </Grid>
     </helpers:DpiDecorator>

@@ -25,13 +25,11 @@ namespace Hedonist.Wpf.Pages.GiftPages {
         }
 
         private GiftsOverModel model;
-        private GiftCommonData GiftData { get; set; }
         private const string TextBlock1Pattern = "{0},\r\nно уверены, что ты знаешь лучше.";
         
-        public GiftsOver(GiftsOverModel model, GiftCommonData giftData) {
+        public GiftsOver(GiftsOverModel model) {
             InitializeComponent();
             this.model = model;
-            this.GiftData = giftData;
             txtWeThink.Text = string.Format(TextBlock1Pattern, model.HeaderText);
         }
         private void btnAgain_Click(object sender, RoutedEventArgs e) {

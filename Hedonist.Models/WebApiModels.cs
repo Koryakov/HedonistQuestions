@@ -39,6 +39,7 @@ namespace Hedonist.Models {
             GiftFound = 1,
             NoFreeGift = 2,
             InconsistentData = 3,
+            StoreHasNoGiftType = 4
         }
 
         public GiftResultType GiftResult { get; set; }
@@ -54,7 +55,8 @@ namespace Hedonist.Models {
         NoFreeGift = 2,
         AnswerNotFound = 3,
         TerminalNotFound = 4,
-        StoreHasNoGiftType = 6
+        StoreHasNoGiftType = 6,
+        Success = 7
     }
 
     public class GiftFromDbResult {
@@ -64,8 +66,18 @@ namespace Hedonist.Models {
 
     }
 
+    public enum GiftTypeResultType {
+        Unknown = 0,
+        AnswerNotFound = 3,
+        TerminalNotFound = 4,
+        StoreHasNoGiftType = 6,
+        Success = 7
+    }
+
     public class GiftTypeResult {
+        public GiftTypeResultType ResultType { get; set; }
         public GiftType? GiftType { get; set; }
 
     }
+
 }
