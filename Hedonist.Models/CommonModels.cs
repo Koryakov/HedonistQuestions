@@ -92,6 +92,8 @@ namespace Hedonist.Models {
         public int LoginAttemptId { get; set; }
         public string CertificateCode { get; set; }
         public DateTime CreatedDate { get; set; }
+        public LoginAttempt LoginAttempt { get; set; } = new();
+        public Gift Gift { get; set; } = new();
     }
 
     //[Table("gift_history")]

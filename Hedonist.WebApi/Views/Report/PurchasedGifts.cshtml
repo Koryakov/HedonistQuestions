@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Hedonist.Models.GiftPurchase>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Полученные подарки</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GiftId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoginAttemptId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CertificateCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiftId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LoginAttemptId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CertificateCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
