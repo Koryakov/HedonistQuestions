@@ -36,13 +36,26 @@ namespace Hedonist.Wpf.Pages.GiftPages {
         private (AutorizeResultType resultType, GiftCommonData giftCommonData) giftDataResponseFromDb;
 
         public GiftPage1(string ticket, GiftType giftType) {
+            try {
+                InitializeComponent();
 
-            this.ticket = ticket;
-            this.GiftTypeFromTestPage = giftType;
-            exData = JObject.Parse(giftType.ExtendedData);
+                this.ticket = ticket;
+                
+                this.GiftTypeFromTestPage = giftType;
+                if (giftType == null) {
+                    modalMessage.Text = "Терминал не зарегистрирован в системе";
+                    modal.IsOpen = true;
 
-            InitializeComponent();
-            Bind();
+                    return;
+                }
+                exData = JObject.Parse(giftType.ExtendedData);
+
+                Bind();
+            }
+            catch (Exception ex) {
+                modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
+                modal.IsOpen = true;
+            }
         }
 
         private void Bind() {
