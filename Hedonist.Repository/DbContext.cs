@@ -7,6 +7,7 @@ namespace Hedonist.Repositories {
         public DbSet<Question> Question { get; set; }
         public DbSet<Answer> Answer { get; set; }
         public DbSet<Gift> Gift { get; set; }
+        public DbSet<GiftPurchase> GiftPurchase { get; set; }
         public DbSet<GiftType> GiftType { get; set; }
         public DbSet<PasswordInfo> PasswordInfo { get; set; }
         public DbSet<Store> Store { get; set; }

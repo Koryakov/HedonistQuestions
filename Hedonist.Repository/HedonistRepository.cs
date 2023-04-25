@@ -166,6 +166,15 @@ namespace Hedonist.Repository {
                     var gift = await db.Gift.Include(g => g.GiftType).FirstOrDefaultAsync(g => !g.IsSold && g.GiftTypeId == info.GiftTypeId);
                     if (gift != null) {
                         gift.IsSold = true;
+
+                        var giftPurchase = new GiftPurchase() {
+                            GiftId = gift.Id,
+                            LoginAttemptId = loginAttempt.Id,
+                            CertificateCode = gift.CertificateCode,
+                            CreatedDate = DateTime.UtcNow
+                        };
+                        await db.GiftPurchase.AddAsync(giftPurchase);
+
                         await db.SaveChangesAsync();
 
                         result.GetGiftResultType = GetGiftResultType.GiftFound;

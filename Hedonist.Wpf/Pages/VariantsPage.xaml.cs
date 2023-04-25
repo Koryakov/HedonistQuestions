@@ -161,8 +161,7 @@ namespace Hedonist.Wpf.Pages {
 
                 Task getAuthTask = Task.Run(async () => {
                     logger.Debug("BgWorkerGiftType_DoWork() Task Run()...");
-                    giftDataResponse = await ClientEngine.
-                        GetGiftByTypeAsync(ticket, selectedGiftTypeId);
+                    giftDataResponse = await ClientEngine.GetGiftTypeAsync(ticket, selectedGiftTypeId);
                 });
                 Task.WaitAll(getAuthTask);
                 logger.Debug("OUT BgWorkerGiftType_DoWork; resetEvent.Wait() ended");

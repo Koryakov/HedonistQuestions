@@ -73,7 +73,6 @@ namespace Hedonist.Models {
 
 
     public class Gift {
-
         [Key]
         public int Id { get; set; }
 
@@ -82,6 +81,17 @@ namespace Hedonist.Models {
         public bool IsSold { get; set; }
         public DateTime CreatedDate { get; set; }
         public GiftType GiftType { get; set; } = new();
+    }
+
+
+    public class GiftPurchase {
+
+        [Key]
+        public int Id { get; set; }
+        public int GiftId { get; set; }
+        public int LoginAttemptId { get; set; }
+        public string CertificateCode { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 
     //[Table("gift_history")]
@@ -93,10 +103,10 @@ namespace Hedonist.Models {
 
     //    [Column("sertificate_code")]
     //    public string SertificateCode { get; set; }
-        
+
     //    [Column("remaining_count")]
     //    public int RemainingCount { get; set; }
-        
+
     //    [Column("created_date")]
     //    public DateTime CreatedDate { get; set; }
     //}

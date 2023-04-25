@@ -256,7 +256,7 @@ namespace Hedonist.Wpf {
                         resultType = AutorizeResultType.Unknown;
                         break;
                 }
-                logger.Debug("OUT GetGiftAsync();");
+                logger.Debug("OUT GetGiftByTypeAsync();");
                 return (resultType, giftData);
 
             }
