@@ -22,7 +22,7 @@ namespace Hedonist.Models {
         public int Group { get; set; }
 
         [Column("order")]
-        public int Order { get; set; }        
+        public int Order { get; set; }
 
         [Column("text")]
         public string Text { get; set; }
@@ -30,26 +30,6 @@ namespace Hedonist.Models {
         //[ForeignKey("QuestionId")]
         public ICollection<Answer> Answers { get; set; } = new List<Answer>();
     }
-
-
-    public class GiftType {
-        
-        [Key]
-        public int Id { get; set; }
-        
-        public string Name { get; set; }
-
-        public string DescriptionPattern { get; set; }
-        public string? ExtendedData { get; set; }
-
-        public string Key { get; set; }
-        public bool HasQrCode { get; set; }
-
-        public List<Answer> Answers { get; set; } = new();
-        public List<Store> Stores { get; set; } = new();
-    }
-
-
     public class Answer {
 
         [Key]
@@ -59,15 +39,6 @@ namespace Hedonist.Models {
         public int Order { get; set; }
         public string Text { get; set; }
         public int QuestionId { get; set; }
-        public List<GiftType> GiftTypes { get; set; } = new();
-    }
-
-
-    public class Store {
-
-        [Key]
-        public int Id { get; set; }
-        public string Name { get; set; }
         public List<GiftType> GiftTypes { get; set; } = new();
     }
 
@@ -83,17 +54,64 @@ namespace Hedonist.Models {
         public GiftType GiftType { get; set; } = new();
     }
 
-
-    public class GiftPurchase {
-
+    public class GiftType {
         [Key]
         public int Id { get; set; }
+
+        public string Name { get; set; }
+
+        public string DescriptionPattern { get; set; }
+        public string? ExtendedData { get; set; }
+
+        public string Key { get; set; }
+        public bool HasQrCode { get; set; }
+
+        public List<Answer> Answers { get; set; }
+        public List<Store> Stores { get; set; }
+        //public List<GiftGroup> GiftGroups { get; set; }
+    }
+
+    public class Store {
+        [Key]
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public List<GiftType> GiftTypes { get; set; }
+        //public List<GiftGroup> GiftGroups { get; set; }
+    }
+
+    public class GiftTypeStore {
+        public int StoresId { get; set; }
+        public int GiftTypesId { get; set; }
+        public int GiftGroupsId { get; set; }
+    }
+
+    public class GiftGroup {
+        [Key]
+        public int Id { get; set; }
+        public int GiftsCount { get; set; }
+        public string Comment { get; set; }
+        public List<Store> Stores { get; set; }
+        //public List<GiftType> GiftTypes { get; set; }
+    }
+
+
+    public class GiftPurchase {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
         public int GiftId { get; set; }
+
+        [Required]
         public int LoginAttemptId { get; set; }
         public string CertificateCode { get; set; }
         public DateTime CreatedDate { get; set; }
-        public LoginAttempt LoginAttempt { get; set; } = new();
-        public Gift Gift { get; set; } = new();
+
+        [ForeignKey("GiftId")]
+        public Gift Gift { get; set; }
+
+        [ForeignKey("LoginAttemptId")]
+        public LoginAttempt LoginAttempt { get; set; }
     }
 
     //[Table("gift_history")]
@@ -121,7 +139,7 @@ namespace Hedonist.Models {
 
         [Column("password_hash")]
         public string PasswordHash { get; set; }
-        
+
         [Column("is_used")]
         public bool IsUsed { get; set; }
 
@@ -130,7 +148,7 @@ namespace Hedonist.Models {
 
         [Column("terminal_name")]
         public string TerminalName { get; set; }
-        
+
     }
 
     public class LoginAttempt {
@@ -159,7 +177,7 @@ namespace Hedonist.Models {
         public AuthenticatedResult() { }
         public bool IsAuthorized { get; set; }
         public T? Result { get; set; }
-    }    
+    }
 
     public class PasswordData {
         public PasswordData(string value, string terminalName) {
@@ -177,4 +195,5 @@ namespace Hedonist.Models {
         }
         public string Value { get; set; }
     }
+
 }

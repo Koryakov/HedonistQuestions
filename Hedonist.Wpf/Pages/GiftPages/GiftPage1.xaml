@@ -67,7 +67,7 @@
                         Click="btnShowResult_Click"
                         Margin="0 132 0 167" Style="{StaticResource commonDarkButton}" />
 
-                <TextBlock Text="Есть вопросики?!" Margin="0 0 0 60"
+                <TextBlock Text="Есть вопросики?" Margin="0 0 0 60"
                                HorizontalAlignment="Center" Style="{StaticResource textGiftMiddle}" />
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                     <Button x:Name="btnOneMore" Content="Заново" Click="btnOneMore_Click"
@@ -89,7 +89,7 @@
                 <StackPanel x:Name="panelQrCode" Visibility="Hidden"
                     Orientation="Vertical" Margin="0 0 0 0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
-                    <TextBlock HorizontalAlignment="Center" Text="Твой комплимент доступен по ссылке:" Margin="0 75 0 30"
+                    <TextBlock HorizontalAlignment="Center" Text="Получи свой комплимент:" Margin="0 75 0 30"
                             TextAlignment="Center" Style="{StaticResource textGiftSmall}" />
 
                     <Image Name="imgQrCode" Width="600" Height="600" Source="/Pages/GiftPages/DemoQrCode.png"/>

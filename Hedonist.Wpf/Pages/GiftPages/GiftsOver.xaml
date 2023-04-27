@@ -49,7 +49,7 @@
                     <Button x:Name="btnAgain" Content="Давай по новой" Click="btnAgain_Click"
                                 Width="420" Style="{StaticResource commonDarkButton}" />
                     <Separator Opacity="0" Width="70"/>
-                    <Button x:Name="btnSayWhoAmI" Content="Скажи мне, кто я" Click="btnSayWhoAmI_Click"
+                    <Button x:Name="btnSayWhoAmI" Content="Скажи мне, кто ты" Click="btnSayWhoAmI_Click"
                                 Width="420" Style="{StaticResource commonDarkButton}" />
                 </StackPanel>
             </StackPanel>
