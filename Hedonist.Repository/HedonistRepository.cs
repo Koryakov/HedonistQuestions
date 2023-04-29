@@ -11,6 +11,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Intrinsics.Arm;
 using System.Data;
+using Npgsql;
+using System.Security.AccessControl;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Hedonist.Repository {
     public class HedonistRepository {
@@ -61,7 +64,7 @@ namespace Hedonist.Repository {
         }
 
         public async Task<AuthenticatedResult<Store>> GetStoreAsync(RequestedStoreInfo info) {
-            
+
             using (var db = CreateContext()) {
                 bool isTicketCorrect = await db.LoginAttempt.AnyAsync(p => p.Ticket == info.Ticket && p.IsExpired == false);
 
@@ -124,13 +127,14 @@ namespace Hedonist.Repository {
 
                         if (answer != null) {
                             result.GiftType = answer.GiftTypes.Where(t => t.Stores.Any(s => s.Id == terminal.StoreId)).FirstOrDefault();
-                            
+
                             if (result.GiftType == null) {
                                 result.ResultType = GiftTypeResultType.StoreHasNoGiftType;
                                 result.GiftType = answer.GiftTypes.FirstOrDefault();
 
                                 logger.Error($"GetGiftTypeByAnswerIdAsync(), STORE HAS NO GIFTTYPE. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={soldGiftData.Ticket.Value}, answerId={soldGiftData.SelectedAnswerId}");
-                            } else {
+                            }
+                            else {
                                 result.ResultType = GiftTypeResultType.Success;
                             }
                         }
@@ -156,42 +160,134 @@ namespace Hedonist.Repository {
 
             using (var db = CreateContext()) {
 
-                LoginAttempt? loginAttempt = await db.LoginAttempt
+                LoginAttempt? loginAttempt = await db.LoginAttempt.AsNoTracking()
                     .FirstOrDefaultAsync(l => l.Ticket == info.Ticket && l.IsExpired == false);
 
                 if (loginAttempt == null) {
+                    logger.Error($"GetGiftByTypeAsync(), LoginAttempt NOT FOUND. ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
                     return AuthenticatedResult<GiftFromDbResult>.NotAuthenticated();
                 }
                 else {
-                    var gift = await db.Gift.Include(g => g.GiftType).FirstOrDefaultAsync(g => !g.IsSold && g.GiftTypeId == info.GiftTypeId);
-                    if (gift != null) {
-                        gift.IsSold = true;
+                    Terminal? terminal = await db.Terminal.FirstOrDefaultAsync(t => t.DeviceIdentifier == loginAttempt.SentDeviceIdentifier);
 
-                        var giftPurchase = new GiftPurchase() {
-                            GiftId = gift.Id,
-                            LoginAttemptId = loginAttempt.Id,
-                            CertificateCode = gift.CertificateCode,
-                            CreatedDate = DateTime.UtcNow
-                        };
-                        await db.GiftPurchase.AddAsync(giftPurchase);
+                    if (terminal != null) {
+                        logger.Debug($"GetGiftByTypeAsync(), Terminal found: Id={terminal.Id}, DeviceIdentifier='{loginAttempt.SentDeviceIdentifier}'");
 
-                        await db.SaveChangesAsync();
+                        (GiftGroup giftGroup, List<Store> groupStores) = await GetGiftGroupStoresAsync(info.GiftTypeId, terminal.StoreId);
 
-                        result.GetGiftResultType = GetGiftResultType.GiftFound;
-                        result.Gift = gift;
-                        result.GiftType = gift.GiftType;
-                        logger.Info($"GetGiftByTypeAsync() found, sold giftId={gift.Id}, DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                        if (giftGroup != null) {
+                            var groupTerminals = await db.Terminal.Where(t => groupStores.Select(l => l.Id).Contains(t.StoreId)).ToListAsync();
+                            try { logger.Debug($"GetGiftByTypeAsync(), giftGroup Id={giftGroup.Id}, giftGroup.GiftsCount={giftGroup.GiftsCount}, gift group  terminals Ids: {string.Join(",", groupTerminals.Select(t => t.Id))}"); }
+                            catch { }
+
+                            var giftPurchases = await db.GiftPurchase
+                                .Where(gp => gp.Gift.GiftTypeId == info.GiftTypeId && groupTerminals.Select(gt => gt.DeviceIdentifier)
+                                .Contains(gp.LoginAttempt.SentDeviceIdentifier)).ToListAsync();
+                            try { logger.Debug($"GetGiftByTypeAsync(), giftPurchases for current group: {string.Join(",", giftPurchases.Select(t => t.Id))}"); }
+                            catch { }
+
+                            var freeGiftsIds = await db.Gift.Where(g => !g.IsSold && g.GiftTypeId == info.GiftTypeId).Select(g => g.Id).ToListAsync();
+                            try { logger.Debug($"GetGiftByTypeAsync(), free gifts Ids: {string.Join(",", freeGiftsIds)}"); }
+                            catch { }
+
+                            if (giftGroup.GiftsCount > (freeGiftsIds.Count - giftPurchases.Count)) {
+                                var gift = await db.Gift.Include(g => g.GiftType).FirstOrDefaultAsync(i => freeGiftsIds.Contains(i.Id));
+
+                                if (gift != null) {
+                                    gift.IsSold = true;
+
+                                    var giftPurchase = new GiftPurchase() {
+                                        GiftId = gift.Id, LoginAttemptId = loginAttempt.Id,
+                                        CertificateCode = gift.CertificateCode, CreatedDate = DateTime.UtcNow
+                                    };
+                                    await db.GiftPurchase.AddAsync(giftPurchase);
+
+                                    await db.SaveChangesAsync();
+                                    result.GetGiftResultType = GetGiftResultType.GiftFound;
+                                    result.Gift = gift;
+                                    result.GiftType = gift.GiftType;
+                                    logger.Info($"GetGiftByTypeAsync() found and SOLD: sold giftId={gift.Id}, gift certificate='{gift.CertificateCode}', giftType name='{gift.GiftType.Name}', giftPurchase id={giftPurchase.Id}, DeviceIdentifier='{loginAttempt.SentDeviceIdentifier}'. ticket={info.Ticket}");
+                                }
+                                else {
+                                    result.GiftType = await db.GiftType.FirstOrDefaultAsync(g => g.Id == info.GiftTypeId);
+                                    result.GetGiftResultType = GetGiftResultType.NoFreeGift;
+                                    logger.Warn($"GetGiftByTypeAsync(), FREE GIFT NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                                }
+                            }
+                            else {
+                                result.GiftType = await db.GiftType.FirstOrDefaultAsync(g => g.Id == info.GiftTypeId);
+                                result.GetGiftResultType = GetGiftResultType.NoFreeGift;
+                                logger.Warn($"GetGiftByTypeAsync(), GROUP GIFTS OVER: freeGiftsIds.Count={freeGiftsIds.Count}, giftPurchases.Count={giftPurchases.Count}");
+                            }
+                        } else {
+                            result.GetGiftResultType = GetGiftResultType.GiftGroupNotFound;
+                            logger.Warn($"GetGiftByTypeAsync(), GIFT GROUP NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, storeId={terminal.StoreId}, giftTypeId={info.GiftTypeId}");
+                        }
                     }
                     else {
-                        result.GiftType = await db.GiftType.FirstOrDefaultAsync(g => g.Id == info.GiftTypeId);
-                        result.GetGiftResultType = GetGiftResultType.NoFreeGift;
-                        logger.Error($"GetGiftByTypeAsync(), FREE GIFT NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
+                        result.GetGiftResultType = GetGiftResultType.TerminalNotFound;
+                        logger.Error($"GetGiftByTypeAsync(), TERMINAL NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");
                     }
                 }
                 logger.Info($"OUT GetGiftByTypeAsync()");
                 return new AuthenticatedResult<GiftFromDbResult>(result);
             }
         }
+
+        private async Task<(GiftGroup giftGroup, List<Store> groupStoresList)> GetGiftGroupStoresAsync(int giftTypeId, int storeId) {
+            logger.Info($"IN GetGiftGroupStoresAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
+            
+            GiftGroup giftGroup = null;
+            List<Store> groupStoresList = new();
+            using (var cn = new NpgsqlConnection(connectionString)) {
+                cn.Open();
+                using (var cmd = new NpgsqlCommand($"SELECT get_gift_group_stores({giftTypeId}, {storeId});", cn)) {
+                    using (var reader = await cmd.ExecuteReaderAsync()) {
+                        while (await reader.ReadAsync()) {
+                            var arr = (System.Object[])reader[0];
+                            giftGroup = new() {
+                                Id = (int)arr[0],
+                                GiftsCount = (int)arr[1],
+                                Comment = (string)arr[2],
+                            };
+                            groupStoresList.Add(new Store() { 
+                                Id = (int)arr[3],
+                                Name = (string)arr[4],
+                            });
+                        }
+                    }
+                }
+            }
+            try { logger.Debug($"GetGiftGroupStoresAsync(), giftGroup found={giftGroup != null}, groupStoresList count={groupStoresList.Count}. group stores Ids={string.Join(",", groupStoresList.Select(s => s.Id).ToList())}."); }
+            catch { }
+            logger.Info($"OUT GetGiftGroupStoresAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
+            return (giftGroup, groupStoresList);
+        }
+
+        //private async Task<GiftGroup> GetGiftGroupAsync(int giftTypeId, int storeId) {
+
+            //    logger.Info($"IN GetGiftGroupAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
+            //    GiftGroup giftGroup = null;
+            //    using (var cn = new NpgsqlConnection(connectionString)) {
+            //        cn.Open();
+            //        using (var cmd = new NpgsqlCommand($"SELECT get_gift_group({giftTypeId}, {storeId});", cn)) {
+            //            using (var reader = await cmd.ExecuteReaderAsync()) {
+            //                while (await reader.ReadAsync()) {
+            //                    var arr = (System.Object[])reader[0];
+            //                    giftGroup = new() {
+            //                        Id = (int)arr[0],
+            //                        GiftsCount = (int)arr[1],
+            //                        Comment = (string)arr[2],
+            //                    };
+            //                }
+            //            }
+            //        }
+            //    }
+            //    logger.Info($"GetGiftGroupAsync(), giftGroup found={giftGroup!=null}.");
+            //    logger.Info($"OUT GetGiftGroupAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
+            //    return giftGroup;
+            //}
+
 
         public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByIdAsync(RequestedGiftTypeInfo info) {
             logger.Info($"IN GetGiftTypeByIdAsync(), ticket={info.Ticket}, giftTypeId={info.GiftTypeId}");

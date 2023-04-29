@@ -56,7 +56,8 @@ namespace Hedonist.Models {
         AnswerNotFound = 3,
         TerminalNotFound = 4,
         StoreHasNoGiftType = 6,
-        Success = 7
+        Success = 7,
+        GiftGroupNotFound = 8
     }
 
     public class GiftFromDbResult {

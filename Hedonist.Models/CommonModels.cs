@@ -68,7 +68,7 @@ namespace Hedonist.Models {
 
         public List<Answer> Answers { get; set; }
         public List<Store> Stores { get; set; }
-        //public List<GiftGroup> GiftGroups { get; set; }
+        public List<GiftGroup> GiftGroups { get; set; }
     }
 
     public class Store {
@@ -76,13 +76,13 @@ namespace Hedonist.Models {
         public int Id { get; set; }
         public string Name { get; set; }
         public List<GiftType> GiftTypes { get; set; }
-        //public List<GiftGroup> GiftGroups { get; set; }
+        public List<GiftGroup> GiftGroups { get; set; }
     }
 
     public class GiftTypeStore {
         public int StoresId { get; set; }
         public int GiftTypesId { get; set; }
-        public int GiftGroupsId { get; set; }
+        //public int GiftGroupId { get; set; }
     }
 
     public class GiftGroup {
@@ -90,8 +90,6 @@ namespace Hedonist.Models {
         public int Id { get; set; }
         public int GiftsCount { get; set; }
         public string Comment { get; set; }
-        public List<Store> Stores { get; set; }
-        //public List<GiftType> GiftTypes { get; set; }
     }
 
 
@@ -106,11 +104,7 @@ namespace Hedonist.Models {
         public int LoginAttemptId { get; set; }
         public string CertificateCode { get; set; }
         public DateTime CreatedDate { get; set; }
-
-        [ForeignKey("GiftId")]
         public Gift Gift { get; set; }
-
-        [ForeignKey("LoginAttemptId")]
         public LoginAttempt LoginAttempt { get; set; }
     }
 
