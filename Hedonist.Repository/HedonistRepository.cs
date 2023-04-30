@@ -190,7 +190,7 @@ namespace Hedonist.Repository {
                             try { logger.Debug($"GetGiftByTypeAsync(), free gifts Ids: {string.Join(",", freeGiftsIds)}"); }
                             catch { }
 
-                            if (giftGroup.GiftsCount > (freeGiftsIds.Count - giftPurchases.Count)) {
+                            if (giftGroup.GiftsCount > giftPurchases.Count) {
                                 var gift = await db.Gift.Include(g => g.GiftType).FirstOrDefaultAsync(i => freeGiftsIds.Contains(i.Id));
 
                                 if (gift != null) {
