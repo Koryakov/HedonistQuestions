@@ -1,68 +1,45 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hedonist.Business;
+using Hedonist.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
+using System.Net.Sockets;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Hedonist.WebApi.Controllers {
     public class ReportController : Controller {
-        // GET: ReportController
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
+
         public ActionResult Index() {
             return View();
         }
 
-        // GET: ReportController/PurchasedGifts/sss
-        public ActionResult PurchasedGifts(string accessString) {
-
-            return View();
-        }
-
-        // GET: ReportController/Create
-        public ActionResult Create() {
-            return View();
-        }
-
-        // POST: ReportController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection) {
+        [HttpGet]
+        [Route("PurchasedGifts")]
+        // GET: ReportController/PurchasedGifts/AccessString
+        public async Task<ActionResult> PurchasedGiftsAsync(string accessString) {
+            //TODO:move AccessKey to database or settings
+            const string AccessKey = "385D145D-4B16-4306-915D-6738D04BC9B4";
             try {
-                return RedirectToAction(nameof(Index));
-            }
-            catch {
-                return View();
-            }
-        }
+                if (accessString == AccessKey) {
+                    logger.Debug($"IN PurchasedGifts(accessString={accessString})");
+                    string reportString = await new QuizEngine().GetPurchasedReportSCVStringAsync();
+                    var bytes = Encoding.UTF8.GetBytes(reportString);
+                    var result = Encoding.UTF8.GetPreamble().Concat(bytes).ToArray();
+                    string fileName = $"Гедонист отчет " + DateTime.Now.ToString("yyyy-MM-dd HH_mm_ss") + ".csv";
+                    return File(result, "text/csv", fileName);
 
-        // GET: ReportController/Edit/5
-        public ActionResult Edit(int id) {
-            return View();
-        }
-
-        // POST: ReportController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection) {
-            try {
-                return RedirectToAction(nameof(Index));
+                } else {
+                    logger.Debug($"OUT PurchasedGifts(accessString={accessString}) return Status404NotFound");
+                    return new StatusCodeResult(StatusCodes.Status401Unauthorized);
+                }
             }
-            catch {
-                return View();
-            }
-        }
-
-        // GET: ReportController/Delete/5
-        public ActionResult Delete(int id) {
-            return View();
-        }
-
-        // POST: ReportController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection) {
-            try {
-                return RedirectToAction(nameof(Index));
-            }
-            catch {
-                return View();
+            catch (Exception ex) {
+                logger.Error(ex, $"PurchasedGifts(accessString={accessString}) EXCEPTION");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
     }
+
 }

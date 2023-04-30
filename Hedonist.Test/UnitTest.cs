@@ -55,5 +55,11 @@ namespace Hedonist.Test {
 
         //    var questionsModel = await engine.GetQuizAsync(new Ticket(ticket));
         //}
+
+        [Fact]
+        public async Task GetPurchasedGiftsTest() {
+            var engine = new QuizEngine();
+            var res = await engine.GetPurchasedReportAsync();
+        }
     }
 }

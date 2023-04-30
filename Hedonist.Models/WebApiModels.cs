@@ -81,4 +81,14 @@ namespace Hedonist.Models {
 
     }
 
+    public class GiftsPurchasedRepotrModel {
+        public int Id { get; set; }
+        public string Terminal { get; set; }
+        public string Password { get; set; }
+        public string Type { get; set; }
+        public string Certificate { get; set; }
+        public DateTime Date { get; set; }
+
+    }
+
 }

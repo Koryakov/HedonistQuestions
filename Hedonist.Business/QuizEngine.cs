@@ -26,7 +26,7 @@ namespace Hedonist.Business {
         public async Task<AuthenticatedResult<string>> UsePasswordAndReturnTicketAsync(AuthenticationData authData) {
 
             string hashPsw = PasswordHasher.Hash(authData.Password);
-            return  await repository.UsePasswordAndReturnTicketAsync(hashPsw, authData);
+            return await repository.UsePasswordAndReturnTicketAsync(hashPsw, authData);
         }
 
         public async Task<AuthenticatedResult<List<Question>?>> GetQuizAsync(Ticket ticket) {
@@ -68,7 +68,7 @@ namespace Hedonist.Business {
 
         public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByAnswerIdAsync(RequestedGiftInfo requestedGiftInfo) {
             var result = await repository.GetGiftTypeByAnswerIdAsync(requestedGiftInfo);
-            
+
             if (!result.IsAuthorized) {
                 return AuthenticatedResult<GiftTypeResult>.NotAuthenticated();
             }
@@ -81,7 +81,7 @@ namespace Hedonist.Business {
         }
 
         public async Task<AuthenticatedResult<GiftCommonData>> GetGiftByTypeAsync(RequestedGiftTypeInfo info) {
-            
+
 
             var giftResult = await repository.GetGiftByTypeAsync(info);
 
@@ -125,7 +125,7 @@ namespace Hedonist.Business {
         }
 
         public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByIdAsync(RequestedGiftTypeInfo info) {
-            
+
             return await repository.GetGiftTypeByIdAsync(info);
         }
 
@@ -135,6 +135,35 @@ namespace Hedonist.Business {
 
             var qrCode = new BitmapByteQRCode(qrCodeData);
             return qrCode.GetGraphic(20);
+        }
+
+        public async Task<List<GiftsPurchasedRepotrModel>> GetPurchasedReportAsync() {
+            var result = await repository.GetPurchasedGiftsAsync();
+            var list = new List<GiftsPurchasedRepotrModel>();
+            foreach (var purchase in result) {
+                list.Add(new() {
+                    Id = purchase.Id,
+                    Terminal = purchase.LoginAttempt.SentDeviceIdentifier,
+                    Password = purchase.LoginAttempt.Psw,
+                    Type = purchase.Gift.GiftType.Name,
+                    Certificate = purchase.CertificateCode,
+                    Date = purchase.CreatedDate
+                }
+                    );
+            }
+            return list;
+        }
+
+        public async Task<string> GetPurchasedReportSCVStringAsync() {
+            var list = await GetPurchasedReportAsync();
+            var stringResult = new StringBuilder();
+            foreach (var data in list.OrderByDescending(m => m.Date).ToList()) {
+                var dt = new DateTime(data.Date.Year, data.Date.Month, data.Date.Day
+                    , data.Date.Hour, data.Date.Minute, data.Date.Second, data.Date.Millisecond
+                    , DateTimeKind.Unspecified).ToLocalTime();
+                stringResult.AppendFormat($"{data.Id},{data.Terminal},{data.Password},{data.Type},'{data.Certificate}',{dt.ToString("yyyy-MM-dd HHHH:mm:ss")}\n");
+            }
+            return stringResult.ToString();
         }
     }
 }

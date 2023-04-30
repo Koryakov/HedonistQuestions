@@ -321,5 +321,15 @@ namespace Hedonist.Repository {
                 }
             }
         }
+
+        public async Task<List<GiftPurchase>> GetPurchasedGiftsAsync() {
+            logger.Info($"GetPurchasedGifts() called.");
+
+            using (var db = CreateContext()) {
+
+                var purchased = await db.GiftPurchase.Include(gp => gp.Gift).ThenInclude(g => g.GiftType).Include(gp => gp.LoginAttempt).ToListAsync();
+                return purchased;
+            }
+        }
     }
 }
