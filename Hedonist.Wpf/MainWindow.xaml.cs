@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,6 +21,7 @@ namespace Hedonist.Wpf {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
         static Settings settings = new();
         public MainWindow() {
 
@@ -29,7 +31,7 @@ namespace Hedonist.Wpf {
             if (settings.HideMouseCursor) {
                 Cursor = Cursors.None;
             }
-
+            logger.Info($"HEDONIST_WPF_VERSION: {Assembly.GetEntryAssembly().GetName().Version}");
             InitializeComponent();
             Loaded += MainWindow_Loaded;
         }
