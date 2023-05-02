@@ -28,7 +28,6 @@ namespace Hedonist.Wpf.Pages.GiftPages {
 
         private GiftType GiftTypeFromTestPage { get; set; }
         private JObject exData;
-        private int pageState = 0;
         private string ticket;
         private JToken giftPage1Data;
         private BackgroundWorker bgWorkerGift = new();
@@ -50,7 +49,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 }
                 exData = JObject.Parse(giftType.ExtendedData);
 
-                Bind();
+                BindPage1();
             }
             catch (Exception ex) {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
@@ -58,27 +57,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
             }
         }
 
-        private void Bind() {
-            switch(pageState) {
-                case 0:
-                    BindPage1();
-                    pageState = 1;
-                    break;
-                case 1:
-
-                    bgWorkerGift = new();
-                    bgWorkerGift.DoWork += BgWorkerGift_DoWork;
-                    bgWorkerGift.RunWorkerCompleted += BgWorkerGift_RunWorkerCompleted;
-
-                    if (!bgWorkerGift.IsBusy) {
-                        spinner.IsLoading = true;
-                        logger.Debug("starting bgWorkerGift.RunWorkerAsync()...");
-                        bgWorkerGift.RunWorkerAsync();
-                    }
-                    break;
-            }
-        }
-
+      
         private void BgWorkerGift_DoWork(object? sender, DoWorkEventArgs e) {
             try {
                 logger.Debug("IN BgWorkerGift_DoWork()");
@@ -107,8 +86,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
 
             if (giftDataResponseFromDb.resultType == AutorizeResultType.Authorized) {
 
-                BindPage2();
-                pageState = 2;
+                BindPage3();
             }
             else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
@@ -140,6 +118,19 @@ namespace Hedonist.Wpf.Pages.GiftPages {
 
         private void BindPage2() {
             try {
+                panelStoreGift.Visibility = Visibility.Hidden;
+                panelAreYoShure.Visibility = Visibility.Visible;
+                panelQrCode.Visibility = Visibility.Hidden;
+                panelStart.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex) {
+                modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
+                modal.IsOpen = true;
+            }
+        }
+
+        private void BindPage3() {
+            try {
                 var giftCommonData = giftDataResponseFromDb.giftCommonData;
 
                 if (giftCommonData.GiftResult == GiftCommonData.GiftResultType.GiftFound) {
@@ -149,16 +140,19 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                         imgQrCode.Source = BitmapHelper.CreateQrCodeBitmap(txtQrCode.Text);
 
                         panelStoreGift.Visibility = Visibility.Hidden;
+                        panelAreYoShure.Visibility = Visibility.Hidden;
                         panelQrCode.Visibility = Visibility.Visible;
                         panelStart.Visibility = Visibility.Hidden;
                     }
                     else {
                         panelStoreGift.Visibility = Visibility.Visible;
+                        panelAreYoShure.Visibility = Visibility.Hidden;
                         panelQrCode.Visibility = Visibility.Hidden;
                         panelStart.Visibility = Visibility.Hidden;
                     }
                 }
-                else if (giftCommonData.GiftResult == GiftCommonData.GiftResultType.NoFreeGift) {
+                else if (giftCommonData.GiftResult == GiftCommonData.GiftResultType.NoFreeGift
+                    || giftCommonData.GiftResult == GiftCommonData.GiftResultType.StoreHasNoGiftType) {
                     var model = new GiftsOver.GiftsOverModel() {
                         HeaderText = giftPage1Data["GiftOverText"].ToString(),
                         Ticket = ticket
@@ -177,7 +171,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
         }
 
         private void btnShowResult_Click(object sender, RoutedEventArgs e) {
-            Bind();
+            BindPage2();
         }
         private void btnOneMore_Click(object sender, RoutedEventArgs e) {
             NavigationService.Navigate(new TestPage(ticket));
@@ -191,6 +185,18 @@ namespace Hedonist.Wpf.Pages.GiftPages {
 
         private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
             NavigationService.Navigate(new StartPage());
+        }
+
+        private void btnYesIAmShure_Click(object sender, RoutedEventArgs e) {
+            bgWorkerGift = new();
+            bgWorkerGift.DoWork += BgWorkerGift_DoWork;
+            bgWorkerGift.RunWorkerCompleted += BgWorkerGift_RunWorkerCompleted;
+
+            if (!bgWorkerGift.IsBusy) {
+                spinner.IsLoading = true;
+                logger.Debug("starting bgWorkerGift.RunWorkerAsync()...");
+                bgWorkerGift.RunWorkerAsync();
+            }
         }
     }
 }

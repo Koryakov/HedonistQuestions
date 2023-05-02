@@ -215,24 +215,18 @@ namespace Hedonist.Wpf.Pages {
             logger.Debug($"IN BgWorkerGiftType_RunWorkerCompleted()");
             spinner.IsLoading = false;
 
-            if(giftTypeResponse.resultType == AutorizeResultType.Authorized) {
+            if (giftTypeResponse.resultType == AutorizeResultType.Authorized) {
                 GiftTypeResult result = giftTypeResponse.giftTypeResult;
 
-                if (result.ResultType == GiftTypeResultType.StoreHasNoGiftType) {
+                var exData = JObject.Parse(result.GiftType.ExtendedData);
+                var giftPage1Data = exData["GiftPage1Data"];
 
-                    var exData = JObject.Parse(result.GiftType.ExtendedData);
-                    var giftPage1Data = exData["GiftPage1Data"];
+                var model = new GiftsOver.GiftsOverModel() {
+                    HeaderText = giftPage1Data["GiftOverText"].ToString(),
 
-                    var model = new GiftsOver.GiftsOverModel() {
-                        HeaderText = giftPage1Data["GiftOverText"].ToString(),
-
-                        Ticket = testPageModel.Ticket
-                    };
-                    NavigationService.Navigate(new GiftsOver(model));
-                }
-                else {
-                    NavigationService.Navigate(new GiftPage1(testPageModel.Ticket, result.GiftType));
-                }
+                    Ticket = testPageModel.Ticket
+                };
+                NavigationService.Navigate(new GiftPage1(testPageModel.Ticket, result.GiftType));
             }
             else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";

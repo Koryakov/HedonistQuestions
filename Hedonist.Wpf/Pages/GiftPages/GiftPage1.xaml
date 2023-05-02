@@ -77,8 +77,18 @@
                                 Width="270" Style="{StaticResource commonDarkButton}" />
                 </StackPanel>
             </StackPanel>
+            <!---PANEL ARE YOU SHURE?!-->
+                <StackPanel x:Name="panelAreYoShure" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Visibility="Hidden">
+                    <TextBlock HorizontalAlignment="Center" Text="Уверен?!" Margin="0 75 0 95"
+                            TextAlignment="Center" Style="{StaticResource textGiftMiddle}" />
+                    
+                    <Button x:Name="btnYesIAmShure" Content="Да" Click="btnYesIAmShure_Click"
+                                Width="270" Style="{StaticResource commonDarkButton}" />
+                    <Separator Opacity="0" Width="70"/>
 
-            <!---PANEL STORE GIFT-->
+                </StackPanel>
+                <!---PANEL STORE GIFT-->
                 <StackPanel x:Name="panelStoreGift" HorizontalAlignment="Center" VerticalAlignment="Center"
                             Visibility="Hidden">
                 <TextBlock TextAlignment="Center" Text="Обратитесь к консультанту за получением комплимента" Margin="0 0 0 30"

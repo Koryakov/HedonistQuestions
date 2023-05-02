@@ -38,7 +38,7 @@ namespace Hedonist.Models {
             Unknown = 0,
             GiftFound = 1,
             NoFreeGift = 2,
-            InconsistentData = 3,
+            InconsistentData = 3, 
             StoreHasNoGiftType = 4
         }
 
@@ -57,7 +57,6 @@ namespace Hedonist.Models {
         TerminalNotFound = 4,
         StoreHasNoGiftType = 6,
         Success = 7,
-        GiftGroupNotFound = 8
     }
 
     public class GiftFromDbResult {

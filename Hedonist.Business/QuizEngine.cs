@@ -108,6 +108,9 @@ namespace Hedonist.Business {
                 else if (giftFromDb.GetGiftResultType == GetGiftResultType.NoFreeGift) {
                     qrCodeData.GiftResult = GiftCommonData.GiftResultType.NoFreeGift;
                 }
+                else if (giftFromDb.GetGiftResultType == GetGiftResultType.StoreHasNoGiftType) {
+                    qrCodeData.GiftResult = GiftCommonData.GiftResultType.StoreHasNoGiftType;
+                }
                 else {
                     qrCodeData.GiftResult = GiftCommonData.GiftResultType.InconsistentData;
                 }

@@ -220,7 +220,7 @@ namespace Hedonist.Repository {
                                 logger.Warn($"GetGiftByTypeAsync(), GROUP GIFTS OVER: freeGiftsIds.Count={freeGiftsIds.Count}, giftPurchases.Count={giftPurchases.Count}");
                             }
                         } else {
-                            result.GetGiftResultType = GetGiftResultType.GiftGroupNotFound;
+                            result.GetGiftResultType = GetGiftResultType.StoreHasNoGiftType;
                             logger.Warn($"GetGiftByTypeAsync(), GIFT GROUP NOT FOUND. DeviceIdentifier={loginAttempt.SentDeviceIdentifier}. ticket={info.Ticket}, storeId={terminal.StoreId}, giftTypeId={info.GiftTypeId}");
                         }
                     }
