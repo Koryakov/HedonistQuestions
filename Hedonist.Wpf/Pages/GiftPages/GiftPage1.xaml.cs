@@ -35,21 +35,23 @@ namespace Hedonist.Wpf.Pages.GiftPages {
         private (AutorizeResultType resultType, GiftCommonData giftCommonData) giftDataResponseFromDb;
 
         public GiftPage1(string ticket, GiftType giftType) {
+            logger.Debug($"IN GiftPage1() constructor, ticket={ticket}, giftType is null ={giftType == null}");
             try {
                 InitializeComponent();
-
                 this.ticket = ticket;
-                
                 this.GiftTypeFromTestPage = giftType;
+                
                 if (giftType == null) {
+                    logger.Warn($"GiftPage1() constructor - Terminal not registered");
                     modalMessage.Text = "Терминал не зарегистрирован в системе";
                     modal.IsOpen = true;
 
                     return;
                 }
+                logger.Debug($"GiftPage1() constructor, ticket={ticket}, giftType={giftType.Id}, name={giftType.Name}");
                 exData = JObject.Parse(giftType.ExtendedData);
 
-                BindPage1();
+                BindPageState1();
             }
             catch (Exception ex) {
                 logger.Error(ex, $"EXCEPTION IN GiftPage1() constructor");
@@ -87,16 +89,18 @@ namespace Hedonist.Wpf.Pages.GiftPages {
 
             if (giftDataResponseFromDb.resultType == AutorizeResultType.Authorized) {
 
-                BindPage3();
+                BindPageState3();
             }
             else {
+                logger.Error($"BgWorkerGift_RunWorkerCompleted() something wrong. resultType={giftDataResponseFromDb.resultType}");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
             logger.Debug($"OUT BgWorkerGift_RunWorkerCompleted()");
         }
 
-        private void BindPage1() {
+        private void BindPageState1() {
+            logger.Debug($"IN BindPageState1()");
             try {
                 giftPage1Data = exData["GiftPage1Data"];
 
@@ -112,13 +116,15 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 panelQrCode.Visibility = Visibility.Hidden;
                 panelStart.Visibility = Visibility.Visible;
             } catch (Exception ex) {
-                logger.Error(ex, $"EXCEPTION IN BindPage1() constructor");
+                logger.Error(ex, $"EXCEPTION IN BindPageState1() constructor");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
+            logger.Debug($"OUT BindPageState1()");
         }
 
-        private void BindPage2() {
+        private void BindPageState2() {
+            logger.Debug($"IN BindPageState2()");
             try {
                 panelStoreGift.Visibility = Visibility.Hidden;
                 panelAreYoShure.Visibility = Visibility.Visible;
@@ -126,19 +132,24 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 panelStart.Visibility = Visibility.Hidden;
             }
             catch (Exception ex) {
-                logger.Error(ex, $"EXCEPTION IN BindPage2() constructor");
+                logger.Error(ex, $"EXCEPTION IN BindPageState2() constructor");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
+            logger.Debug($"OUT BindPageState2()");
         }
 
-        private void BindPage3() {
+        private void BindPageState3() {
+            logger.Debug($"IN BindPageState3()");
             try {
                 var giftCommonData = giftDataResponseFromDb.giftCommonData;
+                logger.Debug($"IN BindPageState3() giftCommonData.GiftResult={giftCommonData.GiftResult}");
 
                 if (giftCommonData.GiftResult == GiftCommonData.GiftResultType.GiftFound) {
+                    logger.Debug($"BindPageState3() GiftFound");
 
                     if (giftCommonData.GiftType.HasQrCode) {
+
                         txtQrCode.Text = giftCommonData.QrCodeText;
                         imgQrCode.Source = BitmapHelper.CreateQrCodeBitmap(txtQrCode.Text);
 
@@ -146,8 +157,11 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                         panelAreYoShure.Visibility = Visibility.Hidden;
                         panelQrCode.Visibility = Visibility.Visible;
                         panelStart.Visibility = Visibility.Hidden;
+
+                        logger.Debug($"BindAfterPalmScan() HasQrCode, Gift Code was shown!");
                     }
                     else {
+                        logger.Debug($"BindPageState3() NO HasQrCode, Gift was shown!");
                         panelStoreGift.Visibility = Visibility.Visible;
                         panelAreYoShure.Visibility = Visibility.Hidden;
                         panelQrCode.Visibility = Visibility.Hidden;
@@ -163,38 +177,47 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                         HeaderText = giftPage1Data["GiftOverText"].ToString(),
                         Ticket = ticket
                     };
+                    logger.Debug($"OUT BindPageState3() Navigate(new GiftsOver(model)");
                     NavigationService.Navigate(new GiftsOver(model));
                 }
                 else {
+                    logger.Error($"BindPageState3() something wrong. giftCommonData.GiftResult={giftCommonData.GiftResult}");
                     modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                     modal.IsOpen = true;
                 }
             }
             catch (Exception ex) {
-                logger.Error(ex, $"EXCEPTION IN BindPage3() constructor");
+                logger.Error(ex, $"EXCEPTION IN BindPageState3() constructor");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
+            logger.Debug($"OUT BindPageState3()");
         }
 
         private void btnShowResult_Click(object sender, RoutedEventArgs e) {
-            BindPage2();
+            logger.Debug($"btnShowResult_Click()");
+            BindPageState2();
         }
         private void btnOneMore_Click(object sender, RoutedEventArgs e) {
+            logger.Debug($"btnOneMore_Click() Navigate(new TestPage(ticket={ticket})");
             NavigationService.Navigate(new TestPage(ticket));
         }
         private void btnChoose_Click(object sender, RoutedEventArgs e) {
+            logger.Debug($"btnChoose_Click() Navigate(new VariantsPage(ticket={ticket})");
             NavigationService.Navigate(new VariantsPage(ticket));
         }
         private void OnCloseModalClick(object sender, RoutedEventArgs e) {
+            logger.Debug($"OnCloseModalClick()");
             modal.IsOpen = false;
         }
 
         private void HomeButtonClick(object sender, MouseButtonEventArgs e) {
+            logger.Debug($"HomeButtonClick()");
             NavigationService.Navigate(new StartPage());
         }
 
         private void btnYesIAmShure_Click(object sender, RoutedEventArgs e) {
+            logger.Debug($"btnYesIAmShure_Click()");
             bgWorkerGift = new();
             bgWorkerGift.DoWork += BgWorkerGift_DoWork;
             bgWorkerGift.RunWorkerCompleted += BgWorkerGift_RunWorkerCompleted;
