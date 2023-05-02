@@ -226,7 +226,7 @@ namespace Hedonist.Wpf.Pages {
 
                     Ticket = testPageModel.Ticket
                 };
-                NavigationService.Navigate(new GiftPage1(testPageModel.Ticket, result.GiftType));
+                NavigationService.Navigate(new HandPage(testPageModel.Ticket, result.GiftType));
             }
             else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";

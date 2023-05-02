@@ -52,6 +52,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 BindPage1();
             }
             catch (Exception ex) {
+                logger.Error(ex, $"EXCEPTION IN GiftPage1() constructor");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
@@ -111,6 +112,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 panelQrCode.Visibility = Visibility.Hidden;
                 panelStart.Visibility = Visibility.Visible;
             } catch (Exception ex) {
+                logger.Error(ex, $"EXCEPTION IN BindPage1() constructor");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
@@ -124,6 +126,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 panelStart.Visibility = Visibility.Hidden;
             }
             catch (Exception ex) {
+                logger.Error(ex, $"EXCEPTION IN BindPage2() constructor");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
@@ -152,7 +155,10 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                     }
                 }
                 else if (giftCommonData.GiftResult == GiftCommonData.GiftResultType.NoFreeGift
-                    || giftCommonData.GiftResult == GiftCommonData.GiftResultType.StoreHasNoGiftType) {
+                    || giftCommonData.GiftResult == GiftCommonData.GiftResultType.StoreHasNoGiftType
+#warning Handling InconsistentData is temporary solution for old backend comatibility
+                    || giftCommonData.GiftResult == GiftCommonData.GiftResultType.InconsistentData
+                    ) {
                     var model = new GiftsOver.GiftsOverModel() {
                         HeaderText = giftPage1Data["GiftOverText"].ToString(),
                         Ticket = ticket
@@ -165,6 +171,7 @@ namespace Hedonist.Wpf.Pages.GiftPages {
                 }
             }
             catch (Exception ex) {
+                logger.Error(ex, $"EXCEPTION IN BindPage3() constructor");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
             }
