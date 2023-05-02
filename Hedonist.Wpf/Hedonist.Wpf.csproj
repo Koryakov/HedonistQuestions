@@ -18,12 +18,14 @@
     <None Remove="Images\DemoQrCode.png" />
     <None Remove="Images\Food.png" />
     <None Remove="Images\free-icon-lock.png" />
+    <None Remove="Images\Hand scanned_1.png" />
     <None Remove="Images\home.png" />
     <None Remove="Images\hypno-backgrnd.png" />
     <None Remove="Images\man_on_yacht.jpg" />
     <None Remove="Images\Mixology.png" />
     <None Remove="Images\Movement.png" />
     <None Remove="Images\Music.png" />
+    <None Remove="Images\Palm scanner1.png" />
     <None Remove="Images\Palm-scanner-2_10.gif" />
     <None Remove="Images\relax_in_water.png" />
     <None Remove="Images\TestPage-2.png" />
@@ -68,10 +70,16 @@
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\DemoQrCode.png" />
+	    <Resource Include="Images\Hand scanned_1.png">
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </Resource>
 	    <Resource Include="Images\home.png">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\man_on_yacht.jpg">
+	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	    </Resource>
+	    <Resource Include="Images\Palm scanner1.png">
 	      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	    </Resource>
 	    <Resource Include="Images\Palm-scanner-2_10.gif">
@@ -147,6 +155,9 @@
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Images\Hypno.mp4">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Images\PalmScanner.mp4">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
       <None Update="Images\TestPage-1.jpg">

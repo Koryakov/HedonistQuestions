@@ -8,37 +8,52 @@
       mc:Ignorable="d"
       xmlns:gif="http://wpfanimatedgif.codeplex.com"
       gif:ImageBehavior.AnimateInDesignMode="True"
-      d:DesignHeight="1920" d:DesignWidth="1080"
+      Background="Black"
       Title="HandPage">
 
     <helpers:DpiDecorator>
-        <Grid Background="Black" Margin="0" Width="1080" Height="1920">
-        <StackPanel Orientation="Vertical" Margin="0">
-            <Grid>
-                <Image Name="img" Tag="ScreenSaver"
-                    Stretch="Fill"
-                    gif:ImageBehavior.AnimatedSource="/Images/Palm-scanner-2_10.gif"
-                    gif:ImageBehavior.AutoStart="True"
-                    />
-                <Image Tag="HomeButton" Source="..\\Images\home.png"  PreviewMouseDown="HomeButtonClick"
-                    Width="91" Height="91" Panel.ZIndex="50"
-                    VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 40 40 0"/>
-                    <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
-                           HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Grid Margin="0" Width="1080" Height="1920">
+            <Image Tag="HomeButton" Panel.ZIndex="50" Source="..\\Images\home.png"  PreviewMouseDown="HomeButtonClick"
+                Width="91" Height="91"
+                VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 40 40 0"/>
 
-                <TextBlock Style="{StaticResource textLarge}" Width="934"
-                    Margin="76 96 0 0"
-                    Text="Приложи руку к экрану и сканер определит уровень твоего удовольствия" />
-                
+            <!-- GRID BEFORE SCAN -->
+            <Grid x:Name="grdBeforeScan" Visibility="Visible" Background="Transparent" Margin="0" Width="1080" Height="1920">
+                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
+                        Panel.ZIndex="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Style="{StaticResource textLarge}" Width="934" Margin="76 96 0 0"
+                    Panel.ZIndex="10" Text="Приложи руку к экрану и сканер определит уровень твоего удовольствия" />
+                <Image  Width="1080" Height="1920" Name="imgPalm"
+                    Source="..\Images\Palm scanner1.png"/>
+                <Border Background="Transparent" Name="borderHand">
+                    <Path Fill="Transparent" Stroke="Transparent" StrokeThickness="1"
+                    Stretch="Uniform" MouseDown="Path_MouseDown" Style="{StaticResource handGeometry}"/>
+                </Border>
+            </Grid>
+            <!-- GRID IN SCAN PROCESS -->
+            <Grid x:Name="grdInScanProcess" Visibility="Hidden">
+                <MediaElement Panel.ZIndex="20" Source="Images\PalmScanner.mp4" Name="palmScannerVideo" 
+                    Width="1080" Height="1920" LoadedBehavior="Manual" />
+            </Grid>
+
+            <!-- GRID AFTER SCAN -->
+            <Grid x:Name="grdAfterScan" Visibility="Hidden">
+                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
+                        Panel.ZIndex="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Style="{StaticResource textLarge}" Width="700" Margin="76 96 0 0"
+                    Panel.ZIndex="10" Text="Сканирование прошло успешно" />
+
                 <StackPanel Orientation="Vertical" Margin="0 0 0 211" Panel.ZIndex="10"
-                            VerticalAlignment="Bottom">
-                    <Button x:Name="btnShowResult" Content="Покажи результат" Width="420" Style="{StaticResource commonDarkButton}" Click="btnShowResult_Click"></Button>
+                        VerticalAlignment="Bottom">
+                    <Button x:Name="btnShowResult" Content="Покажи результат" Panel.ZIndex="30"
+                        Width="420" Style="{StaticResource commonDarkButton}"
+                        Click="btnShowResult_Click"></Button>
                 </StackPanel>
+                
+                <Image  Width="1080" Height="1920" Name="imgPalmEnded"
+                    Source="..\Images\Hand scanned_1.png"/>
 
             </Grid>
-            
-            
-        </StackPanel>
-    </Grid>
+        </Grid>
     </helpers:DpiDecorator>
 </Page>
