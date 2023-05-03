@@ -30,6 +30,11 @@ namespace Hedonist.Wpf.Pages {
             this.giftType = giftType;
 
             InitializeComponent();
+
+            grdBeforeScan.Visibility = Visibility.Visible;
+            grdInScanProcess.Visibility = Visibility.Hidden;
+            grdAfterScan.Visibility = Visibility.Hidden;
+
             palmScannerVideo.MediaEnded += PalmScannerVideo_MediaEnded;
         }
 

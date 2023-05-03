@@ -19,16 +19,26 @@
 
             <!-- GRID BEFORE SCAN -->
             <Grid x:Name="grdBeforeScan" Visibility="Visible" Background="Transparent" Margin="0" Width="1080" Height="1920">
-                <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
+                <Grid Panel.ZIndex="30">
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 0" Width="931">
+                    
+                <Rectangle Margin="0 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
                         Panel.ZIndex="10" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                <TextBlock Style="{StaticResource textLarge}" Width="934" Margin="76 96 0 0"
-                    Panel.ZIndex="10" Text="Приложи руку к экрану и сканер определит уровень твоего удовольствия" />
+                <TextBlock Style="{StaticResource textLarge}" Width="934" Margin="0 18 0 0"
+                    Panel.ZIndex="10" Text="Сканер гедонизма" />
+                <TextBlock Margin="0 15 0 0" Style="{StaticResource textInfoPageSmall}"> Давай определим твой тип гедонизма самым верным способом…по отпечатку руки
+<LineBreak/><LineBreak/>
+Приложи руку к экрану</TextBlock>
+                    </StackPanel>
+                </Grid>
+                <Grid>
                 <Image  Width="1080" Height="1920" Name="imgPalm"
                     Source="..\Images\Palm scanner1.png"/>
                 <Border Background="Transparent" Name="borderHand">
                     <Path Fill="Transparent" Stroke="Transparent" StrokeThickness="1"
                     Stretch="Uniform" MouseDown="Path_MouseDown" Style="{StaticResource handGeometry}"/>
                 </Border>
+                </Grid>
             </Grid>
             <!-- GRID IN SCAN PROCESS -->
             <Grid x:Name="grdInScanProcess" Visibility="Hidden">

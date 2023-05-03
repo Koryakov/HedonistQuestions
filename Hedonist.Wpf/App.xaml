@@ -8,7 +8,7 @@
 
         <Style x:Key="clearPasswordButton" TargetType="Button">
             <Setter Property="FontFamily" Value="Montserrat"/>
-            <Setter Property="FontSize" Value="62"/>
+            <Setter Property="FontSize" Value="42"/>
             <Setter Property="FontWeight" Value="600"/>
             <Setter Property="Foreground" Value="Red"/>
             <Setter Property="Background" Value="#E4E4E9"/>
