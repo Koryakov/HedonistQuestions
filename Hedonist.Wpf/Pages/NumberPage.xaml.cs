@@ -65,11 +65,13 @@ namespace Hedonist.Wpf.Pages {
 
             if (isErrorHappens) {
                 isErrorHappens = false;
+                logger.Error($"NumberPageBgWorker_RunWorkerCompleted() something wrong");
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
                 modal.IsOpen = true;
 
             } else {
                 pswBox.Clear();
+                logger.Debug($"NumberPageBgWorker_RunWorkerCompleted() autorizeResult.Result={autorizeResult.Result}");
 
                 switch (autorizeResult.Result) {
                     case AutorizeResultType.Authorized:
@@ -99,6 +101,12 @@ namespace Hedonist.Wpf.Pages {
             if (!bgWorker.IsBusy && pswBox.Password.Length < 10) {
                 pswBox.Password += buttonValue;
             }
+            ResetTimer();
+        }
+
+        private void btnResetClick(object sender, RoutedEventArgs e) {
+            logger.Debug("btnResetClick()");
+            pswBox.Clear();
             ResetTimer();
         }
 

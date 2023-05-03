@@ -35,12 +35,13 @@
             
 
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" >
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
                     <Grid Margin="0 0 0 65">
-                        <PasswordBox x:Name="pswBox" Width="420" Height="100"
+                        <PasswordBox x:Name="pswBox" Width="320" Height="100"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Center"/>
                     </Grid>
+                        <Button Content="X" Tag="X" VerticalAlignment="Top" Margin="0 0 0 65" Click="btnResetClick" Style="{StaticResource clearPasswordButton}"></Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" >
                     <Button Content="1" Tag="1" Click="btnNumber_Click" Style="{StaticResource roundButton}"></Button>

@@ -6,6 +6,38 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
+        <Style x:Key="clearPasswordButton" TargetType="Button">
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontSize" Value="62"/>
+            <Setter Property="FontWeight" Value="600"/>
+            <Setter Property="Foreground" Value="Red"/>
+            <Setter Property="Background" Value="#E4E4E9"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentControl>
+                            <Border x:Name="normalBorder" Width="100" Height="100"
+                                    CornerRadius="100" 
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{TemplateBinding Background}" Margin="20">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" Margin="{TemplateBinding Padding}">
+                                </ContentPresenter>
+                            </Border>
+                        </ContentControl>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsPressed" Value="True" >
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter Property="BorderBrush" Value="#0BDAF2" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="roundButton" TargetType="Button">
             <Setter Property="FontFamily" Value="Montserrat"/>
             <Setter Property="FontSize" Value="62"/>
