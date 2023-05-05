@@ -168,5 +168,15 @@ namespace Hedonist.Business {
             }
             return stringResult.ToString();
         }
+
+        public async Task<string> GetLeftGiftsSCVStringAsync() {
+            List<LeftGiftsReportModel> model = await repository.GetLeftGiftsAsync();
+            var stringResult = new StringBuilder();
+
+            foreach (var item in model.OrderBy(m => m.GiftGroupId).ToList()) {
+                stringResult.AppendFormat($"{item.GiftGroupId},{item.Comment},{item.GiftsLimit},{item.LeftGifts}\n");
+            }
+            return stringResult.ToString();
+        }
     }
 }

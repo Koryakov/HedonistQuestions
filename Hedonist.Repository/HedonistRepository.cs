@@ -264,29 +264,64 @@ namespace Hedonist.Repository {
             return (giftGroup, groupStoresList);
         }
 
+        public async Task<List<GiftPurchase>> GetPurchasedGiftsAsync() {
+            logger.Info($"GetPurchasedGifts() called.");
+
+            using (var db = CreateContext()) {
+
+                var purchased = await db.GiftPurchase.Include(gp => gp.Gift).ThenInclude(g => g.GiftType).Include(gp => gp.LoginAttempt).ToListAsync();
+                return purchased;
+            }
+        }
+
+        public async Task<List<LeftGiftsReportModel>> GetLeftGiftsAsync() {
+            logger.Info($"IN GetLeftGiftsAsync()");
+
+            List<LeftGiftsReportModel> leftGiftsLlist = new();
+            using (var cn = new NpgsqlConnection(connectionString)) {
+                cn.Open();
+                using (var cmd = new NpgsqlCommand($"SELECT get_left_gifts_report();", cn)) {
+                    using (var reader = await cmd.ExecuteReaderAsync()) {
+                        while (await reader.ReadAsync()) {
+                            var arr = (System.Object[])reader[0];
+
+                            leftGiftsLlist.Add(new LeftGiftsReportModel() {
+                                GiftGroupId = (int)arr[0],
+                                Comment = (string)arr[1],
+                                GiftsLimit = (int)arr[2],
+                                LeftGifts = (int)arr[3],
+                            });
+                        }
+                    }
+                }
+            }
+            logger.Info($"OUT GetLeftGiftsAsync()");
+            return leftGiftsLlist;
+        }
+
         //private async Task<GiftGroup> GetGiftGroupAsync(int giftTypeId, int storeId) {
 
-            //    logger.Info($"IN GetGiftGroupAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
-            //    GiftGroup giftGroup = null;
-            //    using (var cn = new NpgsqlConnection(connectionString)) {
-            //        cn.Open();
-            //        using (var cmd = new NpgsqlCommand($"SELECT get_gift_group({giftTypeId}, {storeId});", cn)) {
-            //            using (var reader = await cmd.ExecuteReaderAsync()) {
-            //                while (await reader.ReadAsync()) {
-            //                    var arr = (System.Object[])reader[0];
-            //                    giftGroup = new() {
-            //                        Id = (int)arr[0],
-            //                        GiftsCount = (int)arr[1],
-            //                        Comment = (string)arr[2],
-            //                    };
-            //                }
-            //            }
-            //        }
-            //    }
-            //    logger.Info($"GetGiftGroupAsync(), giftGroup found={giftGroup!=null}.");
-            //    logger.Info($"OUT GetGiftGroupAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
-            //    return giftGroup;
-            //}
+        //    logger.Info($"IN GetGiftGroupAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
+        //    GiftGroup giftGroup = null;
+        //    using (var cn = new NpgsqlConnection(connectionString)) {
+        //        cn.Open();
+        //        using (var cmd = new NpgsqlCommand($"SELECT get_gift_group({giftTypeId}, {storeId});", cn)) {
+        //            using (var reader = await cmd.ExecuteReaderAsync()) {
+        //                while (await reader.ReadAsync()) {
+        //                    var arr = (System.Object[])reader[0];
+        //                    giftGroup = new() {
+        //                        Id = (int)arr[0],
+        //                        GiftsCount = (int)arr[1],
+        //                        Comment = (string)arr[2],
+        //                    };
+        //                }
+        //            }
+        //        }
+        //    }
+        //    logger.Info($"GetGiftGroupAsync(), giftGroup found={giftGroup!=null}.");
+        //    logger.Info($"OUT GetGiftGroupAsync(), giftTypeId={giftTypeId}, storeId={storeId}");
+        //    return giftGroup;
+        //}
 
 
         public async Task<AuthenticatedResult<GiftTypeResult>> GetGiftTypeByIdAsync(RequestedGiftTypeInfo info) {
@@ -320,16 +355,6 @@ namespace Hedonist.Repository {
                     }
                 }
             }
-        }
-
-        public async Task<List<GiftPurchase>> GetPurchasedGiftsAsync() {
-            logger.Info($"GetPurchasedGifts() called.");
-
-            using (var db = CreateContext()) {
-
-                var purchased = await db.GiftPurchase.Include(gp => gp.Gift).ThenInclude(g => g.GiftType).Include(gp => gp.LoginAttempt).ToListAsync();
-                return purchased;
-            }
-        }
+        }      
     }
 }

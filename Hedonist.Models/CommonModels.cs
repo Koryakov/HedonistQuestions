@@ -190,4 +190,10 @@ namespace Hedonist.Models {
         public string Value { get; set; }
     }
 
+    public class LeftGiftsReportModel {
+        public int GiftGroupId { get; set; }
+        public string Comment { get; set; }
+        public int GiftsLimit { get; set; }
+        public int LeftGifts { get; set; }
+    }
 }
