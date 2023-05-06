@@ -140,8 +140,8 @@
                                 </Grid>
                             </BulletDecorator.Bullet>
                             <!--Text element-->
-                            <TextBlock Margin="23,0,0,0" Foreground="White" FontFamily="Montserrat" FontSize="24" FontWeight="Normal">
-                                <ContentPresenter />
+                            <TextBlock Margin="23,0,0,0" Foreground="White" FontFamily="Montserrat" FontSize="24" FontWeight="Normal"
+                                       Text="{Binding StateName}"  TextWrapping="WrapWithOverflow">
                             </TextBlock>
                         </BulletDecorator>
                         <!--If item is checked, trigger the visibility of the mark-->
