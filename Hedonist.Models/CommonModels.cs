@@ -9,6 +9,8 @@ namespace Hedonist.Models {
         public string Name { get; set; }
         public string DeviceIdentifier { get; set; }
         public int StoreId { get; set; }
+        public int QuestionsGroupId { get; set; }
+        public int AnswersGroupId { get; set; }
     }
 
     [Table("question")]

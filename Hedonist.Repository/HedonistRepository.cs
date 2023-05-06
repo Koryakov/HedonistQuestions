@@ -85,19 +85,29 @@ namespace Hedonist.Repository {
         }
 
         public async Task<AuthenticatedResult<(List<Question>? questions, List<Answer>? answers)>> GetQuizByTicketAsync(string ticket) {
-            const int group = 1;
+            logger.Info($"IN AuthenticatedResult(), ticket={ticket}");
             using (var db = CreateContext()) {
-                bool isTicketCorrect = await db.LoginAttempt.AnyAsync(p => p.Ticket == ticket && p.IsExpired == false);
+                var loginAttempt = await db.LoginAttempt.FirstOrDefaultAsync(p => p.Ticket == ticket && p.IsExpired == false);
+                logger.Info($"AuthenticatedResult() loginAttempt found={loginAttempt != null}, ticket={ticket}");
 
-                if (isTicketCorrect) {
-                    var questions = await db.Question.Where(q => q.Group == group).Include(q => q.Answers).ToListAsync();
-                    var answers = await db.Answer.Where(a => a.Group == group).ToListAsync();
+                if (loginAttempt != null) {
+                    Terminal terminal = await db.Terminal.FirstOrDefaultAsync(t => t.DeviceIdentifier == loginAttempt.SentDeviceIdentifier);
+                    logger.Info($"AuthenticatedResult() terminal found={terminal != null}, ticket={ticket}");
+                    if (terminal != null) {
+                        logger.Info($"AuthenticatedResult() terminal info: Id={terminal.Id}, Name={terminal.Name}, StoreId={terminal.StoreId}, DeviceIdentifier={terminal.DeviceIdentifier}, QuestionsGroupId={terminal.QuestionsGroupId}, AnswersGroupId={terminal.AnswersGroupId}");
+                        var questions = await db.Question.Where(q => q.Group == terminal.QuestionsGroupId)
+                            //.Include(q => q.Answers)
+                            .ToListAsync();
+                        var answers = await db.Answer.Where(a => a.Group == terminal.AnswersGroupId).ToListAsync();
 
-                    return new AuthenticatedResult<(List<Question>?, List<Answer>?)>() {
-                        IsAuthorized = true,
-                        Result = (questions, answers)
-                    };
+                        logger.Info($"OUT AuthenticatedResult(), ticket={ticket}");
+                        return new AuthenticatedResult<(List<Question>?, List<Answer>?)>() {
+                            IsAuthorized = true,
+                            Result = (questions, answers)
+                        };
+                    }
                 }
+                logger.Warn($"OUT AuthenticatedResult() NotAuthenticated, ticket={ticket}");
                 return AuthenticatedResult<(List<Question>?, List<Answer>?)>.NotAuthenticated();
             }
         }
