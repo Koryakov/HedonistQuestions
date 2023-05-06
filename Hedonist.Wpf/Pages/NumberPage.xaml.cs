@@ -75,9 +75,9 @@ namespace Hedonist.Wpf.Pages {
 
                 switch (autorizeResult.Result) {
                     case AutorizeResultType.Authorized:
-                        logger.Debug("NumberPageBgWorker_RunWorkerCompleted() - Navigate to TestPage...");
+                        logger.Debug("NumberPageBgWorker_RunWorkerCompleted() - Navigate to PreTestPage...");
                         timer.Stop();
-                        NavigationService.Navigate(new TestPage(autorizeResult.Ticket));
+                        NavigationService.Navigate(new PreTestPage(autorizeResult.Ticket));
                         break;
                     case AutorizeResultType.Unauthorized:
                         modalMessage.Text = "Пароль неверный";

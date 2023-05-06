@@ -43,6 +43,7 @@ namespace Hedonist.Wpf {
             //frame.NavigationService.Navigate(new InfoPage());
             frame.NavigationService.Navigate(new StartPage());
             //frame.NavigationService.Navigate(new NumberPage());
+            //frame.NavigationService.Navigate(new PreTestPage());
             //frame.NavigationService.Navigate(new TestPage("752e7875-ba1a-4d5f-b223-93db65994390"));
             //frame.NavigationService.Navigate(new HandPage());
             //frame.NavigationService.Navigate(new GiftMusicPage1());

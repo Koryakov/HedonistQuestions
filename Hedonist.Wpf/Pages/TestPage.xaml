@@ -48,11 +48,6 @@
                     Text="Гедонизм: как быть профессионалом в удовольствии" />
             </Grid>
 
-            <StackPanel Orientation="Vertical" Background="Black" Margin="0 48 0 0" Width="894">
-                <TextBlock Style="{StaticResource textMiddle}" Text="Давай разберемся, насколько ты любишь отдыхать и умеешь ли правильно это делать?"/>
-                <TextBlock Margin="0 20 0 0" Style="{StaticResource textMiddle}" Text="Ответь на несколько вопросов и узнай, гедонист ты или нет!"/>
-            </StackPanel>
-
             <StackPanel Orientation="Vertical" Background="Black" Margin="30 48 0 0" Width="931">
                 <TextBlock Style="{StaticResource textMiddle}" x:Name="txtQuestion"/>
 
