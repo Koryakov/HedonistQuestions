@@ -8,32 +8,13 @@
       xmlns:helpers="clr-namespace:Hedonist.Wpf.Helpers"
       xmlns:spinner="clr-namespace:LoadingSpinnerControl;assembly=LoadingSpinnerControl"
       mc:Ignorable="d" 
-      d:DesignHeight="1080" d:DesignWidth="1920"
+      d:DesignHeight="1920" d:DesignWidth="1080"
       Background="Black" 
       Title="Variants">
 
     <helpers:DpiDecorator>
-    <Grid Width="1080">
-            <Image Tag="HomeButton" Source="..\\Images\home.png"  PreviewMouseDown="HomeButtonClick"
-                    Width="91" Height="91" Panel.ZIndex="50"
-                    VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 40 40 0"/>
-
-            <StackPanel Grid.Row="1">
-                <custom:Modal x:Name="modal" Panel.ZIndex="10">
-                    <Border CornerRadius="35" Background="White" BorderThickness="0" BorderBrush="White" Width="1000" Height="450">
-                        <Grid Width="1000" Height="450" Background="Transparent">
-                            <Image Tag="btnCloseSmall" Source="..\\Images\close.png" PreviewMouseDown="OnCloseModalClick"
-                            Width="25" Height="25" Panel.ZIndex="50"
-                            VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 32 32 0"/>
-
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <TextBlock x:Name="modalMessage" Foreground="#2A2C2C" FontFamily="Montserrat" FontSize="42" FontWeight="Normal" Margin="0 0 0 70"/>
-                                <Button  x:Name="btnCloseModal" Click="OnCloseModalClick" Style="{StaticResource commonDarkButton}" Content="Закрыть" />
-                            </StackPanel>
-                        </Grid>
-                    </Border>
-                </custom:Modal>
-
+        <Grid Margin="0" Width="1080" Height="1920">
+            <Grid>
                 <spinner:LoadingSpinner  x:Name="spinner"
             Grid.Row="1"
             Margin="10"
@@ -41,6 +22,28 @@
             Diameter="150"
             Thickness="7"
             Color="#DD01E5" />
+            </Grid>
+            <Image Tag="HomeButton" Source="..\\Images\home.png"  PreviewMouseDown="HomeButtonClick"
+                Width="91" Height="91" Panel.ZIndex="50"
+                VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 40 40 0"/>
+            <Image Width="1080" Height="1920" Source="..\\Images\back-variants.png" Stretch="Fill" />
+
+            <StackPanel>
+            <custom:Modal x:Name="modal" Panel.ZIndex="10">
+                <Border CornerRadius="35" Background="White" BorderThickness="0" BorderBrush="White" Width="1000" Height="450">
+                <Grid Width="1000" Height="450" Background="Transparent">
+                    <Image Tag="btnCloseSmall" Source="..\\Images\close.png" PreviewMouseDown="OnCloseModalClick"
+                    Width="25" Height="25" Panel.ZIndex="50"
+                    VerticalAlignment = "Top" HorizontalAlignment="Right" Margin = "0 32 32 0"/>
+
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock x:Name="modalMessage" Foreground="#2A2C2C" FontFamily="Montserrat" FontSize="42" FontWeight="Normal" Margin="0 0 0 70"/>
+                                <Button  x:Name="btnCloseModal" Click="OnCloseModalClick" Style="{StaticResource commonDarkButton}" Content="Закрыть" />
+                            </StackPanel>
+                </Grid>
+                </Border>
+            </custom:Modal>
+
             <Grid>
                 <Rectangle Margin="76 71 0 0" Width="200" Height="10" Fill="#0BDAF2" 
                            HorizontalAlignment="Left" VerticalAlignment="Top"/>
@@ -50,13 +53,14 @@
                     Text="От чего получаешь удовольствие ты?" />
             </Grid>
             <Button x:Name="btnArt" Tag="Images\Art.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
-                <Button x:Name="btnMusic" Tag="Images\Music.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
-                <Button x:Name="btnTrends" Tag="Images\Trends.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
-                <Button x:Name="btnFood" Tag="Images\Food.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
-                <Button x:Name="btnMovement" Tag="Images\Movement.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
-                <Button x:Name="btnMixology" Tag="Images\Mixology.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
-                <Button x:Name="btnCommunication" Tag="Images\Communication.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
-        </StackPanel>
-    </Grid>
+            <Button x:Name="btnMusic" Tag="Images\Music.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+            <Button x:Name="btnTrends" Tag="Images\Trends.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+            <Button x:Name="btnFood" Tag="Images\Food.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+            <Button x:Name="btnMovement" Tag="Images\Movement.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+            <Button x:Name="btnMixology" Tag="Images\Mixology.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+            <Button x:Name="btnCommunication" Tag="Images\Communication.png" Style="{StaticResource variantsButton}" Visibility="Collapsed" Click="Button_Click"></Button>
+            </StackPanel>
+           
+        </Grid>
     </helpers:DpiDecorator>
 </Page>

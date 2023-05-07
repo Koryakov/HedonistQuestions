@@ -69,10 +69,10 @@ namespace Hedonist.Wpf.Pages {
 
         private void BgWorkerStore_RunWorkerCompleted(object? sender, RunWorkerCompletedEventArgs e) {
             logger.Debug($"IN BgWorkerGiftType_RunWorkerCompleted()");
-            spinner.IsLoading = false;
 
             if (storeResponse.resultType == AutorizeResultType.Authorized) {
                 BindButtonsForAvailableStoreGiftTypes(storeResponse.store.GiftTypes);
+                spinner.IsLoading = false;
             }
             else {
                 modalMessage.Text = "Что-то пошло не так. Попробуйте еще раз";
