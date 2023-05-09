@@ -296,8 +296,18 @@
             <Setter Property="TextWrapping" Value="Wrap"/>
         </Style>
 
+        <Style x:Key="textHeaderPreTest" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Montserrat"/>
+            <Setter Property="FontSize" Value="45"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
 
-       <Style x:Key="handGeometry" TargetType="Path">
+
+        <Style x:Key="handGeometry" TargetType="Path">
             <Setter Property="Data" Value="M228.671921,928.519226 
 	C228.117249,928.391479 227.562561,928.263733 226.627686,927.427795 
 	C224.949417,926.951904 223.299484,926.255981 221.588303,926.035645 
