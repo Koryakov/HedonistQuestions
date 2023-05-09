@@ -28,7 +28,7 @@ namespace Hedonist.Wpf {
         public string Ticket { get; set;}
     }
 
-    internal class Settings {
+    public class Settings {
         public double HttpTimeoutSeconds { get; set; }
         public double ScreensaverTimerIntervalSeconds { get; set; }
         public double? DisplayScale { get; set; }

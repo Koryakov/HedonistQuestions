@@ -22,21 +22,15 @@ namespace Hedonist.Wpf {
     /// </summary>
     public partial class MainWindow : Window {
         private static readonly NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
-        static Settings settings = new();
         public MainWindow() {
-            try {
-                var config = new ConfigurationBuilder().AddJsonFile("appsettings.json").AddEnvironmentVariables().Build();
-                settings = config.GetRequiredSection("Settings").Get<Settings>();
+            (Settings settings, string appInfo) = App.GetApplicationInformationString(logger);
 
-                if (settings.HideMouseCursor) {
-                    Cursor = Cursors.None;
-                }
-                logger.Info($"HEDONIST_WPF_VERSION: {Assembly.GetEntryAssembly().GetName().Version}");
-                InitializeComponent();
-                Loaded += MainWindow_Loaded;
-            } catch (Exception ex) {
-                logger.Error(ex);
+            if (settings.HideMouseCursor) {
+                Cursor = Cursors.None;
             }
+            logger.Info($"HEDONIST APP STARTED. Information: {appInfo}");
+            InitializeComponent();
+            Loaded += MainWindow_Loaded;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e) {
