@@ -24,9 +24,9 @@
                     VerticalAlignment = "Top" Margin = "0"/>
                 </Grid>
 
-                <StackPanel Orientation="Vertical" Background="Black" Margin="0 250 0 200" Width="894">
-                    <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Style="{StaticResource textHeaderPreTest}">Давай разберемся, насколько ты любишь отдыхать<LineBreak/>и умеешь ли правильно это делать?<LineBreak/></TextBlock>
-                    <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Margin="0 20 0 0" Style="{StaticResource textHeaderPreTest}">Ответь на несколько вопросов<LineBreak/>и узнай,гедонист ты или нет!</TextBlock>
+                <StackPanel Orientation="Vertical" Background="Black" Margin="0 250 0 200" Width="931">
+                    <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Style="{StaticResource textHeaderPreTest}">Давай разберемся, насколько ты<LineBreak/>любишь отдыхать и умеешь ли<LineBreak/>правильно это делать?<LineBreak/></TextBlock>
+                    <TextBlock HorizontalAlignment="Center" TextAlignment="Center" Margin="0 20 0 0" Style="{StaticResource textHeaderPreTest}">Ответь на несколько вопросов<LineBreak/>и узнай, гедонист ты или нет!</TextBlock>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical" Margin="0 0 0 0">
