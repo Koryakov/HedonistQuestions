@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Hedonist.Models\Hedonist.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Sql\" />
-  </ItemGroup>
-
 </Project>
